@@ -1,0 +1,147 @@
+\documentclass{article}
+%\VignetteIndexEntry{TFBSTools}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[colorlinks=true, linkcolor=Blue, urlcolor=Blue,
+   citecolor=Blue]{hyperref}
+
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+\newcommand{\Rmethod}[1]{{\texttt{#1}}}
+\newcommand{\Rfunarg}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+\newcommand{\Rcode}[1]{{\texttt{#1}}}
+
+\newcommand{\software}[1]{\textsf{#1}}
+\newcommand{\R}{\software{R}}
+\newcommand{\IRanges}{\Rpackage{IRanges}}
+
+\title{The \textbf{TFBSTools} package overview}
+\author{Ge Tan}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\maketitle
+<<initialize, echo=FALSE>>=
+options(width=70)
+@
+
+\tableofcontents
+
+\section{Introduction}
+
+Eukaryotic regulatory regions are characterized based a set of 
+discovered transcription factor binding sites, 
+which can be represented as sequence patterns 
+with various degree of degeneracy.
+
+This \textbf{TFBSTools} package is designed to be a compuational framework
+for transcription factor binding site analysis. 
+It contains a set of integrated R S4 style classes, 
+tools , JASPAR database interface functions.
+Most approaches can be described in three sequential phases.
+First, a pattern is generated for a set of target sequences 
+known to be bound by a specific transcription factor.
+Second, a set of DNA sequences are analyzed to determine
+the locations of sequences consistent with the described binding pattern.
+Finally, in advanced cases, predictive statistical models of regulatory
+regions are constructed based on  mutiple occurrences of the detected
+patterns. 
+
+\textbf{TFBSTools} aims to support all these functionalities
+in the environment \textbf{R}. 
+However, only the JASPAR database interface functions are exported
+in this release to accompany \Rpackage{JASPAR2014}. 
+More functions will be included in future release after well tested.
+
+\section{S4 classes in TFBSTools}
+The section will explain all the S4 classes defined in \textbf{TFBSTools}.
+
+\subsection{PFMatrix}
+\Rclass{PFMatrix} is designed to store all the relevant information
+for one raw position frequency matrix (PFM).
+This object is compatible with one record from JASPAR database.
+For more details about this object, please consult the help page of this class.
+<<rtl-PFMatrix, results = hide>>=
+library(TFBSTools)
+pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+",
+        bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+        tags=list(family="Helix-Loop-Helix", species="10090", tax_group="vertebrates",
+        medline="7592839", type="SELEX", ACC="P53762", pazar_tf_id="TF0000003",
+        TFBSshape_ID="11", TFencyclopedia_ID="580"),
+        matrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
+                16L, 0L,  20L, 0L,  0L,  0L,
+                0L,  1L,  0L,  20L, 0L,  20L,
+                0L,  0L,  0L,  0L,  20L, 0L),
+                byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T")))
+        )
+## coerced to matrix
+as.matrix(pfm)
+## get the reverse complment matrix with all the same information except the strand.
+reverseComplement(pfm)
+## access the slots of pfm
+ID(pfm)
+name(pfm)
+Matrix(pfm)
+@
+
+\subsection{PFMatrixList}
+\Rclass{PFMatrixList} is used to store a set of \Rclass{PFMatrix} objects.
+Basically it is a SimpleList for easy manipulation the whole set of
+\Rclass{PFMatrix}.
+<<rtl-PFMatrixList, eval=FALSE, results = hide>>=
+pfm2 = pfm
+PFMatrixList(pfm1=pfm, pfm2=pfm2, use.names=TRUE)
+@
+
+%\subsection{Site, SiteList and SitePair}
+
+\section{Database interfaces for JASPAR2014 database}
+This section will demonstrate how to operate on the JASPAR 2014 database.
+JASPAR is a collection of transcription factor DNA-binding preferences, modeled as matrices. These can be converted into Position Weight Matrices (PWMs or PSSMs), used for scanning genomic sequences.
+JASPAR is the only database with this scope where the data can be used with no restrictions (open-source).
+\subsection{Search JASPAR2014 database}
+This search function fetches matrix data for all matrices in the database
+matching criteria defined by the named arguments
+and returns a PFMatrixList object.
+For more search criterias, please see the help page for \Rfunction(getMatrixSet).
+<<rtl-searchDB, eval=FALSE, results = hide>>=
+library(JASPAR2014)
+opts = list()
+opts[["species"]] = 9606
+opts[["name"]] = "RUNX1"
+#opts[["class"]] = "Ig-fold"
+opts[["type"]] = "SELEX"
+opts[["all_versions"]] = TRUE
+PFMatrixList = getMatrixSet(JASPAR2014, opts)
+
+opts2 = list()
+opts2[["type"]] = "SELEX"
+PFMatrixList2 = getMatrixSet(JASPAR2014, opts2)
+@
+
+\subsection{Store, delete and initialize JASPAR2014 database}
+We also provide some functions to initialize an empty JASPAR2014 
+style database, 
+store new \Rclass{PFMatrix} or \Rclass{PFMatrixList} into it,
+or delete some records based on ID.
+<<rtl-operateDb, eval=FALSE, results = hide>>=
+db = "jaspar.sqlite"
+initializeJASPARDB(db)
+storeMatrix(db, pfm)
+deleteMatrixHavingID(db, "MA0003")
+@
+
+%\section{PFM, PWM and ICM methods}
+
+%\section{Scan sequence and alignments with PWM pattern}
+
+%\section{Use external pattern generators}
+
+\section{Conclusion}
+The following is the session info that generated this vignette:
+<<session-info>>=
+  sessionInfo()
+@
+
+\end{document}

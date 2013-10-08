@@ -1,0 +1,58 @@
+import(methods)
+import(RSQLite)
+
+import(IRanges)
+
+#importClassesFrom(JASPAR2014, JASPAR2014)
+importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments)
+
+importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, pattern, PairwiseAlignments)
+importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
+
+importFrom(seqLogo, seqLogo, makePWM)
+importFrom(Biostrings, unitScale, PWMscoreStartingAt, DNAStringSet)
+
+### -----------------------------------------------------------------
+### Export S4 classes defined in TFBSTools
+###
+exportClasses(PFMatrix, PFMatrixList)
+
+### -----------------------------------------------------------------
+### Export non-generic functions
+###
+export(
+  ## AllClasses.r
+  PFMatrix,
+  PFMatrixList
+)
+
+### -----------------------------------------------------------------
+### Export S4 methods for generics not defined in CNEr
+###
+exportMethods(
+  ## XMatrix-methods.r
+  length,
+  reverseComplement
+)
+
+### -----------------------------------------------------------------
+### Export S4 generics defined in TFBSTools + export corresponding methods
+###
+export(
+  ## DB-methods.r
+  storeMatrix,
+  getMatrixSet,
+  getMatrixByID, getMatrixByName,
+  deleteMatrixHavingID,
+  initializeJASPARDB,
+
+  ## AllGenerics.r
+  ID, 
+  name, 
+  matrixClass, 
+  Matrix,
+  bg, 
+  tags,
+  matrixType,
+  XMatrixList
+)
