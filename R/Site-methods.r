@@ -80,6 +80,48 @@ setMethod("[", "Site",
             clone(x, views=ans_views, score=ans_score, strand=ans_strand)
           }
           )
+### -----------------------------------------------------------------
+### Combining
+###
+setMethod("c", "Site",
+          function(x, ...){
+            if(missing(x)){
+              args = unname(list(...))
+              x = args[[1L]]
+            }else{
+              args = unname(list(x, ...))
+            }
+            if (length(args) == 1L)
+              return(x)
+            arg_is_null = sapply(args, is.null)
+            if (any(arg_is_null))
+              args[arg_is_null] = NULL  # remove NULL elements by setting them to NULL!
+            if (!all(sapply(args, is, class(x))))
+              stop("all arguments in '...' must be ", class(x), " objects (or NULLs)")
+            if(length(unique(sapply(args, slot, "seqname"))) != 1)
+              stop("all arguments in '...' must have same seqname ", x@seqname, "!")
+            if(length(unique(sapply(args, slot, "sitesource"))) != 1)
+              stop("all arguments in '...' must have same sitesource ", x@sitesource, "!")
+            if(length(unique(sapply(args, slot, "primary"))) != 1)
+              stop("all arguments in '...' must have same primary ", x@primary, "!")
+            if(!all(sapply(args, function(arg, x){identical(arg@pattern, x@pattern)}, x)))
+              stop("all arguments in '...' must have same pattern matrix!")
+            new_start = unlist(lapply(lapply(args, slot, "views"), start))
+            new_end = unlist(lapply(lapply(args, slot, "views"), end))
+            new_score = unlist(lapply(args, slot, "score"))
+            new_strand = unlist(lapply(args, slot, "strand"))
+            ans = update(x, views=Views(subject=subject(x@views), 
+                                        start=new_start,
+                                        end=new_end),
+                         score=new_score, strand=new_strand, seqname=x@seqname,
+                         sitesource=x@sitesource, primary=x@primary,
+                         pattern=x@pattern
+                         )
+            ## validObject(ans)
+            ## do it when we have setValidity
+            return(ans)
+          }
+          )
 
 ### -----------------------------------------------------------------
 ### Methods
@@ -138,3 +180,18 @@ setMethod("relScore", "Site",
           }
           )
 
+### ----------------------------------------------------------------
+### SiteList Methods
+###
+setMethod("writeGFF3", "SiteList",
+          function(x){
+            ans = do.call(rbind, lapply(x, writeGFF3))
+            return(ans)
+          }
+          )
+setMethod("writeGFF2", "SiteList",
+           function(x){
+             ans = do.call(rbind, lapply(x, writeGFF2))
+             return(ans)
+           }
+           )

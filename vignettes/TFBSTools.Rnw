@@ -3,6 +3,7 @@
 \usepackage[usenames,dvipsnames]{color}
 \usepackage[colorlinks=true, linkcolor=Blue, urlcolor=Blue,
    citecolor=Blue]{hyperref}
+\usepackage[round]{natbib}
 
 \newcommand{\Rfunction}[1]{{\texttt{#1}}}
 \newcommand{\Robject}[1]{{\texttt{#1}}}
@@ -37,7 +38,9 @@ with various degree of degeneracy.
 
 This \textbf{TFBSTools} package is designed to be a compuational framework
 for transcription factor binding site analysis. 
-It contains a set of integrated R S4 style classes, 
+Based on the famous perl module TFBS \cite{Lenhard:2002up},
+we extended the class definitions and enhanced implementations in an interactive environment.
+So far this package contains a set of integrated R S4 style classes,
 tools , JASPAR database interface functions.
 Most approaches can be described in three sequential phases.
 First, a pattern is generated for a set of target sequences 
@@ -49,20 +52,32 @@ regions are constructed based on  mutiple occurrences of the detected
 patterns. 
 
 \textbf{TFBSTools} aims to support all these functionalities
-in the environment \textbf{R}. 
-However, only the JASPAR database interface functions are exported
-in this release to accompany \Rpackage{JASPAR2014}. 
-More functions will be included in future release after well tested.
+in the environment \textbf{R}, except the external motif finding softwares,
+such as MEME \cite{Bailey:1994wq}. 
+%However, only the JASPAR database interface functions are exported
+%in this release to accompany \Rpackage{JASPAR2014}. 
+%More functions will be included in future release after well tested.
 
 \section{S4 classes in TFBSTools}
-The section will explain all the S4 classes defined in \textbf{TFBSTools}.
+The package is built around a number of S4 class of which the \Rclass{XMatrix}, 
+\Rclass{Site} classes are the most important.
+The section will briefly explain most of them defined in \textbf{TFBSTools}.
+%These classes were designed to store necessary information relevant to 
 
-\subsection{PFMatrix}
-\Rclass{PFMatrix} is designed to store all the relevant information
+\subsection{XMatrix and its subclasses}
+\Rclass{XMatrix} is a virtual class, 
+which means no concrete objects can be created directly from it.
+The subclass \Rclass{PFMatrix} is designed to store all the relevant information
 for one raw position frequency matrix (PFM).
 This object is compatible with one record from JASPAR database.
-For more details about this object, please consult the help page of this class.
-<<rtl-PFMatrix, results = hide>>=
+
+\Rclass{PWMatrix} is used to store a position weight matrix (PWM). 
+Compared with \Rclass{PFMatrix}, it has one extra slot \textit{pseudocounts}.
+
+\Rclass{ICMatrix} is used to store a information content matrix (ICM).
+Compared with \Rclass{PWMatrix}, it has one extra slot \textit{schneider}.
+
+<<rtl-PFMatrix, eval=FALSE, results = hide>>=
 library(TFBSTools)
 pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+",
         bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
@@ -75,26 +90,48 @@ pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+"
                 0L,  0L,  0L,  0L,  20L, 0L),
                 byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T")))
         )
+
 ## coerced to matrix
 as.matrix(pfm)
+
 ## get the reverse complment matrix with all the same information except the strand.
-reverseComplement(pfm)
+reverseComplement(pwm)
+
 ## access the slots of pfm
 ID(pfm)
 name(pfm)
 Matrix(pfm)
+
+## conversion to pwm, icm
+toPWM(pfm)
+toICM(pfm)
 @
 
-\subsection{PFMatrixList}
-\Rclass{PFMatrixList} is used to store a set of \Rclass{PFMatrix} objects.
+\subsection{XMatrixList and its subclasses}
+\Rclass{XMatrixList} is used to store a set of \Rclass{XMatrix} objects.
 Basically it is a SimpleList for easy manipulation the whole set of
-\Rclass{PFMatrix}.
+\Rclass{XMatrix}. 
+The concrete objects can be \Rclass{PFMatrix}, \Rclass{PWMatrix} and \Rclass{ICMatrix}.
+
 <<rtl-PFMatrixList, eval=FALSE, results = hide>>=
 pfm2 = pfm
-PFMatrixList(pfm1=pfm, pfm2=pfm2, use.names=TRUE)
+pfmList = PFMatrixList(pfm1=pfm, pfm2=pfm2, use.names=TRUE)
+name(pfmList)
 @
 
-%\subsection{Site, SiteList and SitePair}
+\subsection{Site, SiteList and SitePair}
+The \Rclass{Site} class is a container for storing a set of putative
+  transcription factor binding sites on a nucleotide sequence
+  (start, end, strand, score, pattern as a \Rclass{PWMatrix}, etc.)
+from scaning a nucleotide sequence with the corresponding \Rclass{PWMatrix}.
+
+Similarly, \Rclass{SiteList} stores a set of \Rclass{Site} objects.
+To store the results from scanning a pairwise alignment,
+\Rclass{SitePair} is created.
+
+\subsection{MotifSet}
+This \Rclass{MotifSet} class is used to store the generated motifs from 
+motifs discovery softwares, such as MEME.
 
 \section{Database interfaces for JASPAR2014 database}
 This section will demonstrate how to operate on the JASPAR 2014 database.
@@ -132,16 +169,95 @@ storeMatrix(db, pfm)
 deleteMatrixHavingID(db, "MA0003")
 @
 
-%\section{PFM, PWM and ICM methods}
+\section{PFM, PWM and ICM methods}
+This section will give an introduction of matrix conversion from PFM.
 
-%\section{Scan sequence and alignments with PWM pattern}
+\subsection{PFM to PWM}
+The method \textit{toPWM} can convert PFM to PWM \cite{Wasserman:2004ec}. 
+Optional parameters include \textit{type}, \textit{pseudocounts}, \textit{bg}. 
+The implementation in this package is a bit different from \Rpackage{Biostrings}.
 
-%\section{Use external pattern generators}
+First of all, \textit{toPWM} allows the input matrix to have different column sums,
+which means the count matrix can have an unequal number of sequences contributing
+to each column. This scenario is rare, but exists in JASPAR SELEX data.
+
+Second, we can specify a customized \textit{pseudocounts}. 
+\textit{pseudocounts} is necessary for correcting the small number of counts
+or eliminating the zero values before log transformation.
+In TFBS perl module, the square root of the number of sequences contributing to each column. 
+However, it has been shown to too harsh \cite{Nishida:2009kf}.
+Hence, a default value of 0.8 is used. 
+Of course, it can be changed to other customized value or even different values for each column.
+
+<<rtl-matrixMethods, eval=FALSE, results = hide>>=
+pwm = toPWM(pfm, pseudocounts=0.8)
+@
+
+\subsection{PFM to ICM}
+The method \textit{toICM} can convert PFM to ICM \cite{Schneider:1986ur}.
+Besides the similar \textit{pseudocounts}, \textit{bg}, 
+you can also choose to do the \textbf{schneider} correction.
+
+<<rtl-matrixMethods, eval=FALSE, results = hide>>=
+icm = toICM(pfm, pseudocounts=0.8)
+seqLogo(icm)
+@
+
+
+\section{Scan sequence and alignments with PWM pattern}
+\subsection{searchSeq}
+\textit{searchSeq} scans a nucleotide sequence with the pattern represented by the PWM.
+The strand argument controls which strand of the sequence will be searched.
+When it is "*", both strands will be scanned.
+
+<<rtl-search, eval=FALSE, results = hide>>=
+site = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60%")
+siteList = searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG",
+                         min.score="60%", strand="*")
+## generate gff stype output
+writeGFF3(site)
+writeGFF2(site)
+@
+
+\subsection{searchAln}
+\textit{searchAln} scans a pairwise alignment with the pattern represented by the PWM.
+It reports only those hits that are present in equivalent positions of both sequences 
+and exceed a specified threshold score in both, 
+AND are found in regions of the alignment above the specified.
+
+<<rtl-search, eval=FALSE, results = hide>>=
+aln1 = "ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG"
+aln2 = "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
+sitePair = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5, 
+                     strand="*", type="any")
+## generate gff stype output
+writeGFF3(sitePair)
+writeGFF2(sitePair)
+@
+
+\section{Use external pattern generators}
+In this section, we will introduce wrapper functions for external motif discovery programs. 
+So far, MEME is supported.
+\subsection{MEME}
+\textit{runMEME} takes a \Rclass{DNAStringSet} or a set of \Rclass{characters} as input,
+and returns a \Rclass{MotifSet} object.
+
+<<rtl-wrappers, eval=FALSE, results = hide>>=
+motifSet = runMEME(file.path(system.file("extdata", package="TFBSTools"), "crp0.s"),
+                   binary="/usr/local/Cellar/meme/4.9.0-p4/bin/meme",
+                   arguments="-nmotifs 3")
+sitesSeq(motifSet, type="all")
+sitesSeq(motifSet, type="none")
+@
 
 \section{Conclusion}
 The following is the session info that generated this vignette:
 <<session-info>>=
   sessionInfo()
 @
+
+\newpage
+\bibliographystyle{jss}
+\bibliography{TFBSTools}
 
 \end{document}

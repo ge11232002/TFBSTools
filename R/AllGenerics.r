@@ -35,7 +35,7 @@ setGeneric("XMatrixList", signature="x",
            )
 
 
-# JASPAR DB
+## JASPAR DB
 setGeneric("getMatrixByID", signature="x", function(x, ID) standardGeneric("getMatrixByID"))
 setGeneric("getMatrixByName", signature="x", function(x, name)  standardGeneric("getMatrixByName"))
 setGeneric("getMatrixSet", signature="x", function(x, opts) standardGeneric("getMatrixSet"))
@@ -47,24 +47,29 @@ setGeneric("initializeJASPARDB", signature="x",
 setGeneric("deleteMatrixHavingID", signature="x",
            function(x, IDs) standardGeneric("deleteMatrixHavingID"))
 
+## PFM,PWM, ICM
 setGeneric("toICM", signature="x",
-           function(x, pseudocounts=NULL, schneider=FALSE,
+           function(x, pseudocounts=0.8, schneider=FALSE,
                     bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
              standardGeneric("toICM")
            )
 
 setGeneric("toPWM", signature="x",
-           function(x, type="log2probratio", pseudocounts=NULL,
+           function(x, type="log2probratio", pseudocounts=0.8,
                     bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
              standardGeneric("toPWM")
            )
 
-setGeneric("plotLogo", signature="x",
+#setGeneric("plotLogo", signature="x",
+#           function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
+#                    xfontsize = 15, yfontsize = 15) standardGeneric("plotLogo")
+#           )
+setGeneric("seqLogo", signature="x",
            function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
-                    xfontsize = 15, yfontsize = 15) standardGeneric("plotLogo")
+                    xfontsize = 15, yfontsize = 15) standardGeneric("seqLogo")
            )
-setGeneric("total_ic", signature="x",
-           function(x) standardGeneric("total_ic"))
+setGeneric("totalIC", signature="x",
+           function(x) standardGeneric("totalIC"))
 
 setGeneric("searchSeq", signature="x",
            function(x, subject, seqname="Unknown", strand="*", min.score="80%")
@@ -72,12 +77,12 @@ setGeneric("searchSeq", signature="x",
 
 setGeneric("searchAln",
            function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                    conservation=NULL)
+                    strand="*", type="any", conservation=NULL)
              standardGeneric("searchAln")
            )
 setGeneric("doSiteSearch",
            function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
-                    conservation=NULL)
+                    strand="*", conservation=NULL)
              standardGeneric("doSiteSearch")
            )
 
@@ -88,3 +93,9 @@ setGeneric("calConservation",
 setGeneric("writeGFF3", signature="x", function(x) standardGeneric("writeGFF3"))
 setGeneric("writeGFF2", signature="x", function(x) standardGeneric("writeGFF2"))
 setGeneric("relScore", signature="x", function(x) standardGeneric("relScore"))
+setGeneric("clone", signature="x", function(x, ...) standardGeneric("clone"))
+
+## wrappers
+setGeneric("runMEME", signature="x", function(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir()) standardGeneric("runMEME"))
+setGeneric("sitesSeq", signature="x", function(x, n=10, type="none") standardGeneric("sitesSeq"))
+

@@ -130,9 +130,10 @@ setMethod("toICM", "matrix",
           function(x, pseudocounts=0.8, ## This is the recommended value from http://nar.oxfordjournals.org/content/37/3/939.long.
                    schneider=FALSE,
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
-            x = Biostrings:::.normargPfm(x)
+            x = normargPfm(x)
             ## From here 'x' is guaranteed to have at least 1 column and to have
             ## all its columns sum to the same value.
+            ## In fact, these columns sum could be different... Modify the .normargPfm a little bit.
             bg= Biostrings:::.normargPriorParams(bg)
             #nseq = sum(x[ ,1L])
             nseq = colSums(x)
@@ -159,13 +160,23 @@ setMethod("toICM", "matrix",
 ### --------------------------------------------------------------------
 ### Plot the seqlogo
 ###
-setMethod("plotLogo", "ICMatrix",
+#setMethod("plotLogo", "ICMatrix",
+#          function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
+#                   xfontsize = 15, yfontsize = 15){
+#            m = Matrix(x)
+#            m = sweep(m, MARGIN=2, colSums(m), "/")
+#            m = makePWM(m)
+#            seqLogo(m, ic.scale = ic.scale, xaxis = xaxis, yaxis = yaxis,
+#                             xfontsize = xfontsize, yfontsize = yfontsize)
+#          }
+#          )
+setMethod("seqLogo", "ICMatrix",
           function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
                    xfontsize = 15, yfontsize = 15){
             m = Matrix(x)
             m = sweep(m, MARGIN=2, colSums(m), "/")
             m = makePWM(m)
-            seqLogo(m, ic.scale = ic.scale, xaxis = xaxis, yaxis = yaxis,
+            seqLogo::seqLogo(m, ic.scale = ic.scale, xaxis = xaxis, yaxis = yaxis,
                              xfontsize = xfontsize, yfontsize = yfontsize)
           }
           )
@@ -173,6 +184,7 @@ setMethod("plotLogo", "ICMatrix",
 ### ----------------------------------------------------------------------
 ### Utilities methods
 ###
-setMethod("total_ic", "ICMatrix",
+setMethod("totalIC", "ICMatrix",
           function(x) colSums(Matrix(x))
           )
+

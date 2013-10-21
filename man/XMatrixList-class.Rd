@@ -5,19 +5,16 @@
 \alias{XMatrixList,list-method}
 \alias{PFMatrixList}
 \alias{PFMatrixList-class}
-\alias{bg}
+\alias{PWMatrixList}
+\alias{PWMatrixList-class}
+\alias{ICMatrixList}
+\alias{ICMatrixList-class}
 \alias{bg,XMatrixList-method}
-\alias{ID}
 \alias{ID,XMatrixList-method}
-\alias{Matrix}
 \alias{Matrix,XMatrixList-method}
-\alias{matrixClass}
 \alias{matrixClass,XMatrixList-method}
-\alias{matrixType}
 \alias{matrixType,XMatrixList-method}
-\alias{name}
 \alias{name,XMatrixList-method}
-\alias{strand}
 \alias{strand,XMatrixList-method}
 \alias{tags,XMatrixList-method}
 
@@ -31,6 +28,8 @@
 \usage{
 ## Constructors:
 PFMatrixList(..., use.names=TRUE)
+PWMatrixList(..., use.names=TRUE)
+ICMatrixList(..., use.names=TRUE)
 
 ## Accessor-like methods:
 \S4method{ID}{XMatrixList}(x)

@@ -31,7 +31,7 @@ setClassUnion("XMatrix", c("PFMatrix", "ICMatrix", "PWMatrix"))
 
 
 ### ----------------------------------------------------------------------
-### The PFMatrix constructor
+### The XMatrix constructor
 ###
 PFMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                     strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix()){
@@ -171,22 +171,6 @@ SiteList = function(..., use.names=TRUE){
   IRanges:::newList("SiteList", listData)
 }
 
-### ----------------------------------------------------------------
-### Methods
-###
-setMethod("writeGFF3", "SiteList",
-          function(x){
-            ans = do.call(rbind, lapply(x, writeGFF3))
-            return(ans)
-          }
-          )
-setMethod("writeGFF2", "SiteList",
-           function(x){
-             ans = do.call(rbind, lapply(x, writeGFF2))
-             return(ans)
-           }
-           )
-
 
 ### -------------------------------------------------------------------
 ### SitePair object: a nucleotide sequence feature object representing (possibly putative) transcription factor binding site from A alignment
@@ -274,3 +258,62 @@ PairwiseAlignmentTFBS = function(pattern, subject, type="global",
 ### ---------------------------------------------------------------
 ### The "show" method
 ### Add later... what is the pretty way?
+
+
+
+### ---------------------------------------------------------
+### Motif and MotifSet class
+###
+setClass("Motif",
+         slot=c(
+                motif="GRanges",
+                motifEvalue="numeric",
+                subjectSeqs="DNAStringSet"
+                )
+         )
+
+setClass("MotifSet",
+         slots=c(
+                 motifList="GRangesList",
+                 motifEvalues="numeric",
+                 subjectSeqs="DNAStringSet"
+                 )
+         )
+
+### ---------------------------------------------------------
+### The constructor function
+###
+Motif = function(motif=GRanges(), motifEvalue=numeric(), subjectSeqs=DNAStringSet()){
+  new("Motif", motif=motif, motifEvalue=motifEvalue, subjectSeqs=subjectSeqs)
+}
+
+
+MotifSet = function(motifList=GRangesList(), motifEvalues=numeric(), subjectSeqs=DNAStringSet()){
+  new("MotifSet", motifList=motifList, motifEvalues=motifEvalues,
+      subjectSeqs=subjectSeqs)
+}
+
+
+
+
+### ----------------------------------------------------------------
+### The MEME object which holds the result of a MEME run
+###
+setClass("MEME",
+         slots=c(
+                 version="character",
+                 command="character",
+                 motifs="MotifSet"
+                 )
+         )
+
+### -----------------------------------------------------------------
+### The MEME object constructor
+###
+MEME = function(version=character(), alphabet=c("A", "C", "G", "T"),
+                command=character(), motifs){
+  new("MEME", version=version, alphabet=alphabet, command=command, motifs=motifs)
+}
+
+
+

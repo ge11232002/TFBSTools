@@ -1,19 +1,25 @@
 Package: TFBSTools
 Version: 1.1.0
-Date: 2013-10-07
+Date: 2013-10-09
 Title: Software package for TFBS
 Description: Software package for TFBS.
 Author: Ge Tan <ge.tan09@imperial.ac.uk> 
 Maintainer: Ge Tan <ge.tan09@imperial.ac.uk>
-Imports: Biostrings(>= 2.29.19), RSQLite(>= 0.11.4), seqLogo
+Imports: Biostrings(>= 2.29.19), RSQLite(>= 0.11.4), seqLogo, GenomicRanges(>= 1.13.50), caTools(>= 1.14), XVector(>= 0.1.4)
 Depends: R (>= 3.0.1), methods, IRanges(>= 1.19.38)
+Suggests: JASPAR2014(>= 0.99.3)
+SystemRequirements: meme
 License: GPL-2
 URL: http://jaspardev.genereg.net/
 Type: Package
 biocViews: MotifAnnotation, GeneRegulation, MotifDiscovery
 NeedsCompilation: no
-LazyData: yes
+LazyData: yes 
 Collate: AllGenerics.r AllClasses.r show-methods.r util-methods.r
-        XMatrix-methods.r XMatrixList-methods.r Site-methods.r
-        coercion-methods.r DB-methods.r PairwiseAlignment-methods.r
-        ICM-methods.r PWM-methods.r
+         XMatrix-methods.r XMatrixList-methods.r
+         Site-methods.r
+         coercion-methods.r DB-methods.r 
+         PairwiseAlignment-methods.r
+         ICM-methods.r PWM-methods.r 
+         Motif-methods.r
+         Wrappers-methods.r

@@ -263,7 +263,7 @@ setMethod("getMatrixByID", "JASPAR2014",
 setMethod("getMatrixByName", "SQLiteConnection",
           function(x, name){
             # here x is the path of SQLite db file
-            type = match.arg(type, c("PWM", "PFM", "ICM"))
+            #type = match.arg(type, c("PWM", "PFM", "ICM"))
             if(missing(name))
               stop("name needs to be specified!")
             sqlCMD = paste0("SELECT distinct BASE_ID  FROM MATRIX WHERE NAME='", name, "'")
@@ -272,7 +272,7 @@ setMethod("getMatrixByName", "SQLiteConnection",
             if(length(baseID) == 0)
               return(NA)
             if(length(baseID) > 1)
-              warning("There are ", length(baseID), " distinct stable IDs with name ", name, ": ", baseID)
+              warning("There are ", length(baseID), " distinct stable IDs with name ", name, ": ", paste(baseID, collapse=", "))
             getMatrixByID(x, baseID[1])
           }
           )
@@ -328,7 +328,7 @@ setMethod("getMatrixSet", "SQLiteConnection",
              xmatrix = .get_Matrix_by_int_id(x, id, type="PFM")
              if(!is.null(opts[["min_ic"]])){
                # we assume the matrix IS a PFM, o something in normal space at least
-               if(sum(total_ic(toICM(xmatrix))) < opts[["min_ic"]])
+               if(sum(totalIC(toICM(xmatrix))) < opts[["min_ic"]])
                  next
              }
              if(!is.null(opts[["length"]])){
