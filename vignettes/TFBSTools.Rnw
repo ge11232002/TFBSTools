@@ -94,17 +94,18 @@ pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+"
 ## coerced to matrix
 as.matrix(pfm)
 
-## get the reverse complment matrix with all the same information except the strand.
-reverseComplement(pwm)
-
 ## access the slots of pfm
 ID(pfm)
 name(pfm)
 Matrix(pfm)
 
 ## conversion to pwm, icm
-toPWM(pfm)
-toICM(pfm)
+pwm = toPWM(pfm)
+icm = toICM(pfm)
+
+## get the reverse complment matrix with all the same information except the strand.
+reverseComplement(pwm)
+
 @
 
 \subsection{XMatrixList and its subclasses}
