@@ -20,8 +20,8 @@ setGeneric("views", signature="x", function(x) standardGeneric("views"))
 setGeneric("seqname", signature="x", function(x) standardGeneric("seqname"))
 setGeneric("sitesource", signature="x", function(x) standardGeneric("sitesource"))
 setGeneric("primary", signature="x", function(x) standardGeneric("primary"))
-setGeneric("site1", signature="x", function(x) standardGeneric("site1"))
-setGeneric("site2", signature="x", function(x) standardGeneric("site2"))
+setGeneric("siteset1", signature="x", function(x) standardGeneric("siteset1"))
+setGeneric("siteset2", signature="x", function(x) standardGeneric("siteset2"))
 setGeneric("alignments", signature="x", function(x) standardGeneric("alignments"))
 setGeneric("conservation1", signature="x", function(x) standardGeneric("conservation1"))
 setGeneric("seqlength", signature="x", function(x) standardGeneric("seqlength"))
@@ -86,6 +86,11 @@ setGeneric("doSiteSearch",
              standardGeneric("doSiteSearch")
            )
 
+setGeneric("searchPairBSgenome", signature="pwm",
+           function(pwm, BSgenome1, BSgenome2, chr1, chr2, min.score="80%", strand="*", chain)
+             standardGeneric("searchPairBSgenome")
+           )
+
 setGeneric("calConservation",
            function(aln1, aln2, windowSize=51L, which="1")
              standardGeneric("calConservation")
@@ -94,6 +99,15 @@ setGeneric("writeGFF3", signature="x", function(x) standardGeneric("writeGFF3"))
 setGeneric("writeGFF2", signature="x", function(x) standardGeneric("writeGFF2"))
 setGeneric("relScore", signature="x", function(x) standardGeneric("relScore"))
 setGeneric("clone", signature="x", function(x, ...) standardGeneric("clone"))
+
+## PFM methods
+setGeneric("searchMatrix", 
+           function(pfmSubject, pfmQuery, openPenalty=3, extPenalty=0.01)
+                    #max.results=10, min.percent_score=NULL, min.score=NULL) 
+             standardGeneric("searchMatrix"))
+
+setGeneric("permuteMatrix", signature="x",
+           function(x, type="intra") standardGeneric("permuteMatrix"))
 
 ## wrappers
 setGeneric("runMEME", signature="x", function(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir()) standardGeneric("runMEME"))

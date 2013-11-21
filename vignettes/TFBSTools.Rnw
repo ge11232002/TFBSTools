@@ -38,7 +38,7 @@ with various degree of degeneracy.
 
 This \textbf{TFBSTools} package is designed to be a compuational framework
 for transcription factor binding site analysis. 
-Based on the famous perl module TFBS \cite{Lenhard:2002up},
+Based on the famous perl module TFBS (\cite{Lenhard:2002up}),
 we extended the class definitions and enhanced implementations in an interactive environment.
 So far this package contains a set of integrated R S4 style classes,
 tools , JASPAR database interface functions.
@@ -52,8 +52,8 @@ regions are constructed based on  mutiple occurrences of the detected
 patterns. 
 
 \textbf{TFBSTools} aims to support all these functionalities
-in the environment \textbf{R}, except the external motif finding softwares,
-such as MEME \cite{Bailey:1994wq}. 
+in the environment \textbf{R}, except the external motif finding software,
+such as MEME (\cite{Bailey:1994wq}). 
 %However, only the JASPAR database interface functions are exported
 %in this release to accompany \Rpackage{JASPAR2014}. 
 %More functions will be included in future release after well tested.
@@ -120,19 +120,19 @@ pfmList = PFMatrixList(pfm1=pfm, pfm2=pfm2, use.names=TRUE)
 name(pfmList)
 @
 
-\subsection{Site, SiteList and SitePair}
-The \Rclass{Site} class is a container for storing a set of putative
+\subsection{SiteSet, SiteSetList ,SitePairSet and SitePairSetList}
+The \Rclass{SiteSet} class is a container for storing a set of putative
   transcription factor binding sites on a nucleotide sequence
   (start, end, strand, score, pattern as a \Rclass{PWMatrix}, etc.)
 from scaning a nucleotide sequence with the corresponding \Rclass{PWMatrix}.
 
-Similarly, \Rclass{SiteList} stores a set of \Rclass{Site} objects.
+Similarly, \Rclass{SiteSetList} stores a set of \Rclass{SiteSet} objects.
 To store the results from scanning a pairwise alignment,
-\Rclass{SitePair} is created.
+\Rclass{SitePairSet} is created.
 
 \subsection{MotifSet}
 This \Rclass{MotifSet} class is used to store the generated motifs from 
-motifs discovery softwares, such as MEME.
+motifs discovery software, such as MEME.
 
 \section{Database interfaces for JASPAR2014 database}
 This section will demonstrate how to operate on the JASPAR 2014 database.
@@ -164,7 +164,7 @@ style database,
 store new \Rclass{PFMatrix} or \Rclass{PFMatrixList} into it,
 or delete some records based on ID.
 <<rtl-operateDb, eval=FALSE, results = hide>>=
-db = "jaspar.sqlite"
+db = "myMatrixDb.sqlite"
 initializeJASPARDB(db)
 storeMatrix(db, pfm)
 deleteMatrixHavingID(db, "MA0003")
@@ -182,11 +182,11 @@ First of all, \textit{toPWM} allows the input matrix to have different column su
 which means the count matrix can have an unequal number of sequences contributing
 to each column. This scenario is rare, but exists in JASPAR SELEX data.
 
-Second, we can specify a customized \textit{pseudocounts}. 
+Second, we can specify customized \textit{pseudocounts}. 
 \textit{pseudocounts} is necessary for correcting the small number of counts
 or eliminating the zero values before log transformation.
 In TFBS perl module, the square root of the number of sequences contributing to each column. 
-However, it has been shown to too harsh \cite{Nishida:2009kf}.
+However, it has been shown to too harsh (\cite{Nishida:2009kf}).
 Hence, a default value of 0.8 is used. 
 Of course, it can be changed to other customized value or even different values for each column.
 
@@ -195,7 +195,7 @@ pwm = toPWM(pfm, pseudocounts=0.8)
 @
 
 \subsection{PFM to ICM}
-The method \textit{toICM} can convert PFM to ICM \cite{Schneider:1986ur}.
+The method \textit{toICM} can convert PFM to ICM (\cite{Schneider:1986ur}).
 Besides the similar \textit{pseudocounts}, \textit{bg}, 
 you can also choose to do the \textbf{schneider} correction.
 
@@ -204,6 +204,42 @@ icm = toICM(pfm, pseudocounts=0.8)
 seqLogo(icm)
 @
 
+\subsection{Align PFM to a custom matrix or IUPAC string}
+In some cases, it is beneficial to assess similarity to input data 
+(as with using BLAST for sequence data comparison when using Genbank).
+
+<<rtl-matrixMethods, eval=FALSE, results = hide>>=
+library(JASPAR2014)
+## one to one comparison
+pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
+pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
+score = searchMatrix(pfmSubject, pfmQuery)
+## one to several comparsion
+opts = list()
+opts[["class"]] = "Ig-fold"
+pfmList = getMatrixSet(JASPAR2014, opts)
+scores = searchMatrix(pfmList, pfmQuery)
+## align IUPAC string
+IUPACString = "ACGTMRWSYKVHDBN"
+searchMatrix(pfmList, IUPACString)
+@
+
+\subsection{PFM permutation}
+In this section, we will demonstrate the matrix permutation.
+This method simply shuffles the columns in matrices.
+This can either be done by just shuffling columns within each selected matrix,
+or by shuffling columns almong all selected matrices.
+<<rtl-matrixMethods, eval=FALSE, results = hide>>=
+library(JASPAR2014)
+pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
+pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
+opts = list()
+opts[["class"]] = "Ig-fold"
+pfmList = getMatrixSet(JASPAR2014, opts)
+foo = permuteMatrix(pfmQuery)
+foo1 = permuteMatrix(pfmList, type="intra")
+foo2 = permuteMatrix(pfmList, type="inter")
+@
 
 \section{Scan sequence and alignments with PWM pattern}
 \subsection{searchSeq}
@@ -212,10 +248,12 @@ The strand argument controls which strand of the sequence will be searched.
 When it is "*", both strands will be scanned.
 
 <<rtl-search, eval=FALSE, results = hide>>=
-site = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60%")
-siteList = searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG",
-                         min.score="60%", strand="*")
-## generate gff stype output
+subject = DNAString("GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG")
+siteset = searchSeq(pwm, subject, min.score="60%")
+siteList = searchSeq(pwmList, subject,
+                     min.score="60%", strand="*")
+
+## generate gff style output
 writeGFF3(site)
 writeGFF2(site)
 @
@@ -227,11 +265,11 @@ and exceed a specified threshold score in both,
 AND are found in regions of the alignment above the specified.
 
 <<rtl-search, eval=FALSE, results = hide>>=
-aln1 = "ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG"
-aln2 = "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
+aln1 = DNAString("ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG")
+aln2 = DNAString("GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC")
 sitePair = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5, 
                      strand="*", type="any")
-## generate gff stype output
+## generate gff style output
 writeGFF3(sitePair)
 writeGFF2(sitePair)
 @
@@ -245,7 +283,7 @@ and returns a \Rclass{MotifSet} object.
 
 <<rtl-wrappers, eval=FALSE, results = hide>>=
 motifSet = runMEME(file.path(system.file("extdata", package="TFBSTools"), "crp0.s"),
-                   binary="/usr/local/Cellar/meme/4.9.0-p4/bin/meme",
+                   binary="meme",
                    arguments="-nmotifs 3")
 sitesSeq(motifSet, type="all")
 sitesSeq(motifSet, type="none")

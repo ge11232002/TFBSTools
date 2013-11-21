@@ -132,7 +132,7 @@ setMethod("searchSeq", "PWMatrix",
             }
             stopifnot(isConstant(c(length(ans_strand), length(ans_score),
                                  length(ans_views))))
-            ans_site = Site(views=ans_views, seqname=seqname,
+            ans_site = SiteSet(views=ans_views, seqname=seqname,
                             score=ans_score, strand=ans_strand, 
                             sitesource="TFBS", primary="TF binding site",
                             pattern=xPos
@@ -147,7 +147,7 @@ setMethod("searchSeq", "PWMatrixList",
             #ans = lapply(pwms, matchPWM, subject, min.score)
             ans_list = lapply(x, searchSeq, subject=subject, seqname=seqname, 
                               strand=strand, min.score=min.score)
-            ans = SiteList(ans_list)
+            ans = SiteSetList(ans_list)
             return(ans)
           }
           )
@@ -164,7 +164,7 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="character", aln2="cha
                               windowSize=windowSize, cutoff=cutoff, 
                               strand=strand, type=type,
                               conservation=conservation)
-            ans = SitePairList(ans_list)
+            ans = SitePairSetList(ans_list)
             return(ans)
           }
           )
@@ -176,7 +176,7 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="character", aln2="mis
                               windowSize=windowSize, cutoff=cutoff, 
                               strand=strand, type=type, 
                               conservation=conservation)
-            ans = SitePairList(ans_list)
+            ans = SitePairSetList(ans_list)
             return(ans)
           }
           )
@@ -188,7 +188,7 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAStringSet", aln2="
                               windowSize=windowSize, cutoff=cutoff, 
                               strand=strand, type=type,
                               conservation=conservation)
-            ans = SitePairList(ans_list)
+            ans = SitePairSetList(ans_list)
             return(ans)
           }
           )
@@ -200,7 +200,7 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAString", aln2="DNA
                               windowSize=windowSize, cutoff=cutoff, 
                               strand=strand, type=type, 
                               conservation=conservation)
-            ans = SitePairList(ans_list)
+            ans = SitePairSetList(ans_list)
             return(ans)
           }
           )
@@ -226,6 +226,7 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="character", aln2="charact
                           conservation=conservation)
           }
           )
+
 setMethod("searchAln", signature(pwm="PWMatrix", aln1="character", aln2="missing"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
@@ -237,6 +238,7 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="character", aln2="missing
                           conservation=conservation)
           }
           )
+
 setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAStringSet", aln2="missing"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
@@ -248,6 +250,7 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAStringSet", aln2="miss
                           type=type, conservation=conservation)
           }
           )
+
 setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAString", aln2="DNAString"),
           function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
@@ -257,6 +260,7 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAString", aln2="DNAStri
                              type=type, conservation=conservation)
           }
           )
+
 #setMethod("searchAln", signature(pwm="PWMatrix", aln1="PairwiseAlignmentTFBS", aln2="missing"),
 #          function(pwm, aln1, aln2, min.score="80%", windowSize=51L, cutoff=0.7,
 #                   strand="*", type="any", conservation=NULL){
@@ -267,4 +271,25 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAString", aln2="DNAStri
 #                          type=type, conservation=conservation1(aln1))
 #          }
 #          )
+
+### -----------------------------------------------------------------
+### searchPairSeq, it search two unaligned sequences, usually the genome wise. and find the shared binding sites.
+###
+setMethod("searchPairBSgenome", signature(pwm="PWMatrix"),
+          function(pwm, BSgenome1, BSgenome2, chr1, chr2,
+                   min.score="80%", strand="*", chain){
+            ans = do_PairBSgenomeSearch(pwm, BSgenome1, BSgenome2, chr1, chr2, strand, min.score, chain)
+            return(ans)
+          }
+          )
+
+setMethod("searchPairBSgenome", signature(pwm="PWMatrixList"),
+          function(pwm, BSgenome1, BSgenome2, chr1, chr2,
+                   min.score="80%", strand="*", chain){
+            ans_list = lapply(pwm, searchPairBSgenome, BSgenome1, BSgenome2,
+                              chr1, chr2, min.score, strand, chain)
+            ans = SitePairSetList(ans_list)
+            return(ans)
+          }
+          )
 

@@ -348,6 +348,7 @@ setMethod("getMatrixSet", "SQLiteConnection",
                matrixSet = c(matrixSet, list(toICM(xmatrix)))
              }
            }
+           names(matrixSet) = ID(matrixSet)
            return(matrixSet)
          }
          )

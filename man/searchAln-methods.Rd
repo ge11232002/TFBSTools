@@ -67,8 +67,8 @@
 }
 
 \value{
-  A \code{Site} object is returned when pwm is a \code{PWMatrix}, 
-  while a \code{SiteList} is returned when pwm is a \code{PWMatrixList}.
+  A \code{SitePairSet} object is returned when pwm is a \code{PWMatrix}, 
+  while a \code{SitePairSetList} is returned when pwm is a \code{PWMatrixList}.
 }
 
 \author{
@@ -85,7 +85,7 @@
     ## two character objects
     aln1 = "ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG"
     aln2 = "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
-    sitePair = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5, strand="*", type="any")
+    sitePairSet = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5, strand="*", type="any")
   }
 }
 

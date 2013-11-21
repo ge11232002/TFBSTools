@@ -118,10 +118,10 @@ ICMatrixList = function(..., use.names=TRUE){
 }
 
 ### ---------------------------------------------------------------------
-### Site object: a nucleotide sequence feature object representing (possibly putative) transcription factor binding site. Different from TFBS perl module, here one Site object contains multiple sites.
+### SiteSet object: a nucleotide sequence feature object representing (possibly putative) transcription factor binding site. Different from TFBS perl module, here one Site object contains multiple sites.
 ###
 
-setClass("Site",
+setClass("SiteSet",
          slots=c(views="XStringViews",
                  score="numeric",    # vector
                  strand="character",  ## make it Rle() later.
@@ -133,88 +133,88 @@ setClass("Site",
          )
 
 ### -------------------------------------------------------------------
-### The Site constructor
+### The SiteSet constructor
 ###
-Site = function(views, score, strand="*",
-                seqname="Unknown",
-                sitesource="TFBS", primary="TF binding site",
-                pattern){
-  new("Site", views=views, seqname=seqname, score=score, strand=strand,
+SiteSet = function(views, score, strand="*",
+                   seqname="Unknown",
+                   sitesource="TFBS", primary="TF binding site",
+                   pattern){
+  new("SiteSet", views=views, seqname=seqname, score=score, strand=strand,
       sitesource=sitesource, primary=primary, pattern=pattern)
 }
 
 
 ### --------------------------------------------------------------
-### SiteList objects
+### SiteSetList objects
 ###
 
-setClass("SiteList",
+setClass("SiteSetList",
          contains="SimpleList",
          representation(
                         ),
          prototype(
-                   elementType="Site"
+                   elementType="SiteSet"
                    )
          )
 ### -------------------------------------------------------------
-### SiteList() constructor
+### SiteSetList() constructor
 ###
-SiteList = function(..., use.names=TRUE){
+SiteSetList = function(..., use.names=TRUE){
   listData = list(...)
   if(is(listData[[1]], "list"))
     listData = listData[[1]]
-  ok = sapply(listData, is, "Site")
+  ok = sapply(listData, is, "SiteSet")
   if(!all(ok))
-    stop("SiteList() only accepts Site objects!")
+    stop("SiteSetList() only accepts SiteSet objects!")
   if(!use.names)
     names(listData) = NULL
-  IRanges:::newList("SiteList", listData)
+  IRanges:::newList("SiteSetList", listData)
 }
 
 
 ### -------------------------------------------------------------------
-### SitePair object: a nucleotide sequence feature object representing (possibly putative) transcription factor binding site from A alignment
+### SitePairSet object: a nucleotide sequence feature object representing (possibly putative) transcription factor binding site from A alignment
 
-setClass("SitePair",
-         slots=c(site1="Site",
-                 site2="Site"
+setClass("SitePairSet",
+         slots=c(siteset1="SiteSet",
+                 siteset2="SiteSet"
                  )
          )
 
 ### -----------------------------------------------------------------
-### The SitePair constructor
+### The SitePairSet constructor
 ###
-SitePair = function(site1, site2){
-  new("SitePair", site1=site1, site2=site2)
+SitePairSet = function(siteset1, siteset2){
+  new("SitePairSet", siteset1=siteset1, siteset2=siteset2)
 }
 
 
 ### ----------------------------------------------------------------
-### SitePairList obejct: holds the list of SitePair.
+### SitePairSetList obejct: holds the list of SitePairSet.
 ###
 
-setClass("SitePairList",
+setClass("SitePairSetList",
          contains="SimpleList",
          representation(
                         ),
          prototype(
-                   elementType="SitePair"
+                   elementType="SitePairSet"
                    )
          )
 
 ### ------------------------------------------------------------
-### SitePairList constructor
+### SitePairSetList constructor
 ###
-SitePairList = function(..., use.names=TRUE){
+SitePairSetList = function(..., use.names=TRUE){
   listData = list(...)
   if(is(listData[[1]], "list")) # This is pretty ugly. better solution?
     listData = listData[[1]]
-  ok = sapply(listData, is, "SitePair")
+  ok = sapply(listData, is, "SitePairSet")
   if(!all(ok))
-    stop("SitePairList() only accepts SitePair objects!")
+    stop("SitePairSetList() only accepts SitePairSet objects!")
   if(!use.names)
     names(listData) = NULL
-  IRanges:::newList("SitePairList", listData)
+  IRanges:::newList("SitePairSetList", listData)
 }
 
 ### ----------------------------------------------------------------

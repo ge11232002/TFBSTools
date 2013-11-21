@@ -18,6 +18,7 @@
 \alias{length,XMatrix-method}
 \alias{Matrix}
 \alias{Matrix,XMatrix-method}
+\alias{Matrix<-}
 \alias{Matrix<-,XMatrix-method}
 \alias{matrixClass}
 \alias{matrixClass,XMatrix-method}

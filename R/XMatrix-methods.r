@@ -95,6 +95,12 @@ setMethod("length", "XMatrix",
           }
           )
 
+setMethod("ncol", "XMatrix",
+          function(x){
+            ncol(Matrix(x))
+          }
+          )
+
 setMethod("reverseComplement", "PWMatrix",
           function(x){
             ans = x
