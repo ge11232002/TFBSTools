@@ -2,8 +2,8 @@ include Makevars.common
 OBJECTS = $(PKG_OBJECTS)
 all: $(SHLIB)
 
-clean:$
-	rm -f $(OBJECTS)$
+clean:
+	rm -f $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) -c $< -o $@

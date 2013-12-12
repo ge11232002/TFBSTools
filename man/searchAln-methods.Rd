@@ -77,16 +77,16 @@
 
 \seealso{
   \code{\link{searchSeq}}
-
 }
 
 \examples{
-  \dontrun{
-    ## two character objects
-    aln1 = "ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG"
-    aln2 = "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
-    sitePairSet = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5, strand="*", type="any")
-  }
+  data(MA0003.2)
+  pwm = toPWM(MA0003.2)
+  ## two character objects
+  aln1 = "ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG"
+  aln2 = "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
+  sitePairSet = searchAln(pwm, aln1, aln2, min.score="50\%",
+                          cutoff=0.5, strand="*", type="any")
 }
 
 \keyword{methods}

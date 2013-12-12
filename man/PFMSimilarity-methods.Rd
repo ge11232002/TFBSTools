@@ -1,24 +1,24 @@
-\name{searchMatrix-methods}
+\name{PFMSimilarity-methods}
 \docType{methods}
-\alias{searchMatrix}
-\alias{searchMatrix-methods}
-\alias{searchMatrix,matrix,character-method}
-\alias{searchMatrix,matrix,matrix-method}
-\alias{searchMatrix,matrix,PFMatrix-method}
-\alias{searchMatrix,PFMatrix,character-method}
-\alias{searchMatrix,PFMatrix,matrix-method}
-\alias{searchMatrix,PFMatrix,PFMatrix-method}
-\alias{searchMatrix,PFMatrixList,character-method}
-\alias{searchMatrix,PFMatrixList,matrix-method}
-\alias{searchMatrix,PFMatrixList,PFMatrix-method}
-\title{searchMatrix method}
+\alias{PFMSimilarity}
+\alias{PFMSimilarity-methods}
+\alias{PFMSimilarity,matrix,character-method}
+\alias{PFMSimilarity,matrix,matrix-method}
+\alias{PFMSimilarity,matrix,PFMatrix-method}
+\alias{PFMSimilarity,PFMatrix,character-method}
+\alias{PFMSimilarity,PFMatrix,matrix-method}
+\alias{PFMSimilarity,PFMatrix,PFMatrix-method}
+\alias{PFMSimilarity,PFMatrixList,character-method}
+\alias{PFMSimilarity,PFMatrixList,matrix-method}
+\alias{PFMSimilarity,PFMatrixList,PFMatrix-method}
+\title{PFMSimilarity method}
 \description{
   Given a \code{PFMatrix} or a normal matrix, 
   align it with another set of \code{PFMatrix} to assess the similarity.
 }
 
 \usage{
-  searchMatrix(pfmSubject, pfmQuery, openPenalty=3, extPenalty=0.01)
+  PFMSimilarity(pfmSubject, pfmQuery, openPenalty=3, extPenalty=0.01)
 }
 
 \arguments{
@@ -59,13 +59,13 @@
     ## one to one comparison
     pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
     pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
-    score = searchMatrix(pfmSubject, pfmQuery)
+    score = PFMSimilarity(pfmSubject, pfmQuery)
     ## one to several comparsion
     opts = list()
     opts[["class"]] = "Ig-fold"
     pfmList = getMatrixSet(JASPAR2014, opts)
-    scores = searchMatrix(pfmList, pfmQuery)
-  }  
+    scores = PFMSimilarity(pfmList, pfmQuery)
+  }
 }
 
 \keyword{methods}

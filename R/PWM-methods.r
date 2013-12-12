@@ -27,7 +27,8 @@ setMethod("toPWM", "character",
           function(x, type="log2probratio", pseudocounts=0.8, 
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             dnaset = DNAStringSet(x)
-            toPWM(dnaset, pseudocounts=pseudocounts,
+            toPWM(dnaset, type=type,
+                  pseudocounts=pseudocounts,
                   bg=bg)
           }
           )
@@ -37,7 +38,8 @@ setMethod("toPWM", "DNAStringSet",
             if(!isConstant(width(x)))
               stop("'x' must be rectangular (i.e. have a constant width)")
             pfm = consensusMatrix(x)
-            toPWM(pfm, pseudocounts=pseudocounts,
+            toPWM(pfm, type=type,
+                  pseudocounts=pseudocounts,
                   bg=bg)
           }
           )
@@ -45,7 +47,8 @@ setMethod("toPWM", "PFMatrix",
           function(x, type="log2probratio", pseudocounts=0.8, bg=NULL){
             if(is.null(bg))
               bg = bg(x)
-            pwmMatrix = toPWM(Matrix(x), pseudocounts=pseudocounts,
+            pwmMatrix = toPWM(Matrix(x), type=type,
+                              pseudocounts=pseudocounts,
                               bg=bg)
             pwm = PWMatrix(ID=ID(x), name=name(x), matrixClass=matrixClass(x),
                            strand=strand(x), bg=bg, 
@@ -289,6 +292,107 @@ setMethod("searchPairBSgenome", signature(pwm="PWMatrixList"),
             ans_list = lapply(pwm, searchPairBSgenome, BSgenome1, BSgenome2,
                               chr1, chr2, min.score, strand, chain)
             ans = SitePairSetList(ans_list)
+            return(ans)
+          }
+          )
+
+### -----------------------------------------------------------------
+### PWMDivergence, computes the normalised Euclidian distance
+###  (Harbison et al. 2004)
+PWMEuclidian = function(pwm1, pwm2){
+  # now the pwm1 and pwm2 must have same widths
+  stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
+  pwm1 = Biostrings:::.normargPwm(pwm1)
+  pwm2 = Biostrings:::.normargPwm(pwm2)
+  width = ncol(pwm1)
+  diffMatrix = (pwm1 - pwm2)^2
+  PWMDistance = sum(sqrt(colSums(diffMatrix))) / sqrt(2) / width
+  return(PWMDistance) 
+}
+
+PWMPearson = function(pwm1, pwm2){
+  # now the pwm1 and pwm2 must have the same widths
+  stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
+  pwm1 = Biostrings:::.normargPwm(pwm1)
+  pwm2 = Biostrings:::.normargPwm(pwm2)
+  top = colSums((pwm1 - 0.25) * (pwm2 - 0.25))
+  bottom = sqrt(colSums((pwm1 - 0.25)^2) * colSums((pwm2 - 0.25)^2))
+  r = 1 / ncol(pwm1) * sum((top / bottom))
+  return(r)
+}
+
+PWMKL = function(pwm1, pwm2){
+  # now the pwm1 and pwm2 must have the same widths
+  stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
+  pwm1 = Biostrings:::.normargPwm(pwm1)
+  pwm2 = Biostrings:::.normargPwm(pwm2)
+  KL = 0.5 / ncol(pwm1) * sum(colSums(pwm1 * log(pwm1 / pwm2) + pwm2 * log(pwm2 / pwm2)))
+  return(KL)
+}
+
+setMethod("PWMSimilarity", signature(pwmSubject="matrix", pwmQuery="matrix"),
+          ## It takes the prob PWM, rather than log prob PWM.
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+            pwm1 = pwmSubject
+            pwm2 = pwmQuery
+            method = match.arg(method)
+            widthMin = min(ncol(pwm1), ncol(pwm2))
+            ans = c()
+            for(i in 1:(1+ncol(pwm1)-widthMin)){
+              for(j in 1:(1+ncol(pwm2)-widthMin)){
+                pwm1Temp = pwm1[ ,i:(i+widthMin-1)]
+                pwm2Temp = pwm2[ ,j:(j+widthMin-1)]
+                ansTemp = switch(method,
+                                 "Euclidian"=PWMEuclidian(pwm1Temp, pwm2Temp),
+                                 "Pearson"=PWMPearson(pwm1Temp, pwm2Temp),
+                                 "KL"=PWMKL(pwm1Temp, pwm2Temp))
+                ans = c(ans, ansTemp)
+              }
+            }
+            ans = switch(method,
+                         "Euclidian"=min(ans),
+                         "Pearson"=max(ans),
+                         "KL"=min(ans)
+                         )
+            return(ans)
+          }
+          )
+
+setMethod("PWMSimilarity", signature(pwmSubject="PWMatrix", pwmQuery="PWMatrix"),
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+            PWMSimilarity(pwmSubject@matrix, pwmQuery@matrix, method=method)
+          }
+          )
+
+setMethod("PWMSimilarity", signature(pwmSubject="matrix", pwmQuery="PWMatrix"),
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+            PWMSimilarity(pwmSubject, pwmQuery@matrix, method=method)
+          }
+          )
+
+setMethod("PWMSimilarity", signature(pwmSubject="PWMatrix", pwmQuery="matrix"),
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+            PWMSimilarity(pwmSubject@matrix, pwmQuery, method=method)
+          }
+          )
+
+setMethod("PWMSimilarity", signature(pwmSubject="PWMatrixList", pwmQuery="PWMatrix"),
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+            #ans = lapply(pwm1, PWMSimilarity, pwm2, method=method)
+            PWMSimilarity(pwmSubject, pwmQuery@matrix, method=method)
+          }
+          )
+
+setMethod("PWMSimilarity", signature(pwmSubject="PWMatrixList", pwmQuery="matrix"),
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+            ans = sapply(pwmSubject, PWMSimilarity, pwmQuery, method=method)
+            return(ans)
+          }
+          )
+
+setMethod("PWMSimilarity", signature(pwmSubject="PWMatrixList", pwmQuery="PWMatrixList"),
+          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+            ans = mapply(PWMSimilarity, pwmSubject, pwmQuery, method=method)
             return(ans)
           }
           )

@@ -16,6 +16,7 @@
 \newcommand{\software}[1]{\textsf{#1}}
 \newcommand{\R}{\software{R}}
 \newcommand{\IRanges}{\Rpackage{IRanges}}
+\usepackage{amsmath}
 
 \title{The \textbf{TFBSTools} package overview}
 \author{Ge Tan}
@@ -60,7 +61,7 @@ such as MEME (\cite{Bailey:1994wq}).
 
 \section{S4 classes in TFBSTools}
 The package is built around a number of S4 class of which the \Rclass{XMatrix}, 
-\Rclass{Site} classes are the most important.
+\Rclass{SiteSet} classes are the most important.
 The section will briefly explain most of them defined in \textbf{TFBSTools}.
 %These classes were designed to store necessary information relevant to 
 
@@ -241,6 +242,30 @@ foo1 = permuteMatrix(pfmList, type="intra")
 foo2 = permuteMatrix(pfmList, type="inter")
 @
 
+\subsection{PWM similarity}
+To measure the similarity of two PWM matrix in three measurements:
+"normalised Euclidian distance", "Pearson correlation" and "Kullback Leibler divergence".
+Given two PWMs, $P^1$ and $P^2$, where l is the length. 
+$P_{i,b}$ is the values in column i with base b.
+The normalised Euclidian distance is computed in
+
+\begin{equation}
+  D(a,b) = {1 \over {\sqrt{2}l}} \cdot \sum_{i=1}^{l} \sqrt{\sum_{b \in {\{A,C,G,T\}}} (P_{i,b}^1-P_{i,b}^2)^2}
+\end{equation}
+
+This distance is between 0 (perfect identity) and 1 (complete dis-similarity).
+
+The pearson correlation coefficient is computed in
+\begin{equation}
+  r(P^1, P^2) = {1 \over l} \cdot \sum_{i=1}^l {\sum_{b \in \{A,C,G,T\}} (P_{i,b}^1 - 0.25)(P_{i,b}^2-0.25) \over \sqrt{\sum_{b \in \{A,C,G,T\}} (P_{i,b}^1 - 0.25)^2 \cdot \sum_{b \in \{A,C,G,T\}} (P_{i,b}^2 - 0.25)^2}}.
+\end{equation}
+
+The Kullback-Leibler divergence is computed in 
+\begin{equation}
+  KL(P^1, P^2) = {1 \over {2l}} \cdot \sum_{i=1}^l \sum_{b \in \{A,C,G,T\}} (P_{i,b}^1\log{ P_{i,b}^1 \over P_{i,b}^2}+ P_{i,b}^2\log{P_{i,b}^2 \over {P_{i,b}^1}}).
+\end{equation}
+
+
 \section{Scan sequence and alignments with PWM pattern}
 \subsection{searchSeq}
 \textit{searchSeq} scans a nucleotide sequence with the pattern represented by the PWM.
@@ -272,6 +297,25 @@ sitePair = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5,
 ## generate gff style output
 writeGFF3(sitePair)
 writeGFF2(sitePair)
+@
+
+\subsection{searchPairBSgenome}
+\textit{searchPairBSgenome} is designed to do the genome-wise phylogenetic footprinting.
+Given two \Rclass{BSgenome}, a chain file for liftover from one genome to another,
+\textit{searchPairBSgenome} identifies the putative transcription factor binding sites
+which are conserved in both genomes.
+<<rtl-search, eval=FALSE, results = hide>>=
+library(rtracklayer)
+library(JASPAR2014)
+library(BSgenome.Hsapiens.UCSC.hg19)
+library(BSgenome.Mmusculus.UCSC.mm10)
+pfm = getMatrixByID(JASPAR2014, ID="MA0004.1")
+pwm=toPWM(pfm)
+chain = import.chain("Downloads/hg19ToMm10.over.chain")
+sitepairset = searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
+                                 BSgenome.Mmusculus.UCSC.mm10,
+                                 chr1="chr1", chr2="chr1",
+                                 min.score="90%", strand="+", chain=chain)
 @
 
 \section{Use external pattern generators}

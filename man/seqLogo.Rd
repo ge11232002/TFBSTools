@@ -64,9 +64,9 @@ T D Schneider, R. M. S. (1990). Sequence logos: a new way to display consensus s
 }
 
 \examples{
-  \dontrun{
-    seqLogo(icm, ic.scale = TRUE)
-  }  
+  data(MA0003.2)
+  icm = toICM(MA0003.2)
+  seqLogo(icm, ic.scale = TRUE)
 }
 
 \keyword{methods}

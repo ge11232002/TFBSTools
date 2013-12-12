@@ -13,6 +13,9 @@ setMethod("matrixType", "ICMatrix", function(x) "ICM")
 setMethod("matrixType", "PWMatrix", function(x) "PWM")
 setMethod("pseudocounts", "PWMatrix", function(x) x@pseudocounts)
 setMethod("schneider", "ICMatrix", function(x) x@schneider)
+setMethod("colSums", "XMatrix", function(x) colSums(x@matrix))
+setMethod("rowSums", "XMatrix", function(x) rowSums(x@matrix))
+setMethod("dim", "XMatrix", function(x) dim(x@matrix))
 
 ### -----------------------------------------------------------------
 ### Setters
@@ -23,42 +26,49 @@ setReplaceMethod("ID", "XMatrix",
                    return(x)
                  }
                  )
+
 setReplaceMethod("name", "XMatrix",
                  function(x, value){
                    x@name = value
                    return(x)
                  }
                  )
+
 setReplaceMethod("matrixClass", "XMatrix",
                  function(x, value){
                    x@matrixClass = value
                    return(x)
                  }
                  )
+
 setReplaceMethod("strand", "XMatrix",
                  function(x, value){
                    x@strand = value
                    return(x)
                  }
                  )
+
 setReplaceMethod("bg", "XMatrix",
                  function(x, value){
                    x@bg = value
                    return(x)
                  }
                  )
+
 setReplaceMethod("Matrix", "XMatrix",
                  function(x, value){
                    x@matrix = value
                    return(x)
                  }
                  )
+
 setReplaceMethod("pseudocounts", "PWMatrix",
                  function(x, value){
                    x@pseudocounts = value
                    return(x)
                  }
                  )
+
 setReplaceMethod("schneider", "ICMatrix",
                  function(x, value){
                    x@schneider = value

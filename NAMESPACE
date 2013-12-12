@@ -59,6 +59,8 @@ export(
 exportMethods(
   ## XMatrix-methods.r
   length,
+  ncol,
+  dim,
   reverseComplement
 )
 
@@ -85,11 +87,16 @@ export(
   XMatrixList,
   #alignments,
 
+  # XMatrix-methods.r
+  colSums,
+  rowSums,
+
   ## PWM-methods.r
   toPWM,
   searchSeq,
   searchAln,
   searchPairBSgenome,
+  PWMSimilarity,
 
   ## ICM-methods.r
   toICM,
@@ -106,7 +113,7 @@ export(
   #doSiteSearch
 
   ## PFM-methods
-  searchMatrix,
+  PFMSimilarity,
   permuteMatrix,
 
   ## Wrappers-methods.r
