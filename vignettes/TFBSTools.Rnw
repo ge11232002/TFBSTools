@@ -37,7 +37,7 @@ discovered transcription factor binding sites,
 which can be represented as sequence patterns 
 with various degree of degeneracy.
 
-This \textbf{TFBSTools} package is designed to be a compuational framework
+This \Rpackage{TFBSTools} package is designed to be a compuational framework
 for transcription factor binding site analysis. 
 Based on the famous perl module TFBS (\cite{Lenhard:2002up}),
 we extended the class definitions and enhanced implementations in an interactive environment.
@@ -52,8 +52,8 @@ Finally, in advanced cases, predictive statistical models of regulatory
 regions are constructed based on  mutiple occurrences of the detected
 patterns. 
 
-\textbf{TFBSTools} aims to support all these functionalities
-in the environment \textbf{R}, except the external motif finding software,
+\Rpackage{TFBSTools} aims to support all these functionalities
+in the environment \R{R}, except the external motif finding software,
 such as MEME (\cite{Bailey:1994wq}). 
 %However, only the JASPAR database interface functions are exported
 %in this release to accompany \Rpackage{JASPAR2014}. 
@@ -62,7 +62,7 @@ such as MEME (\cite{Bailey:1994wq}).
 \section{S4 classes in TFBSTools}
 The package is built around a number of S4 class of which the \Rclass{XMatrix}, 
 \Rclass{SiteSet} classes are the most important.
-The section will briefly explain most of them defined in \textbf{TFBSTools}.
+The section will briefly explain most of them defined in \Rpackage{TFBSTools}.
 %These classes were designed to store necessary information relevant to 
 
 \subsection{XMatrix and its subclasses}
@@ -73,12 +73,12 @@ for one raw position frequency matrix (PFM).
 This object is compatible with one record from JASPAR database.
 
 \Rclass{PWMatrix} is used to store a position weight matrix (PWM). 
-Compared with \Rclass{PFMatrix}, it has one extra slot \textit{pseudocounts}.
+Compared with \Rclass{PFMatrix}, it has one extra slot \Rfunarg{pseudocounts}.
 
 \Rclass{ICMatrix} is used to store a information content matrix (ICM).
-Compared with \Rclass{PWMatrix}, it has one extra slot \textit{schneider}.
+Compared with \Rclass{PWMatrix}, it has one extra slot \Rfunarg{schneider}.
 
-<<rtl-PFMatrix, eval=FALSE, results = hide>>=
+<<rtl-PFMatrix, eval=TRUE, results = hide>>=
 library(TFBSTools)
 pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+",
         bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
@@ -175,16 +175,16 @@ deleteMatrixHavingID(db, "MA0003")
 This section will give an introduction of matrix conversion from PFM.
 
 \subsection{PFM to PWM}
-The method \textit{toPWM} can convert PFM to PWM \cite{Wasserman:2004ec}. 
-Optional parameters include \textit{type}, \textit{pseudocounts}, \textit{bg}. 
+The method \Rfunction{toPWM} can convert PFM to PWM \cite{Wasserman:2004ec}. 
+Optional parameters include \Rfunarg{type}, \Rfunarg{pseudocounts}, \Rfunarg{bg}. 
 The implementation in this package is a bit different from \Rpackage{Biostrings}.
 
-First of all, \textit{toPWM} allows the input matrix to have different column sums,
+First of all, \Rfunction{toPWM} allows the input matrix to have different column sums,
 which means the count matrix can have an unequal number of sequences contributing
 to each column. This scenario is rare, but exists in JASPAR SELEX data.
 
-Second, we can specify customized \textit{pseudocounts}. 
-\textit{pseudocounts} is necessary for correcting the small number of counts
+Second, we can specify customized \Rfunarg{pseudocounts}. 
+\Rfunarg{pseudocounts} is necessary for correcting the small number of counts
 or eliminating the zero values before log transformation.
 In TFBS perl module, the square root of the number of sequences contributing to each column. 
 However, it has been shown to too harsh (\cite{Nishida:2009kf}).
@@ -196,9 +196,9 @@ pwm = toPWM(pfm, pseudocounts=0.8)
 @
 
 \subsection{PFM to ICM}
-The method \textit{toICM} can convert PFM to ICM (\cite{Schneider:1986ur}).
-Besides the similar \textit{pseudocounts}, \textit{bg}, 
-you can also choose to do the \textbf{schneider} correction.
+The method \Rfunarg{toICM} can convert PFM to ICM (\cite{Schneider:1986ur}).
+Besides the similar \Rfunarg{pseudocounts}, \Rfunarg{bg}, 
+you can also choose to do the \Rfunarg{schneider} correction.
 
 <<rtl-matrixMethods, eval=FALSE, results = hide>>=
 icm = toICM(pfm, pseudocounts=0.8)
@@ -268,7 +268,7 @@ The Kullback-Leibler divergence is computed in
 
 \section{Scan sequence and alignments with PWM pattern}
 \subsection{searchSeq}
-\textit{searchSeq} scans a nucleotide sequence with the pattern represented by the PWM.
+\Rfunction{searchSeq} scans a nucleotide sequence with the pattern represented by the PWM.
 The strand argument controls which strand of the sequence will be searched.
 When it is "*", both strands will be scanned.
 
@@ -284,7 +284,7 @@ writeGFF2(site)
 @
 
 \subsection{searchAln}
-\textit{searchAln} scans a pairwise alignment with the pattern represented by the PWM.
+\Rfunction{searchAln} scans a pairwise alignment with the pattern represented by the PWM.
 It reports only those hits that are present in equivalent positions of both sequences 
 and exceed a specified threshold score in both, 
 AND are found in regions of the alignment above the specified.
@@ -300,9 +300,9 @@ writeGFF2(sitePair)
 @
 
 \subsection{searchPairBSgenome}
-\textit{searchPairBSgenome} is designed to do the genome-wise phylogenetic footprinting.
+\Rfunction{searchPairBSgenome} is designed to do the genome-wise phylogenetic footprinting.
 Given two \Rclass{BSgenome}, a chain file for liftover from one genome to another,
-\textit{searchPairBSgenome} identifies the putative transcription factor binding sites
+\Rfunction{searchPairBSgenome} identifies the putative transcription factor binding sites
 which are conserved in both genomes.
 <<rtl-search, eval=FALSE, results = hide>>=
 library(rtracklayer)
@@ -322,7 +322,7 @@ sitepairset = searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
 In this section, we will introduce wrapper functions for external motif discovery programs. 
 So far, MEME is supported.
 \subsection{MEME}
-\textit{runMEME} takes a \Rclass{DNAStringSet} or a set of \Rclass{characters} as input,
+\Rfunction{runMEME} takes a \Rclass{DNAStringSet} or a set of \Rclass{characters} as input,
 and returns a \Rclass{MotifSet} object.
 
 <<rtl-wrappers, eval=FALSE, results = hide>>=

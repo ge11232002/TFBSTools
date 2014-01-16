@@ -36,7 +36,7 @@
   
   \code{ID}, \code{name} 
   
-  \code{collection=c("CORE", "CNE", "PHYLOFACTS", ...)}
+  \code{collection=c("CORE", "CNE", "PHYLOFACTS", "SPLICE", "POLII", "FAM", "PBM", "PBM_HOMEO", "PBM_HLH"}
   
   \code{all_versions=c(TRUE,FALSE)}
   
@@ -44,9 +44,13 @@
 
   (2) Tags based criterias: 
   
-  \code{class}, \code{type}, \code{family}
+  \code{class}: "Zipper-Type"", "Helix-Turn-Helix", etc.
   
-  \code{medline}, \code{tax_group}
+  \code{type}: "SELEX", "ChIP-seq", "PBM", etc.
+  
+  \code{tax_group}: "plants", "vertebrates", "insects", "urochordat", "nematodes", "fungi".
+  
+  \code{family}, \code{medline}, 
 
   (3) Further criterias: 
   
