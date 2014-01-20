@@ -54,6 +54,7 @@ setMethod("toPWM", "PFMatrix",
                            strand=strand(x), bg=bg, 
                            tags=tags(x), matrix=pwmMatrix,
                            pseudocounts=pseudocounts)
+            pwm
           }
           )
 

@@ -208,6 +208,7 @@
   ans_pfm = PFMatrix(ID=paste0(baseID, ".", version),
                      name=name,
                      matrixClass=matrixClass,
+                     strand="+",
                      tags=tags,
                      matrix=FMatrix
                      )

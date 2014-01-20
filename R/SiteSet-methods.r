@@ -130,6 +130,8 @@ setMethod("writeGFF3", "SiteSet",
           function(x){
             if(length(x) == 0)
               return(data.frame())
+            seqs = DNAStringSet(views(x))
+            seqs[strand(x) == "-"] = reverseComplement(seqs[strand(x) == "-"])
             gff = list(seqname=seqname(x),
                        source=sitesource(x),
                        feature=sitesource(x),
@@ -141,7 +143,7 @@ setMethod("writeGFF3", "SiteSet",
                        attributes=paste(
                                         paste("TF", name(pattern(x)), sep="="),
                                         paste("class", matrixClass(pattern(x)), sep="="),
-                                        paste("sequence", as.character(views(x)), sep="="),
+                                        paste("sequence", seqs, sep="="),
                                         sep=";")
                        )
             gff = as.data.frame(gff)
@@ -153,6 +155,8 @@ setMethod("writeGFF2", "SiteSet",
           function(x){
             if(length(x) == 0)
               return(data.frame())
+            seqs = DNAStringSet(views(x))
+            seqs[strand(x) == "-"] = reverseComplement(seqs[strand(x) == "-"])
             gff = list(seqname=seqname(x),
                        source=sitesource(x),
                        feature=sitesource(x),
@@ -164,7 +168,7 @@ setMethod("writeGFF2", "SiteSet",
                        attributes=paste(
                                         paste("TF", paste0("\"", name(pattern(x)), "\""), sep=" "),
                                         paste("class", paste0("\"", matrixClass(pattern(x)), "\""), sep=" "),
-                                        paste("sequence", paste0("\"", as.character(views(x)), "\""), sep=" "),
+                                        paste("sequence", paste0("\"", seqs, "\""), sep=" "),
                                         sep="; ")
                        )
             gff = as.data.frame(gff)

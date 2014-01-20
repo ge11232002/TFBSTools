@@ -31,6 +31,8 @@
     pseudocounts is a numeric non-negative vector, which means you can specify different pseudocounts for each site. 
     The values will be recycled if shorter than the length of sites. 
     0.8 is recommended. See the reference below for more details.
+    In the TFBS perl module, the squared root of the column sum of the matrix, 
+    i.e., the number of motifs used to construct the PFM, is used.
   }
   \item{bg}{
     bg is a vector of background frequencies of four bases with names containing A, C, G, T. When toPWM is applied to a \code{PFMatrix}, if bg is not specified, it will use the bg information contained in \code{PFMatrix}. 

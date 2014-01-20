@@ -104,22 +104,22 @@ setMethod("XMatrixList", "list",
 
 PFMatrixList = function(..., use.names=TRUE){
   listData = list(...)
-  if(is(listData[[1]], "list"))
-    listData = listData[[1]]
+  #if(is(listData[[1]], "list"))
+  #  listData = listData[[1]]
   XMatrixList(listData, use.names=use.names, type="PFMatrixList")
 }
 
 PWMatrixList = function(..., use.names=TRUE){
   listData = list(...)
-  if(is(listData[[1]], "list"))
-    listData = listData[[1]]
+  #if(is(listData[[1]], "list"))
+  #  listData = listData[[1]]
   XMatrixList(listData, use.names=use.names, type="PWMatrixList")
 }
 
 ICMatrixList = function(..., use.names=TRUE){
   listData = list(...)
-  if(is(listData[[1]], "list"))
-    listData = listData[[1]]
+  #if(is(listData[[1]], "list"))
+  #  listData = listData[[1]]
   XMatrixList(listData, use.names=use.names, type="ICMatrixList")
 }
 
