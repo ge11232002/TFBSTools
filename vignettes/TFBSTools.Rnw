@@ -78,7 +78,7 @@ Compared with \Rclass{PFMatrix}, it has one extra slot \Rfunarg{pseudocounts}.
 \Rclass{ICMatrix} is used to store a information content matrix (ICM).
 Compared with \Rclass{PWMatrix}, it has one extra slot \Rfunarg{schneider}.
 
-<<rtl-PFMatrix, eval=TRUE, results = hide>>=
+<<rtl-PFMatrix, eval=TRUE, results = verbatim>>=
 library(TFBSTools)
 pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+",
         bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
@@ -95,14 +95,19 @@ pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+"
 ## coerced to matrix
 as.matrix(pfm)
 
+
 ## access the slots of pfm
 ID(pfm)
 name(pfm)
 Matrix(pfm)
 
+
 ## conversion to pwm, icm
 pwm = toPWM(pfm)
+pwm 
+
 icm = toICM(pfm)
+icm
 
 ## get the reverse complment matrix with all the same information except the strand.
 reverseComplement(pwm)
@@ -115,10 +120,11 @@ Basically it is a SimpleList for easy manipulation the whole set of
 \Rclass{XMatrix}. 
 The concrete objects can be \Rclass{PFMatrix}, \Rclass{PWMatrix} and \Rclass{ICMatrix}.
 
-<<rtl-PFMatrixList, eval=FALSE, results = hide>>=
+<<rtl-PFMatrixList, eval=TRUE, results =verbatim>>=
 pfm2 = pfm
 pfmList = PFMatrixList(pfm1=pfm, pfm2=pfm2, use.names=TRUE)
-name(pfmList)
+pfmList
+names(pfmList)
 @
 
 \subsection{SiteSet, SiteSetList ,SitePairSet and SitePairSetList}
@@ -144,8 +150,10 @@ This search function fetches matrix data for all matrices in the database
 matching criteria defined by the named arguments
 and returns a PFMatrixList object.
 For more search criterias, please see the help page for \Rfunction(getMatrixSet).
+
 <<rtl-searchDB, eval=FALSE, results = hide>>=
 library(JASPAR2014)
+library(TFBSTools)
 opts = list()
 opts[["species"]] = 9606
 opts[["name"]] = "RUNX1"
@@ -191,8 +199,9 @@ However, it has been shown to too harsh (\cite{Nishida:2009kf}).
 Hence, a default value of 0.8 is used. 
 Of course, it can be changed to other customized value or even different values for each column.
 
-<<rtl-matrixMethods, eval=FALSE, results = hide>>=
+<<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
 pwm = toPWM(pfm, pseudocounts=0.8)
+pwm
 @
 
 \subsection{PFM to ICM}
@@ -200,29 +209,41 @@ The method \Rfunarg{toICM} can convert PFM to ICM (\cite{Schneider:1986ur}).
 Besides the similar \Rfunarg{pseudocounts}, \Rfunarg{bg}, 
 you can also choose to do the \Rfunarg{schneider} correction.
 
-<<rtl-matrixMethods, eval=FALSE, results = hide>>=
-icm = toICM(pfm, pseudocounts=0.8)
+<<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
+icm = toICM(pfm, pseudocounts=0.8, schneider=TRUE)
+icm
+@
+
+To plot the sequence logo shown in figure \ref{fig.logo1},
+we use the package \Rpackage{seqlogo}.
+
+\begin{figure}
+\centering
+\caption{Sequence logo with column heights proportional to information content. \label{fig.logo1}}
+<<seqLogo1, fig=TRUE, echo=TRUE, height=4, width=6>>=
 seqLogo(icm)
 @
+\end{figure}
 
 \subsection{Align PFM to a custom matrix or IUPAC string}
 In some cases, it is beneficial to assess similarity to input data 
 (as with using BLAST for sequence data comparison when using Genbank).
 
-<<rtl-matrixMethods, eval=FALSE, results = hide>>=
-library(JASPAR2014)
+<<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
+
 ## one to one comparison
-pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
-pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
-score = searchMatrix(pfmSubject, pfmQuery)
+data(MA0003.2)
+data(MA0004.1)
+pfmSubject = MA0003.2
+pfmQuery =  MA0004.1
+PFMSimilarity(pfmSubject, pfmQuery)
+
 ## one to several comparsion
-opts = list()
-opts[["class"]] = "Ig-fold"
-pfmList = getMatrixSet(JASPAR2014, opts)
-scores = searchMatrix(pfmList, pfmQuery)
+PFMSimilarity(pfmList, pfmQuery)
+
 ## align IUPAC string
 IUPACString = "ACGTMRWSYKVHDBN"
-searchMatrix(pfmList, IUPACString)
+PFMSimilarity(pfmList, IUPACString)
 @
 
 \subsection{PFM permutation}
@@ -230,16 +251,17 @@ In this section, we will demonstrate the matrix permutation.
 This method simply shuffles the columns in matrices.
 This can either be done by just shuffling columns within each selected matrix,
 or by shuffling columns almong all selected matrices.
-<<rtl-matrixMethods, eval=FALSE, results = hide>>=
-library(JASPAR2014)
-pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
-pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
-opts = list()
-opts[["class"]] = "Ig-fold"
-pfmList = getMatrixSet(JASPAR2014, opts)
-foo = permuteMatrix(pfmQuery)
-foo1 = permuteMatrix(pfmList, type="intra")
-foo2 = permuteMatrix(pfmList, type="inter")
+
+<<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
+#library(JASPAR2014)
+#pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
+#pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
+#opts = list()
+#opts[["class"]] = "Ig-fold"
+#pfmList = getMatrixSet(JASPAR2014, opts)
+permuteMatrix(pfmQuery)
+permuteMatrix(pfmList, type="intra")
+permuteMatrix(pfmList, type="inter")
 @
 
 \subsection{PWM similarity}
@@ -265,6 +287,15 @@ The Kullback-Leibler divergence is computed in
   KL(P^1, P^2) = {1 \over {2l}} \cdot \sum_{i=1}^l \sum_{b \in \{A,C,G,T\}} (P_{i,b}^1\log{ P_{i,b}^1 \over P_{i,b}^2}+ P_{i,b}^2\log{P_{i,b}^2 \over {P_{i,b}^1}}).
 \end{equation}
 
+<<rtl-PWMSimilarity, eval=TRUE, results = verbatim>>=
+  data(MA0003.2)
+  data(MA0004.1)
+  pwm1 = toPWM(MA0003.2, type="prob")
+  pwm2 = toPWM(MA0004.1, type="prob")
+  PWMSimilarity(pwm1, pwm2, method="Euclidian")
+  PWMSimilarity(pwm1, pwm2, method="Pearson")
+  PWMSimilarity(pwm1, pwm2, method="KL")
+@
 
 \section{Scan sequence and alignments with PWM pattern}
 \subsection{searchSeq}
@@ -272,15 +303,26 @@ The Kullback-Leibler divergence is computed in
 The strand argument controls which strand of the sequence will be searched.
 When it is "*", both strands will be scanned.
 
-<<rtl-search, eval=FALSE, results = hide>>=
+<<rtl-search, eval=TRUE, results = verbatim>>=
+library(Biostrings)
+data(MA0003.2)
+data(MA0004.1)
+pwmList = PWMatrixList(MA0003.2=toPWM(MA0003.2), MA0004.1=toPWM(MA0004.1), use.names=TRUE)
 subject = DNAString("GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG")
-siteset = searchSeq(pwm, subject, min.score="60%")
-siteList = searchSeq(pwmList, subject,
-                     min.score="60%", strand="*")
+siteset = searchSeq(pwm, subject, seqname="seq1", min.score="60%", strand="*")
+
+sitesetList = searchSeq(pwmList, subject, seqname="seq1",
+                        min.score="60%", strand="*")
+
 
 ## generate gff style output
-writeGFF3(site)
-writeGFF2(site)
+head(writeGFF3(siteset))
+head(writeGFF3(sitesetList))
+head(writeGFF2(siteset))
+
+## get the relative score
+relScore(siteset)
+relScore(sitesetList)
 @
 
 \subsection{searchAln}
@@ -289,14 +331,18 @@ It reports only those hits that are present in equivalent positions of both sequ
 and exceed a specified threshold score in both, 
 AND are found in regions of the alignment above the specified.
 
-<<rtl-search, eval=FALSE, results = hide>>=
+<<rtl-search, eval=TRUE, results = verbatim>>=
+library(Biostrings)
+data(MA0003.2)
+pwm = toPWM(MA0003.2)
 aln1 = DNAString("ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG")
 aln2 = DNAString("GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC")
-sitePair = searchAln(pwm, aln1, aln2, min.score="50%", cutoff=0.5, 
-                     strand="*", type="any")
+sitePairSet = searchAln(pwm, aln1, aln2, seqname1="seq1", seqname2="seq2",
+                        min.score="50%", cutoff=0.5, 
+                        strand="*", type="any")
 ## generate gff style output
-writeGFF3(sitePair)
-writeGFF2(sitePair)
+head(writeGFF3(sitePairSet))
+head(writeGFF2(sitePairSet))
 @
 
 \subsection{searchPairBSgenome}
@@ -312,7 +358,7 @@ library(BSgenome.Mmusculus.UCSC.mm10)
 pfm = getMatrixByID(JASPAR2014, ID="MA0004.1")
 pwm=toPWM(pfm)
 chain = import.chain("Downloads/hg19ToMm10.over.chain")
-sitepairset = searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
+sitePairSet = searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
                                  BSgenome.Mmusculus.UCSC.mm10,
                                  chr1="chr1", chr2="chr1",
                                  min.score="90%", strand="+", chain=chain)

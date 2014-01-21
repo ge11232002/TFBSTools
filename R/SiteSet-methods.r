@@ -56,13 +56,15 @@ setMethod("writeGFF2", "SitePairSet",
 ###
 setMethod("siteset1", "SitePairSetList",
           function(x){
-            ans = SiteSetList(lapply(x, siteset1))
+            #ans = SiteSetList(lapply(x, siteset1))
+            ans = do.call(SiteSetList, lapply(x, siteset1))
             return(ans)
           }
           )
 setMethod("siteset2", "SitePairSetList",
           function(x){
-            ans = SiteSetList(lapply(x, siteset2))
+            #ans = SiteSetList(lapply(x, siteset2))
+            ans = do.call(SiteSetList, lapply(x, siteset2))
             return(ans)
           }
           )
@@ -184,6 +186,12 @@ setMethod("relScore", "SiteSet",
           }
           )
 
+setMethod("relScore", "SiteSetList",
+          function(x){
+            lapply(x, relScore)
+          }
+          )
+
 ### ----------------------------------------------------------------
 ### SiteSetList Methods
 ###
@@ -199,3 +207,4 @@ setMethod("writeGFF2", "SiteSetList",
              return(ans)
            }
            )
+

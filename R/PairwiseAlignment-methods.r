@@ -72,12 +72,16 @@ setMethod("calConservation", signature(aln1="character", aln2="character"),
           }
           )
 
-do_sitesearchOneStrand = function(pwm, aln1, aln2, strand, min.score, 
+do_sitesearchOneStrand = function(pwm, aln1, aln2, 
+                                  seqname1="Unknown1", seqname2="Unknown2",
+                                  strand, min.score, 
                                   conservation, cutoff, type="any"){
   seq1 = gsub("(-|_|\\.)", "", aln1)
   seq2 = gsub("(-|_|\\.)", "", aln2)
-  site1 = searchSeq(pwm, seq1, strand=strand, min.score=min.score)
-  site2 = searchSeq(pwm, seq2, strand=strand, min.score=min.score)
+  site1 = searchSeq(pwm, seq1, seqname=seqname1,
+                    strand=strand, min.score=min.score)
+  site2 = searchSeq(pwm, seq2, seqname=seqname2,
+                    strand=strand, min.score=min.score)
   siteset1 = views(site1)
   siteset2 = views(site2)
   stopifnot(all(diff(start(siteset1)) >= 1) && all(diff(start(siteset2)) >= 1))
@@ -104,7 +108,9 @@ do_sitesearchOneStrand = function(pwm, aln1, aln2, strand, min.score,
   return(list(ans_siteset1=ans_siteset1, ans_siteset2=ans_siteset2))
 }
 
-do_sitesearch = function(pwm, aln1, aln2, min.score, windowSize, cutoff, 
+do_sitesearch = function(pwm, aln1, aln2, 
+                         seqname1="Unknown1", seqname2="Unknown2", 
+                         min.score, windowSize, cutoff, 
                          strand="*", type="any", conservation){
 # aln1, aln2: characters.
   strand = match.arg(strand, c("+", "-", "*"))
@@ -121,10 +127,18 @@ do_sitesearch = function(pwm, aln1, aln2, min.score, windowSize, cutoff,
   sitesetPos = NULL
   sitesetNeg = NULL
   if(strand %in% c("+", "*")){
-    sitesetPos = do_sitesearchOneStrand(pwm, aln1, aln2, strand="+", min.score=min.score, conservation=conservations1, cutoff=cutoff, type=type)
+    sitesetPos = do_sitesearchOneStrand(pwm, aln1, aln2, 
+                                        seqname1=seqname1, seqname2=seqname2,
+                                        strand="+", min.score=min.score, 
+                                        conservation=conservations1, 
+                                        cutoff=cutoff, type=type)
   }
   if(strand %in% c("-", "*")){
-    sitesetNeg = do_sitesearchOneStrand(pwm, aln1, aln2, strand="-", min.score=min.score, conservation=conservations1, cutoff=cutoff, type=type)
+    sitesetNeg = do_sitesearchOneStrand(pwm, aln1, aln2, 
+                                        seqname1=seqname1, seqname2=seqname2,
+                                        strand="-", min.score=min.score, 
+                                        conservation=conservations1, 
+                                        cutoff=cutoff, type=type)
   }
   ans_siteset1 = do.call(c, list(sitesetPos$ans_siteset1, sitesetNeg$ans_siteset1))
   ans_siteset2 = do.call(c, list(sitesetPos$ans_siteset2, sitesetNeg$ans_siteset2))

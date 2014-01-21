@@ -167,8 +167,8 @@ setClass("SiteSetList",
 ###
 SiteSetList = function(..., use.names=TRUE){
   listData = list(...)
-  if(is(listData[[1]], "list"))
-    listData = listData[[1]]
+  #if(is(listData[[1]], "list"))
+  #  listData = listData[[1]]
   ok = sapply(listData, is, "SiteSet")
   if(!all(ok))
     stop("SiteSetList() only accepts SiteSet objects!")
@@ -213,8 +213,8 @@ setClass("SitePairSetList",
 ###
 SitePairSetList = function(..., use.names=TRUE){
   listData = list(...)
-  if(is(listData[[1]], "list")) # This is pretty ugly. better solution?
-    listData = listData[[1]]
+  #if(is(listData[[1]], "list")) # This is pretty ugly. better solution?
+  #  listData = listData[[1]]
   ok = sapply(listData, is, "SitePairSet")
   if(!all(ok))
     stop("SitePairSetList() only accepts SitePairSet objects!")

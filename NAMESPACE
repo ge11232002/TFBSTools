@@ -27,7 +27,9 @@ importMethodsFrom(BSgenome, getSeq)
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
 importFrom(seqLogo, seqLogo, makePWM)
-importFrom(Biostrings, unitScale, PWMscoreStartingAt, DNAStringSet, DNA_BASES, DNA_ALPHABET, readDNAStringSet, readAAStringSet, writeXStringSet)
+importFrom(Biostrings, unitScale, PWMscoreStartingAt, 
+                       DNAStringSet, DNA_BASES, DNA_ALPHABET, readDNAStringSet, 
+                       readAAStringSet, writeXStringSet, IUPAC_CODE_MAP)
 importFrom(caTools, runmean)
 importFrom(GenomicRanges, GRanges, GRangesList)
 

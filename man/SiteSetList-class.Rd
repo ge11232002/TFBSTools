@@ -3,6 +3,7 @@
 \docType{class}
 \alias{SiteSetList}
 \alias{SiteSetList-class}
+\alias{relScore,SiteSetList-method}
 \alias{writeGFF2,SiteSetList-method}
 \alias{writeGFF3,SiteSetList-method}
 

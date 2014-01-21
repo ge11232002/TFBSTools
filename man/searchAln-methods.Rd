@@ -22,7 +22,8 @@
 }
 
 \usage{
-  searchAln(pwm, aln1, aln2, min.score="80\%", windowSize=51L, 
+  searchAln(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
+            min.score="80\%", windowSize=51L, 
             cutoff=0.7, strand="*", type="any", conservation=NULL)
 }
 
@@ -39,6 +40,10 @@
   }
   \item{aln2}{
     A \code{DNAString}, \code{character} or missing.
+  }
+  \item{seqname1,seqname2}{
+    A \code{chracter} object for the name of sequence. 
+    "Unknown1" and "Unknown2" are used by default.
   }
   \item{min.score}{
     The minimum score for the hit. Can be given an character string in th format
