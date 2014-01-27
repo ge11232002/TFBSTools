@@ -214,16 +214,15 @@ icm = toICM(pfm, pseudocounts=0.8, schneider=TRUE)
 icm
 @
 
-To plot the sequence logo shown in figure \ref{fig.logo1},
-we use the package \Rpackage{seqlogo}.
+To plot the sequence logo, we use the package \Rpackage{seqlogo}.
 
-\begin{figure}
-\centering
-\caption{Sequence logo with column heights proportional to information content. \label{fig.logo1}}
-<<seqLogo1, fig=TRUE, echo=TRUE, height=4, width=6>>=
+%\begin{figure}
+%\centering
+%\caption{Sequence logo with column heights proportional to information content. \label{fig.logo1}}
+<<seqLogo1, fig=TRUE, results=hide, echo=TRUE, height=4, width=6>>=
 seqLogo(icm)
 @
-\end{figure}
+%\end{figure}
 
 \subsection{Align PFM to a custom matrix or IUPAC string}
 In some cases, it is beneficial to assess similarity to input data 
@@ -331,7 +330,7 @@ It reports only those hits that are present in equivalent positions of both sequ
 and exceed a specified threshold score in both, 
 AND are found in regions of the alignment above the specified.
 
-<<rtl-search, eval=TRUE, results = verbatim>>=
+<<rtl-searchAln, eval=TRUE, results = verbatim>>=
 library(Biostrings)
 data(MA0003.2)
 pwm = toPWM(MA0003.2)

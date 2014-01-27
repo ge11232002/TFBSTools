@@ -9,7 +9,7 @@ import(RSQLite)
 ###
 importClassesFrom(IRanges, SimpleList)
 #importClassesFrom(JASPAR2014, JASPAR2014)
-importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments)
+importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments, XStringViews)
 importClassesFrom(GenomicRanges, GRanges)
 #importClassesFrom(rtracklayer, Chain)
 
