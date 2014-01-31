@@ -4,6 +4,7 @@
 \alias{MotifSet}
 \alias{MotifSet-class}
 \alias{[,MotifSet-method}
+\alias{consensusMatrix,MotifSet-method}
 \alias{[,MotifSet,ANY,ANY-method}
 \alias{length,MotifSet-method}
 \alias{sitesSeq}
@@ -18,7 +19,8 @@
 
 \usage{
   ## Constructor
-  MotifSet(motifList=GRangesList(), motifEvalues=numeric(), subjectSeqs=DNAStringSet())
+  MotifSet(motifList=GRangesList(), motifEvalues=numeric(), 
+           subjectSeqs=DNAStringSet())
 }
 
 \arguments{
@@ -36,10 +38,16 @@
 \section{Methods}{
   \describe{
     \item{[}{\code{signature(x = "MotifSet")}: Getter}
+
+    \item{consensusMatrix}{\code{signature(x = "MotifSet")}(x, as.prob = FALSE, shift = 0L, width = NULL, ...): Calculate the consensus matrix. Other arguments, please check the \code{consensusMatrix} in \code{Biostrings} package.}
+
     \item{length}{\code{signature(x = "MotifSet")}: Returns the number of motifs.}
-    \item{sitesSeq}{\code{signature(x = "MotifSet")}(x, n=10, type="none"): 
+
+    \item{sitesSeq}{\code{signature(x = "MotifSet")}(x, n=10L, type="none"): 
       Gets the sites sequences. 
+
       \code{n} is the number of bases to include from flanking region. 
+
       \code{type} controls "all", "left", "right" or "none" flanking sequences are included.}
 	 }
 }
@@ -48,16 +56,16 @@
 }
 
 \seealso{
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
   \code{\link{runMEME}}
 }
 \examples{
   \dontrun{
-    motifSet = runMEME("/Users/gtan/src/meme_4.9.1/tests/crp0.s",
+    motifSet = runMEME(file.path(system.file("extdata", package="TFBSTools"), "crp0.s"),
                     binary="/usr/local/Cellar/meme/4.9.0-p4/bin/meme",
                     arguments="-nmotifs 3")
     sitesSeq(motifSet, type="all")
+    sitesSeq(motifSet, type="none")
+    consensusMatrix(motifSet)
   }  
 }
 \keyword{classes}

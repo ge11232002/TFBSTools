@@ -39,7 +39,7 @@ with various degree of degeneracy.
 
 This \Rpackage{TFBSTools} package is designed to be a compuational framework
 for transcription factor binding site analysis. 
-Based on the famous perl module TFBS (\cite{Lenhard:2002up}),
+Based on the famous perl module TFBS \citep{Lenhard:2002up},
 we extended the class definitions and enhanced implementations in an interactive environment.
 So far this package contains a set of integrated R S4 style classes,
 tools , JASPAR database interface functions.
@@ -54,7 +54,7 @@ patterns.
 
 \Rpackage{TFBSTools} aims to support all these functionalities
 in the environment \R{R}, except the external motif finding software,
-such as MEME (\cite{Bailey:1994wq}). 
+such as MEME \citep{Bailey:1994wq}. 
 %However, only the JASPAR database interface functions are exported
 %in this release to accompany \Rpackage{JASPAR2014}. 
 %More functions will be included in future release after well tested.
@@ -127,7 +127,7 @@ pfmList
 names(pfmList)
 @
 
-\subsection{SiteSet, SiteSetList ,SitePairSet and SitePairSetList}
+\subsection{SiteSet, SiteSetList, SitePairSet and SitePairSetList}
 The \Rclass{SiteSet} class is a container for storing a set of putative
   transcription factor binding sites on a nucleotide sequence
   (start, end, strand, score, pattern as a \Rclass{PWMatrix}, etc.)
@@ -151,9 +151,8 @@ matching criteria defined by the named arguments
 and returns a PFMatrixList object.
 For more search criterias, please see the help page for \Rfunction(getMatrixSet).
 
-<<rtl-searchDB, eval=FALSE, results = hide>>=
+<<rtl-searchDB, eval=TRUE, results = verbatim>>=
 library(JASPAR2014)
-library(TFBSTools)
 opts = list()
 opts[["species"]] = 9606
 opts[["name"]] = "RUNX1"
@@ -161,10 +160,12 @@ opts[["name"]] = "RUNX1"
 opts[["type"]] = "SELEX"
 opts[["all_versions"]] = TRUE
 PFMatrixList = getMatrixSet(JASPAR2014, opts)
+PFMatrixList
 
 opts2 = list()
 opts2[["type"]] = "SELEX"
 PFMatrixList2 = getMatrixSet(JASPAR2014, opts2)
+PFMatrixList2
 @
 
 \subsection{Store, delete and initialize JASPAR2014 database}
@@ -183,7 +184,7 @@ deleteMatrixHavingID(db, "MA0003")
 This section will give an introduction of matrix conversion from PFM.
 
 \subsection{PFM to PWM}
-The method \Rfunction{toPWM} can convert PFM to PWM \cite{Wasserman:2004ec}. 
+The method \Rfunction{toPWM} can convert PFM to PWM \citep{Wasserman:2004ec}. 
 Optional parameters include \Rfunarg{type}, \Rfunarg{pseudocounts}, \Rfunarg{bg}. 
 The implementation in this package is a bit different from \Rpackage{Biostrings}.
 
@@ -195,7 +196,7 @@ Second, we can specify customized \Rfunarg{pseudocounts}.
 \Rfunarg{pseudocounts} is necessary for correcting the small number of counts
 or eliminating the zero values before log transformation.
 In TFBS perl module, the square root of the number of sequences contributing to each column. 
-However, it has been shown to too harsh (\cite{Nishida:2009kf}).
+However, it has been shown to too harsh \citep{Nishida:2009kf}.
 Hence, a default value of 0.8 is used. 
 Of course, it can be changed to other customized value or even different values for each column.
 
@@ -205,7 +206,7 @@ pwm
 @
 
 \subsection{PFM to ICM}
-The method \Rfunarg{toICM} can convert PFM to ICM (\cite{Schneider:1986ur}).
+The method \Rfunarg{toICM} can convert PFM to ICM \citep{Schneider:1986ur}.
 Besides the similar \Rfunarg{pseudocounts}, \Rfunarg{bg}, 
 you can also choose to do the \Rfunarg{schneider} correction.
 
@@ -370,13 +371,15 @@ So far, MEME is supported.
 \Rfunction{runMEME} takes a \Rclass{DNAStringSet} or a set of \Rclass{characters} as input,
 and returns a \Rclass{MotifSet} object.
 
-<<rtl-wrappers, eval=FALSE, results = hide>>=
+<<MEME-wrapper, eval=FALSE, results = hide>>=
 motifSet = runMEME(file.path(system.file("extdata", package="TFBSTools"), "crp0.s"),
                    binary="meme",
                    arguments="-nmotifs 3")
 sitesSeq(motifSet, type="all")
 sitesSeq(motifSet, type="none")
 @
+
+
 
 \section{Conclusion}
 The following is the session info that generated this vignette:
