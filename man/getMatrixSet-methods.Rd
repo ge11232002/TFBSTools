@@ -78,8 +78,8 @@
 }
 
 \examples{
-  \dontrun{
-    db = "/Users/gtan/CSC/JASPAR/JASPAR2014/inst/extdata/JASPAR2014.sqlite"
+    library(JASPAR2014)
+    db = file.path(system.file("extdata", package="JASPAR2014"), "JASPAR2014.sqlite")
     opts = list()
     opts[["species"]] = 9606
     opts[["name"]] = "RUNX1"
@@ -87,11 +87,7 @@
     opts[["type"]] = "SELEX"
     opts[["all_versions"]] = TRUE
     siteList = getMatrixSet(db, opts)
-
-    library(JASPAR2014)
     siteList2 = getMatrixSet(JASPAR2014, opts)
-  }
-
 }
 
 \keyword{methods}

@@ -266,10 +266,11 @@ permuteMatrix(pfmList, type="inter")
 
 \subsection{PWM similarity}
 To measure the similarity of two PWM matrix in three measurements:
-"normalised Euclidian distance", "Pearson correlation" and "Kullback Leibler divergence".
+"normalised Euclidean distance", "Pearson correlation" 
+and "Kullback Leibler divergence" \citep{Linhart:2008gy}.
 Given two PWMs, $P^1$ and $P^2$, where l is the length. 
 $P_{i,b}$ is the values in column i with base b.
-The normalised Euclidian distance is computed in
+The normalised Euclidean distance is computed in
 
 \begin{equation}
   D(a,b) = {1 \over {\sqrt{2}l}} \cdot \sum_{i=1}^{l} \sqrt{\sum_{b \in {\{A,C,G,T\}}} (P_{i,b}^1-P_{i,b}^2)^2}
@@ -292,7 +293,7 @@ The Kullback-Leibler divergence is computed in
   data(MA0004.1)
   pwm1 = toPWM(MA0003.2, type="prob")
   pwm2 = toPWM(MA0004.1, type="prob")
-  PWMSimilarity(pwm1, pwm2, method="Euclidian")
+  PWMSimilarity(pwm1, pwm2, method="Euclidean")
   PWMSimilarity(pwm1, pwm2, method="Pearson")
   PWMSimilarity(pwm1, pwm2, method="KL")
 @
@@ -350,7 +351,7 @@ head(writeGFF2(sitePairSet))
 Given two \Rclass{BSgenome}, a chain file for liftover from one genome to another,
 \Rfunction{searchPairBSgenome} identifies the putative transcription factor binding sites
 which are conserved in both genomes.
-<<rtl-search, eval=FALSE, results = hide>>=
+<<searchBSgenome, eval=FALSE, results = hide>>=
 library(rtracklayer)
 library(JASPAR2014)
 library(BSgenome.Hsapiens.UCSC.hg19)
@@ -372,11 +373,14 @@ So far, MEME is supported.
 and returns a \Rclass{MotifSet} object.
 
 <<MEME-wrapper, eval=FALSE, results = hide>>=
-motifSet = runMEME(file.path(system.file("extdata", package="TFBSTools"), "crp0.s"),
+motifSet = runMEME(file.path(system.file("extdata", 
+                                         package="TFBSTools"), "crp0.s"),
                    binary="meme",
-                   arguments="-nmotifs 3")
+                   arguments=list("-nmotifs"=3)
+                  )
 sitesSeq(motifSet, type="all")
 sitesSeq(motifSet, type="none")
+consensusMatrix(motifSet)
 @
 
 

@@ -1,4 +1,5 @@
-## To define it again, then do not need to import JASPAR2014, as JASPAR2014 is not in Bioconductor yet.
+## To define it again, then do not need to import JASPAR2014, 
+## as JASPAR2014 is not in Bioconductor yet.
 ## clean it later.
 setClass("JASPAR2014",
          slots=c(
@@ -34,23 +35,29 @@ setClassUnion("XMatrix", c("PFMatrix", "ICMatrix", "PWMatrix"))
 ### The XMatrix constructor
 ###
 PFMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
-                    strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix()){
-  new("PFMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
+                    strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
+                    tags=list(), matrix=matrix()){
+  new("PFMatrix", ID=ID, name=name, matrixClass=matrixClass, 
+      strand=strand, bg=bg,
       tags=tags,
       matrix=matrix)
 }
 
 ICMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
-                    strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix(),
+                    strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
+                    tags=list(), matrix=matrix(),
                     pseudocounts=numeric(), schneider=logical()){
-  new("ICMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
+  new("ICMatrix", ID=ID, name=name, matrixClass=matrixClass, 
+      strand=strand, bg=bg,
       tags=tags,
       matrix=matrix, pseudocounts=pseudocounts, schneider=schneider)
 }
 PWMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
-                    strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), tags=list(), matrix=matrix(),
+                    strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
+                    tags=list(), matrix=matrix(),
                     pseudocounts=numeric()){
-  new("PWMatrix", ID=ID, name=name, matrixClass=matrixClass, strand=strand, bg=bg,
+  new("PWMatrix", ID=ID, name=name, matrixClass=matrixClass, 
+      strand=strand, bg=bg,
       tags=tags,
       matrix=matrix, pseudocounts=pseudocounts)
 }
@@ -124,7 +131,10 @@ ICMatrixList = function(..., use.names=TRUE){
 }
 
 ### ---------------------------------------------------------------------
-### SiteSet object: a nucleotide sequence feature object representing (possibly putative) transcription factor binding site. Different from TFBS perl module, here one Site object contains multiple sites.
+### SiteSet object: a nucleotide sequence feature object representing 
+### (possibly putative) transcription factor binding site. 
+### Different from TFBS perl module, here one 
+### Site object contains multiple sites.
 ###
 
 setClass("SiteSet",
@@ -179,8 +189,10 @@ SiteSetList = function(..., use.names=TRUE){
 
 
 ### -------------------------------------------------------------------
-### SitePairSet object: a nucleotide sequence feature object representing (possibly putative) transcription factor binding site from A alignment
-
+### SitePairSet object: a nucleotide sequence feature object 
+### representing (possibly putative) transcription factor binding site 
+### from A alignment
+### 
 setClass("SitePairSet",
          slots=c(siteset1="SiteSet",
                  siteset2="SiteSet"
@@ -225,13 +237,16 @@ SitePairSetList = function(..., use.names=TRUE){
 
 ### ----------------------------------------------------------------
 ### The PairwiseAlignmentTFBS object
-### Let's define our PairwiseAlignmentTFBS object, based on the PairwiseAlignments object from Biostrings. For simplicity, make it as a slot.
+### Let's define our PairwiseAlignmentTFBS object, 
+### based on the PairwiseAlignments object from Biostrings. 
+### For simplicity, make it as a slot.
 setClass("PairwiseAlignmentTFBS",
          slots=c(alignments="PairwiseAlignments",
                  seqname1="character",
                  seqname2="character",
                  conservation1="numeric",
-                 #conservation2="numeric", # because conservation2 is never used.
+                 #conservation2="numeric", 
+                 # because conservation2 is never used.
                  windowSize="integer",
                  cutoff="numeric",
                  seq1length="integer",
@@ -250,7 +265,9 @@ PairwiseAlignmentTFBS = function(pattern, subject, type="global",
   alignments = PairwiseAlignments(pattern, subject, type=type,
                                   substitutionMatrix=substitutionMatrix,
                                   gapOpening=gapOpening, gapExtension=gapExtension)
-  conservation1 = calConservation(as.character(pattern(alignments)), as.character(subject(alignments)), windowSize=windowSize)
+  conservation1 = calConservation(as.character(pattern(alignments)), 
+                                  as.character(subject(alignments)), 
+                                  windowSize=windowSize)
   seq1length = nchar(gsub("(-|_|\\.)", "", as.character(pattern(alignments))))
   seq2length = nchar(gsub("(-|_|\\.)", "", as.character(subject(alignments))))
   new("PairwiseAlignmentTFBS", alignments=alignments, seqname1=seqname1,
@@ -258,7 +275,8 @@ PairwiseAlignmentTFBS = function(pattern, subject, type="global",
       cutoff=cutoff, seq1length=seq1length, seq2length=seq2length)
 }
 
-##  Is there any way to update the conservation automatically when windowSize is changed???
+##  Is there any way to update the conservation automatically 
+## when windowSize is changed???
 
 
 ### ---------------------------------------------------------------

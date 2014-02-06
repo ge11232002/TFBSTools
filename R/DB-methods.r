@@ -15,7 +15,10 @@
   if(!"collection" %in% names(opts))
     opts[["collection"]] = "CORE"
   else
-    opts[["collection"]] = match.arg(opts[["collection"]], c("CORE", "CNE", "PHYLOFACTS", "SPLICE", "POLII", "FAM", "PBM", "PBM_HOMEO", "PBM_HLH"))
+    opts[["collection"]] = match.arg(opts[["collection"]], 
+                                     c("CORE", "CNE", "PHYLOFACTS", 
+                                       "SPLICE", "POLII", "FAM", 
+                                       "PBM", "PBM_HOMEO", "PBM_HLH"))
 
   if(!"all_versions" %in% names(opts))
     opts[["all_versions"]] = FALSE
@@ -28,7 +31,8 @@
   if(!"matrixtype" %in% names(opts))
     opts[["matrixtype"]] = "PFM"
   else
-    opts[["matrixtype"]] = match.arg(opts[["matrixtype"]], c("PFM", "PWM", "ICM"))
+    opts[["matrixtype"]] = match.arg(opts[["matrixtype"]], 
+                                     c("PFM", "PWM", "ICM"))
 
   ## DB used TAGs
   if(!"class" %in% names(opts))
@@ -54,10 +58,12 @@
 }
 
 .is_latest_version = function(con, int_id){
-  sqlCMD = paste0("select count(*) from MATRIX where BASE_ID= (SELECT BASE_ID from MATRIX where ID='",
+  sqlCMD = paste0("select count(*) from MATRIX where 
+                  BASE_ID= (SELECT BASE_ID from MATRIX where ID='",
                   int_id, "') ", 
-                  "AND VERSION>(SELECT VERSION from MATRIX where ID='", int_id, "')"
-                    )
+                  "AND VERSION>(SELECT VERSION from MATRIX where ID='", 
+                  int_id, "')"
+                  )
   count = dbGetQuery(con, sqlCMD)[["count(*)"]]
   return(ifelse(count==0, TRUE, FALSE))
 }
@@ -70,14 +76,17 @@
     ans_ids = dbGetQuery(con, sqlCMD)[["ID"]]
     return(ans_ids)
   }
-  # ids: special case2 which is has higher priority than any other except the above (ignore all others)
+  # ids: special case2 which is has higher priority than 
+  # any other except the above (ignore all others)
   # these might be either stable IDs or stableid.version.
-  # if just stable ID and if all_versions==1, take all versions, otherwise the latest
+  # if just stable ID and if all_versions==1, 
+  # take all versions, otherwise the latest
   if(!is.null(opts[["ID"]])){
     ans_ids = c()
     if(opts[["all_versions"]]){
       for(id in opts[["ID"]]){
-        baseID = strsplit(id, "\\.")[[1]][1] # ignore vesion here, this is a stupidity filter
+        baseID = strsplit(id, "\\.")[[1]][1] 
+        # ignore vesion here, this is a stupidity filter
         sqlCMD = paste0("SELECT ID FROM MATRIX WHERE BASE_ID='", baseID, "'")
         ans_ids = c(ans_ids, dbGetQuery(con, sqlCMD)[["ID"]])
       }
@@ -119,14 +128,19 @@
     sqlAnds = c(sqlAnds, sqlCMD)
   }
   # At this stage, let's fetch the ID first.
-  sqlCMD = paste0("SELECT distinct (M.ID) from ", paste0(sqlTables, collapse=","), 
+  sqlCMD = paste0("SELECT distinct (M.ID) from ", 
+                  paste0(sqlTables, collapse=","), 
                   " where ", paste0(sqlAnds, collapse=" AND "))
   ids = dbGetQuery(con, sqlCMD)[["ID"]]
   
-  # Then deal with TAG_BASED, includes  "class", "type", "comment", "family", "medline", "tax_group"
-  for(tag in c("class", "type", "comment", "family", "medline", "tax_group")){
+  # Then deal with TAG_BASED, includes  
+  # "class", "type", "comment", "family", "medline", "tax_group"
+  for(tag in c("class", "type", "comment", "family", 
+               "medline", "tax_group")){
     if(!is.null(opts[[tag]])){
-      sqlCMD = paste0("SELECT distinct ID from MATRIX_ANNOTATION where ", "TAG='", tag, "'", " AND (", paste0("VAL='", opts[[tag]], "'", collapse=" or "), ")")
+      sqlCMD = paste0("SELECT distinct ID from MATRIX_ANNOTATION where ", 
+                      "TAG='", tag, "'", " AND (", 
+                      paste0("VAL='", opts[[tag]], "'", collapse=" or "), ")")
       ids = intersect(ids, dbGetQuery(con, sqlCMD)[["ID"]])
     }
   }
@@ -153,11 +167,14 @@
 }
 
 .get_internal_id = function(con, baseID, version){
-  # picks out the internal id for a stable id + version. Also checks if this cobo exists or not
-  sqlCMD = paste0("SELECT ID FROM MATRIX WHERE BASE_ID='", baseID,"' AND VERSION='", version, "'")
+  # picks out the internal id for a stable id + version. 
+  # Also checks if this cobo exists or not
+  sqlCMD = paste0("SELECT ID FROM MATRIX WHERE BASE_ID='", 
+                  baseID,"' AND VERSION='", version, "'")
   ini_id = dbGetQuery(con, sqlCMD)[["ID"]]
   if(length(ini_id) != 1)
-    warning("There are ", length(ini_id), " records with this based id and version combination!")
+    warning("There are ", length(ini_id), 
+            " records with this based id and version combination!")
   return(ini_id)
 }
 
@@ -165,14 +182,18 @@
   # Get the pfm matrix
   # bases orders in ("A", "C", "G", "T")
   type = match.arg(type, c("PFM", "PWM", "ICM"))
-  sqlCMD = paste0("SELECT val FROM MATRIX_DATA WHERE ID='", int_id, "' ORDER BY col, row")
+  sqlCMD = paste0("SELECT val FROM MATRIX_DATA WHERE ID='", 
+                  int_id, "' ORDER BY col, row")
   matrixVector = dbGetQuery(con, sqlCMD)[["val"]]
   if(length(matrixVector) %% 4 != 0)
-    stop("The number of retrived elements ", length(matrixVector), " is incomplete!")
-  FMatrix = matrix(as.integer(matrixVector), nrow=4, dimnames=list(c("A", "C", "G", "T")))
+    stop("The number of retrived elements ", 
+         length(matrixVector), " is incomplete!")
+  FMatrix = matrix(as.integer(matrixVector), 
+                   nrow=4, dimnames=list(c("A", "C", "G", "T")))
   
   # get remaining data in the matrix table: name, collection
-  sqlCMD = paste0("SELECT BASE_ID,VERSION,COLLECTION,NAME FROM MATRIX WHERE ID='",
+  sqlCMD = paste0("SELECT BASE_ID,VERSION,COLLECTION,
+                  NAME FROM MATRIX WHERE ID='",
                   int_id, "'")
   tempTable = dbGetQuery(con, sqlCMD)
   baseID = tempTable[["BASE_ID"]]
@@ -183,7 +204,8 @@
   # get species
   sqlCMD = paste0("SELECT TAX_ID FROM MATRIX_SPECIES WHERE ID='", int_id, "'")
   tempTable = dbGetQuery(con, sqlCMD)
-  tax_ids = tempTable[["TAX_ID"]] ## need to convert to taxs, fix this here or some place.
+  tax_ids = tempTable[["TAX_ID"]] 
+  ## need to convert to taxs, fix this here or some place.
   if(length(tax_ids) == 0)
     tax_ids = ""
 
@@ -195,10 +217,12 @@
     accs = ""
 
   # get remaining annotation as tags, from ANNOTATION table
-  sqlCMD = paste0("SELECT TAG,VAL FROM MATRIX_ANNOTATION WHERE ID='", int_id, "'")
+  sqlCMD = paste0("SELECT TAG,VAL FROM MATRIX_ANNOTATION WHERE ID='", 
+                  int_id, "'")
   tempTable = dbGetQuery(con, sqlCMD)
   tags = list()
-  tags = mapply(function(x,y){tags[[x]]=y}, tempTable[["TAG"]], tempTable[["VAL"]], SIMPLIFY=FALSE)
+  tags = mapply(function(x,y){tags[[x]]=y}, tempTable[["TAG"]], 
+                tempTable[["VAL"]], SIMPLIFY=FALSE)
   tags[["collection"]] = collection
   tags[["species"]] = tax_ids
   tags[["acc"]] = accs
@@ -222,10 +246,18 @@
   #  stop("This should never happen")
 }
 
-### get_Matrix_by_ID fetches matrix data under the given ID from the database and returns a XMatrix object.
-# Returns : a XMatrix object; the exact type of the object depending on the second argument (allowed values are 'PFM', 'ICM', and 'PWM'); returns NA if matrix with the given ID is not found.
+### get_Matrix_by_ID fetches matrix data under 
+### the given ID from the database and returns a XMatrix object.
+# Returns : a XMatrix object; the exact type of the object 
+# depending on the second argument (allowed values are 
+# 'PFM', 'ICM', and 'PWM'); 
+# returns NA if matrix with the given ID is not found.
 # Args: 
-    #ID: is a string which refers to the stable JASPAR ID (usually something like "MA0001") with or without version numbers. "MA0001" will give the latest version on MA0001, while "MA0001.2" will give the second version, if existing. Warnings will be given for non-existing matrices.
+    #ID: is a string which refers to the stable JASPAR ID 
+    # (usually something like "MA0001") with or without version numbers. 
+    # "MA0001" will give the latest version on MA0001, 
+    # while "MA0001.2" will give the second version, 
+    # if existing. Warnings will be given for non-existing matrices.
 setMethod("getMatrixByID", "SQLiteConnection",
           function(x, ID){
             # separate stable ID and version number
@@ -258,22 +290,37 @@ setMethod("getMatrixByID", "JASPAR2014",
           }
           )
 
-### get_Matrix_by_name fetches matrix data under the given name from the database and returns a XMatrix object.
-# Returns : a XMatrix object; the exact type of the object depending on the second argument (allowed values are 'PFM', 'ICM', and 'PWM'); returns NA if matrix with the given name is not found.
-# Notes: According to the current JASPAR5 data model, name is not necessarily a unique identifier. Also, names change over time. In the case where there are several matrices with the same name in the database, the function fetches the first one and prints a warning on STDERR. You've been warned. Some matrices have multiple versions. The function will return the latest version. For specific versions, use get_Matrix_by_ID($ID.$version)
+### get_Matrix_by_name fetches matrix data under 
+### the given name from the database and returns a XMatrix object.
+# Returns : a XMatrix object; 
+# the exact type of the object depending on the second argument 
+# (allowed values are 'PFM', 'ICM', and 'PWM'); 
+# returns NA if matrix with the given name is not found.
+# Notes: According to the current JASPAR5 data model, 
+# name is not necessarily a unique identifier. 
+# Also, names change over time. 
+# In the case where there are several matrices with the same name 
+# in the database, the function fetches the first one and 
+# prints a warning on STDERR. You've been warned. 
+# Some matrices have multiple versions. 
+# The function will return the latest version. 
+# For specific versions, use get_Matrix_by_ID($ID.$version)
 setMethod("getMatrixByName", "SQLiteConnection",
           function(x, name){
             # here x is the path of SQLite db file
             #type = match.arg(type, c("PWM", "PFM", "ICM"))
             if(missing(name))
               stop("name needs to be specified!")
-            sqlCMD = paste0("SELECT distinct BASE_ID  FROM MATRIX WHERE NAME='", name, "'")
+            sqlCMD = paste0("SELECT distinct BASE_ID 
+                            FROM MATRIX WHERE NAME='", name, "'")
             tempTable = dbGetQuery(x, sqlCMD)
             baseID = tempTable[["BASE_ID"]]
             if(length(baseID) == 0)
               return(NA)
             if(length(baseID) > 1)
-              warning("There are ", length(baseID), " distinct stable IDs with name ", name, ": ", paste(baseID, collapse=", "))
+              warning("There are ", length(baseID), 
+                      " distinct stable IDs with name ", name, 
+                      ": ", paste(baseID, collapse=", "))
             getMatrixByID(x, baseID[1])
           }
           )
@@ -328,7 +375,8 @@ setMethod("getMatrixSet", "SQLiteConnection",
            for(id in IDlist){
              xmatrix = .get_Matrix_by_int_id(x, id, type="PFM")
              if(!is.null(opts[["min_ic"]])){
-               # we assume the matrix IS a PFM, o something in normal space at least
+               # we assume the matrix IS a PFM, 
+               # or something in normal space at least
                if(sum(totalIC(toICM(xmatrix))) < opts[["min_ic"]])
                  next
              }
@@ -379,11 +427,15 @@ setMethod("deleteMatrixHavingID", "SQLiteConnection",
               baseID = strsplit(ID, "\\.")[[1]][1]
               version = strsplit(ID, "\\.")[[1]][2]
               if(is.na(version))
-                stop("You have supplied a non-versioned matrix ID to delete. Skipping: ", ID)
+                stop("You have supplied a non-versioned matrix ID 
+                     to delete. Skipping: ", ID)
               # get relevant internal ID
               int_id = .get_internal_id(baseID, version)
-              for(dbTable in c("MATRIX_DATA", "MATRIX", "MATRIX_SPECIES", "MATRIX_PROTEIN", "MATRIX_ANNOTATION")){
-                sqlCMD = paste0("DELETE from ", dbTable, " where ID='", int_id, "'")
+              for(dbTable in c("MATRIX_DATA", "MATRIX", 
+                               "MATRIX_SPECIES", "MATRIX_PROTEIN", 
+                               "MATRIX_ANNOTATION")){
+                sqlCMD = paste0("DELETE from ", dbTable, 
+                                " where ID='", int_id, "'")
                 ans = dbGetQuery(x, sqlCMD)
               }
             }
@@ -397,6 +449,7 @@ setMethod("deleteMatrixHavingID", "character",
             deleteMatrixHavingID(con, IDs)
           }
           )
+
 setMethod("deleteMatrixHavingID", "JASPAR2014",
           function(x, IDs){
             deleteMatrixHavingID(x@db, IDs)
@@ -413,21 +466,27 @@ setMethod("deleteMatrixHavingID", "JASPAR2014",
   # Get version from the matrix ID
   version = strsplit(ID(pfm), "\\.")[[1]][2]
   if(is.na(version)){
-    warning("Lacking  version number for ", ID(pfm), ". Setting version=1")
+    warning("Lacking  version number for ", 
+            ID(pfm), ". Setting version=1")
     version = 1
   }
   collection = tags(pfm)[["collection"]]
   if(is.null(collection)){
-    warning("Lacking  collection name for ", ID(pfm), ". Setting collection to an empty string. You probably do not want this")
+    warning("Lacking  collection name for ", ID(pfm), 
+            ". Setting collection to an empty string. 
+            You probably do not want this")
     collection = ""
   }
   # sanity check: do we already have this combination of base ID and version? If we do, die
   baseID = strsplit(ID(pfm), "\\.")[[1]][1]
-  sqlCMD = paste0("select count(*) from MATRIX where VERSION='", version, 
-                  "' and BASE_ID='", baseID, "' and collection='", collection, "'")
+  sqlCMD = paste0("select count(*) from MATRIX where VERSION='", 
+                  version, 
+                  "' and BASE_ID='", baseID, "' and collection='", 
+                  collection, "'")
   sanity_count = dbGetQuery(con, sqlCMD)[["count(*)"]]
   if(sanity_count > 0)
-    stop("Database input inconsistency: You have already have ", sanity_count, 
+    stop("Database input inconsistency: You have already have ", 
+         sanity_count, 
          " ", baseID, " matrices of version ", version, 
          " in collection ", collection, ". Terminating program")
 
@@ -459,7 +518,8 @@ setMethod("deleteMatrixHavingID", "JASPAR2014",
   tags = tags(pfm)
   if(length(matrixClass(pfm)) != 0)
     tags[["class"]] = matrixClass(pfm)
-  # but skip out collection or version as we already have those in the MATRIX table
+  # but skip out collection or version as 
+  # we already have those in the MATRIX table
   tag = names(tags)[1]
   for(tag in names(tags)){
     if(tag %in% c("collection", "version", "species", "acc"))
@@ -511,7 +571,8 @@ setMethod("deleteMatrixHavingID", "JASPAR2014",
 # Returns : 0 on success; $@ contents on failure
 # Args    : (PFMatrixList)
 
-setMethod("storeMatrix", signature(x="SQLiteConnection", pfmList="PFMatrixList"),
+setMethod("storeMatrix", signature(x="SQLiteConnection",
+                                   pfmList="PFMatrixList"),
           function(x, pfmList){
             for(pfm in pfmList){
               int_id =  .store_matrix(x, pfm)
@@ -523,7 +584,8 @@ setMethod("storeMatrix", signature(x="SQLiteConnection", pfmList="PFMatrixList")
             return("Success")
           }
           )
-setMethod("storeMatrix", signature(x="character", pfmList="PFMatrixList"),
+setMethod("storeMatrix", signature(x="character", 
+                                   pfmList="PFMatrixList"),
           function(x, pfmList){
             con = dbConnect(SQLite(), x)
             on.exit(dbDisconnect(con))
@@ -535,7 +597,8 @@ setMethod("storeMatrix", signature(x="character", pfmList="PFMatrix"),
             storeMatrix(x, PFMatrixList(pfmList))
           }
           )
-setMethod("storeMatrix", signature(x="SQLiteConnection", pfmList="PFMatrix"),
+setMethod("storeMatrix", signature(x="SQLiteConnection", 
+                                   pfmList="PFMatrix"),
           function(x, pfmList){
             storeMatrix(x, PFMatrixList(pfmList))
           }
@@ -545,7 +608,8 @@ setMethod("storeMatrix", signature(x="JASPAR2014", pfmList="PFMatrix"),
             storeMatrix(x@db, pfmList)
           }
           )
-setMethod("storeMatrix", signature(x="JASPAR2014", pfmList="PFMatrixList"),
+setMethod("storeMatrix", signature(x="JASPAR2014", 
+                                   pfmList="PFMatrixList"),
           function(x, pfmList){
             storeMatrix(x@db, pfmList)
           }

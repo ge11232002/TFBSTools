@@ -54,7 +54,6 @@
 }
 
 \examples{
-  \dontrun{
     library(JASPAR2014)
     ## one to one comparison
     pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
@@ -65,7 +64,6 @@
     opts[["class"]] = "Ig-fold"
     pfmList = getMatrixSet(JASPAR2014, opts)
     scores = PFMSimilarity(pfmList, pfmQuery)
-  }
 }
 
 \keyword{methods}

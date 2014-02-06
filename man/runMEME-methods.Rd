@@ -9,8 +9,10 @@
 }
 
 \usage{
-  \S4method{runMEME}{character}(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir())
-  \S4method{runMEME}{DNAStringSet}(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir())
+  \S4method{runMEME}{character}(x, binary="meme", seqtype="DNA", 
+                                arguments=list(), tmpdir=tempdir())
+  \S4method{runMEME}{DNAStringSet}(x, binary="meme", seqtype="DNA", 
+                                   arguments=list(), tmpdir=tempdir())
 }
 
 \arguments{
@@ -24,7 +26,11 @@
     The sequence type. "AA" and "DNA" are allowed.
   }
   \item{arguments}{
-    A character vector. The addtional arguments for meme.
+    A \code{list}: the addtional arguments for meme.
+    This list takes the parameter of MEME as names of the elements,
+    and the values of the parameters as the elements.
+    For examples, arguments=list("-nmotifs"=3).
+
   }
   \item{tmpdir}{
     A character vector to change the defult tmp directory.

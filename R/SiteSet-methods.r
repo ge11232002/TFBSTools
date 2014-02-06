@@ -31,21 +31,21 @@ setMethod("length", "SitePairSet", function(x) length(siteset1(x)))
 ### SitePairSet Method
 ###
 setMethod("writeGFF3", "SitePairSet",
-          function(x){
+          function(x, scoreType=c("absolute", "relative")){
             if(length(x) == 0)
               return(data.frame())
-            gff1 = writeGFF3(siteset1(x))
-            gff2 = writeGFF3(siteset2(x))
+            gff1 = writeGFF3(siteset1(x), scoreType=scoreType)
+            gff2 = writeGFF3(siteset2(x), scoreType=scoreType)
             ans = rbind(gff1, gff2)
             return(ans)
           }
           )
 setMethod("writeGFF2", "SitePairSet",
-          function(x){
+          function(x, scoreType=c("absolute", "relative")){
             if(length(x) == 0)
               return(data.frame())
-            gff1 = writeGFF2(siteset1(x))
-            gff2 = writeGFF2(siteset2(x))
+            gff1 = writeGFF2(siteset1(x), scoreType=scoreType)
+            gff2 = writeGFF2(siteset2(x), scoreType=scoreType)
             ans = rbind(gff1, gff2)
             return(ans)
           }
@@ -97,16 +97,23 @@ setMethod("c", "SiteSet",
               return(x)
             arg_is_null = sapply(args, is.null)
             if (any(arg_is_null))
-              args[arg_is_null] = NULL  # remove NULL elements by setting them to NULL!
+              args[arg_is_null] = NULL  
+            # remove NULL elements by setting them to NULL!
             if (!all(sapply(args, is, class(x))))
-              stop("all arguments in '...' must be ", class(x), " objects (or NULLs)")
+              stop("all arguments in '...' must be ", class(x), 
+                   " objects (or NULLs)")
             if(length(unique(sapply(args, slot, "seqname"))) != 1)
-              stop("all arguments in '...' must have same seqname ", x@seqname, "!")
+              stop("all arguments in '...' must have same seqname ", 
+                   x@seqname, "!")
             if(length(unique(sapply(args, slot, "sitesource"))) != 1)
-              stop("all arguments in '...' must have same sitesource ", x@sitesource, "!")
+              stop("all arguments in '...' must have same sitesource ", 
+                   x@sitesource, "!")
             if(length(unique(sapply(args, slot, "primary"))) != 1)
-              stop("all arguments in '...' must have same primary ", x@primary, "!")
-            if(!all(sapply(args, function(arg, x){identical(arg@pattern, x@pattern)}, x)))
+              stop("all arguments in '...' must have same primary ", 
+                   x@primary, "!")
+            if(!all(sapply(args, 
+                           function(arg, x){
+                             identical(arg@pattern, x@pattern)}, x)))
               stop("all arguments in '...' must have same pattern matrix!")
             new_start = unlist(lapply(lapply(args, slot, "views"), start))
             new_end = unlist(lapply(lapply(args, slot, "views"), end))
@@ -129,24 +136,31 @@ setMethod("c", "SiteSet",
 ### Methods
 ###
 setMethod("writeGFF3", "SiteSet",
-          function(x){
+          function(x, scoreType=c("absolute", "relative")){
             if(length(x) == 0)
               return(data.frame())
+            scoreType = match.arg(scoreType, c("absolute", "relative"))
             seqs = DNAStringSet(views(x))
             seqs[strand(x) == "-"] = reverseComplement(seqs[strand(x) == "-"])
+            if(scoreType =="absolute"){
+              score = score(x)
+            }else{
+              score = relScore(x)
+            }
             gff = list(seqname=seqname(x),
                        source=sitesource(x),
                        feature=sitesource(x),
                        start=start(views(x)),
                        end=end(views(x)),
-                       score=score(x),
+                       score=score,
                        strand=strand(x),
                        frame=".",
-                       attributes=paste(
-                                        paste("TF", name(pattern(x)), sep="="),
-                                        paste("class", matrixClass(pattern(x)), sep="="),
-                                        paste("sequence", seqs, sep="="),
-                                        sep=";")
+                       attributes=
+                        paste(
+                              paste("TF", name(pattern(x)), sep="="),
+                              paste("class", matrixClass(pattern(x)), sep="="),
+                              paste("sequence", seqs, sep="="),
+                              sep=";")
                        )
             gff = as.data.frame(gff)
             return(gff)
@@ -154,24 +168,36 @@ setMethod("writeGFF3", "SiteSet",
           )
 
 setMethod("writeGFF2", "SiteSet",
-          function(x){
+          function(x, scoreType=c("absolute", "relative")){
             if(length(x) == 0)
               return(data.frame())
+            scoreType = match.arg(scoreType, c("absolute", "relative"))
             seqs = DNAStringSet(views(x))
             seqs[strand(x) == "-"] = reverseComplement(seqs[strand(x) == "-"])
+            if(scoreType == "absolute"){
+              score = score(x)
+            }else{
+              score = relScore(x)
+            }
             gff = list(seqname=seqname(x),
                        source=sitesource(x),
                        feature=sitesource(x),
                        start=start(views(x)),
                        end=end(views(x)),
-                       score=score(x),
+                       score=score,
                        strand=strand(x),
                        frame=".",
-                       attributes=paste(
-                                        paste("TF", paste0("\"", name(pattern(x)), "\""), sep=" "),
-                                        paste("class", paste0("\"", matrixClass(pattern(x)), "\""), sep=" "),
-                                        paste("sequence", paste0("\"", seqs, "\""), sep=" "),
-                                        sep="; ")
+                       attributes=
+                        paste(
+                              paste("TF", 
+                                    paste0("\"", name(pattern(x)), "\""), 
+                                    sep=" "),
+                              paste("class", 
+                                    paste0("\"", matrixClass(pattern(x)), "\""),
+                                    sep=" "),
+                              paste("sequence", paste0("\"", seqs, "\""), 
+                                    sep=" "),
+                              sep="; ")
                        )
             gff = as.data.frame(gff)
             return(gff)
@@ -180,8 +206,8 @@ setMethod("writeGFF2", "SiteSet",
 
 setMethod("relScore", "SiteSet",
           function(x){
-          # Luckliy, the maxScore, minScore implementation is same with TFBS perl module. Validated!
-            ans = (score(x) - minScore(Matrix(pattern(x)))) / (maxScore(Matrix(pattern(x))) - minScore(Matrix(pattern(x))))
+            ans = (score(x) - minScore(Matrix(pattern(x)))) / 
+              (maxScore(Matrix(pattern(x))) - minScore(Matrix(pattern(x))))
             return(ans)
           }
           )

@@ -48,10 +48,11 @@
 }
 
 \examples{
-  \dontrun{
-    sitesetList = SiteSetList(siteset1, siteset2)
+    data(MA0003.2)
+    data(MA0004.1)
+    pwmList = PWMatrixList(MA0003.2=toPWM(MA0003.2), MA0004.1=toPWM(MA0004.1))
     sitesetList = searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
-                            min.score="60%")
-  }
+                            min.score="50\%")
+
 }
 \keyword{classes}

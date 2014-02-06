@@ -13,7 +13,8 @@ setMethod("[", "MotifSet",
             ans_motifList = x@motifList[i]
             ans_motifEvalues = x@motifEvalues[i]
             ans_subjectSeqs = x@subjectSeqs
-            clone(x, motifList=ans_motifList, motifEvalues=ans_motifEvalues, subjectSeqs=ans_subjectSeqs)
+            clone(x, motifList=ans_motifList, 
+                  motifEvalues=ans_motifEvalues, subjectSeqs=ans_subjectSeqs)
           }
           )
 
@@ -23,7 +24,8 @@ setMethod("sitesSeq", "MotifSet",
             if(!is(n, "integer"))
               stop("n must be an integer!")
             subjectSeqsAll = x@subjectSeqs
-            names(subjectSeqsAll) = sapply(strsplit(names(subjectSeqsAll), "[[:blank:]]+"), "[", 1)
+            names(subjectSeqsAll) = 
+            sapply(strsplit(names(subjectSeqsAll), "[[:blank:]]+"), "[", 1)
             ans = list()
             for(i in seq_len(length(x))){
               oneRange = x@motifList[[i]]
@@ -40,9 +42,12 @@ setMethod("sitesSeq", "MotifSet",
               }
               rightSeqs = ""
               if(type %in% c("all", "right")){
-                rightSeqs = mapply(subseq, subjectSeqsAll[seqnames(oneRange)],
-                                   start=pmin(end(oneRange)+1L, width(subjectSeqsAll[seqnames(oneRange)])),
-                                   end=pmin(end(oneRange)+n, width(subjectSeqsAll[seqnames(oneRange)])))
+                rightSeqs = 
+                mapply(subseq, subjectSeqsAll[seqnames(oneRange)],
+                       start=pmin(end(oneRange)+1L, 
+                                  width(subjectSeqsAll[seqnames(oneRange)])),
+                       end=pmin(end(oneRange)+n, 
+                                width(subjectSeqsAll[seqnames(oneRange)])))
                 rightSeqs = tolower(sapply(rightSeqs, as.character))
                 #rightSeqs = format(rightSeqs, width=n, justify="left")
               }

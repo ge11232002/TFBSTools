@@ -98,7 +98,8 @@ setMethod("PFMSimilarity", signature(pfmSubject="PFMatrixList", pfmQuery="charac
 setMethod("permuteMatrix", "matrix",
           function(x, type="intra"){
             if(type == "inter")
-              stop("Only permutation within matrix is available for single matrix!")
+              stop("Only permutation within matrix is 
+                   available for single matrix!")
             type = match.arg(type, c("intra", "inter"))
             x = normargPfm(x)
             index = sample(seq_len(ncol(x)), ncol(x), replace=FALSE)
@@ -125,9 +126,11 @@ setMethod("permuteMatrix", "PFMatrixList",
               allMatrix = do.call(cbind, Matrix(x))
               lengths = sapply(Matrix(x), ncol)
               lengths = c(0, cumsum(lengths))
-              index = sample(seq_len(ncol(allMatrix)), ncol(allMatrix), replace=FALSE)
+              index = sample(seq_len(ncol(allMatrix)), 
+                             ncol(allMatrix), replace=FALSE)
               for(i in seq_len(length(x))){
-                Matrix(x[[i]]) = allMatrix[ , index[(lengths[i]+1):lengths[i+1]]]
+                Matrix(x[[i]]) = 
+                allMatrix[ , index[(lengths[i]+1):lengths[i+1]]]
               }
             }
             return(x)

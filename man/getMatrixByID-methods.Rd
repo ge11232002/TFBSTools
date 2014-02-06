@@ -69,14 +69,11 @@
 }
 
 \examples{
-  \dontrun{
-    db = "/Users/gtan/CSC/JASPAR/JASPAR2014/inst/extdata/JASPAR2014.sqlite"
+    library(JASPAR2014)
+    db = file.path(system.file("extdata", package="JASPAR2014"), "JASPAR2014.sqlite")
     pfm = getMatrixByID(db, ID="MA0003")
     pfm2 = getMatrixByName(db, name="TFAP2A")
-
-    library(JASPAR2014)
     pfm3 = getMatrixByID(JASPAR2014, ID="MA0003")
-  }
 }
 
 \keyword{methods}

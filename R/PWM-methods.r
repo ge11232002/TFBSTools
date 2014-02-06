@@ -50,7 +50,8 @@ setMethod("toPWM", "PFMatrix",
             pwmMatrix = toPWM(Matrix(x), type=type,
                               pseudocounts=pseudocounts,
                               bg=bg)
-            pwm = PWMatrix(ID=ID(x), name=name(x), matrixClass=matrixClass(x),
+            pwm = PWMatrix(ID=ID(x), name=name(x), 
+                           matrixClass=matrixClass(x),
                            strand=strand(x), bg=bg, 
                            tags=tags(x), matrix=pwmMatrix,
                            pseudocounts=pseudocounts)
@@ -90,7 +91,8 @@ setMethod("toPWM", "matrix",
 ### Currently we make it as a normal function. Is it necessary to make it a setMethod? Yes. It's necessary to make it a setMethod.
 setMethod("searchSeq", "PWMatrix",
 # scans a nucleotide sequence with the pattern represented by the PWM.
-          function(x, subject, seqname="Unknown", strand="*", min.score="80%"){
+          function(x, subject, seqname="Unknown", 
+                   strand="*", min.score="80%"){
             strand = match.arg(strand, c("+", "-", "*"))
             ans_ranges = IRanges()
             ans_score = c()
@@ -105,20 +107,30 @@ setMethod("searchSeq", "PWMatrix",
               xPos = reverseComplement(x)
             }
             if(strand %in% c("+", "*")){
-              ans_viewsPos = matchPWM(unitScale(Matrix(xPos)), subject, min.score=min.score)
-              scorePos = PWMscoreStartingAt(unitScale(Matrix(xPos)), subject(ans_viewsPos),
+              ans_viewsPos = 
+              matchPWM(unitScale(Matrix(xPos)), subject, min.score=min.score)
+              scorePos = 
+              PWMscoreStartingAt(unitScale(Matrix(xPos)), subject(ans_viewsPos),
                                             start(ans_viewsPos))
-              # The score here from PWMscoreStartingAt is the unitscaled score. Let's make it into original one, synced with TFBS module. This is validated!
-              scorePos = scorePos * (maxScore(Matrix(xPos)) - minScore(Matrix(xPos))) + minScore(Matrix(xPos))
+              # The score here from PWMscoreStartingAt is the unitscaled score. 
+              # Let's make it into original one, synced with TFBS module. 
+              # This is validated!
+              scorePos = scorePos * (maxScore(Matrix(xPos)) - 
+                                     minScore(Matrix(xPos))) + 
+                                     minScore(Matrix(xPos))
               ans_ranges = c(ans_ranges, ranges(ans_viewsPos))
               ans_score = c(ans_score, scorePos)
               ans_strand = c(ans_strand, rep("+", length(ans_viewsPos)))
             }
             if(strand %in% c("-", "*")){
-              ans_viewsNeg = matchPWM(unitScale(Matrix(xNeg)), subject, min.score=min.score)
-              scoreNeg = PWMscoreStartingAt(unitScale(Matrix(xNeg)), subject(ans_viewsNeg),
+              ans_viewsNeg = 
+              matchPWM(unitScale(Matrix(xNeg)), subject, min.score=min.score)
+              scoreNeg = 
+              PWMscoreStartingAt(unitScale(Matrix(xNeg)), subject(ans_viewsNeg),
                                             start(ans_viewsNeg))
-              scoreNeg = scoreNeg * (maxScore(Matrix(xNeg)) - minScore(Matrix(xNeg))) + minScore(Matrix(xNeg))
+              scoreNeg = scoreNeg * (maxScore(Matrix(xNeg)) - 
+                                     minScore(Matrix(xNeg))) + 
+                                     minScore(Matrix(xNeg))
               ans_ranges = c(ans_ranges, ranges(ans_viewsNeg))
               ans_score = c(ans_score, scoreNeg)
               ans_strand = c(ans_strand, rep("-", length(ans_viewsNeg)))
@@ -145,11 +157,14 @@ setMethod("searchSeq", "PWMatrix",
           )
 
 setMethod("searchSeq", "PWMatrixList",
-# scans a nucleotide sequence with all patterns represented stored in $matrixset;
-          function(x, subject, seqname="Unknown", strand="*", min.score="80%"){
+# scans a nucleotide sequence with 
+# all patterns represented stored in $matrixset;
+          function(x, subject, seqname="Unknown", 
+                   strand="*", min.score="80%"){
             #pwms = lapply(Matrix(x), unitScale)
             #ans = lapply(pwms, matchPWM, subject, min.score)
-            ans_list = lapply(x, searchSeq, subject=subject, seqname=seqname, 
+            ans_list = lapply(x, searchSeq, 
+                              subject=subject, seqname=seqname, 
                               strand=strand, min.score=min.score)
             ans = do.call(SiteSetList, ans_list)
             #ans = SiteSetList(ans_list)
@@ -161,8 +176,10 @@ setMethod("searchSeq", "PWMatrixList",
 ### searchAln: Scans a pairwise alignment of nucleotide sequences with the pattern represented by the PWM: it reports only those hits that are present in equivalent positions of both sequences and exceed a specified threshold score in both, AND are found in regions of the alignment above the specified
 ## Should have a better way for this duplicated code..
 
-setMethod("searchAln", signature(pwm="PWMatrixList", aln1="character", aln2="character"),
-          function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
+setMethod("searchAln", 
+          signature(pwm="PWMatrixList", aln1="character", aln2="character"),
+          function(pwm, aln1, aln2, 
+                   seqname1="Unknown1", seqname2="Unknown2",
                    min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
             #ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
@@ -178,8 +195,10 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="character", aln2="cha
           }
           )
 
-setMethod("searchAln", signature(pwm="PWMatrixList", aln1="character", aln2="missing"),
-          function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
+setMethod("searchAln", 
+          signature(pwm="PWMatrixList", aln1="character", aln2="missing"),
+          function(pwm, aln1, aln2, 
+                   seqname1="Unknown1", seqname2="Unknown2",
                    min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
             #ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
@@ -195,11 +214,15 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="character", aln2="mis
           }
           )
 
-setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAStringSet", aln2="missing"),
-          function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
+setMethod("searchAln", 
+          signature(pwm="PWMatrixList", aln1="DNAStringSet", aln2="missing"),
+          function(pwm, aln1, aln2, 
+                   seqname1="Unknown1", seqname2="Unknown2",
                    min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
-            #ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+            #ans = lapply(x, doSiteSearch, subject, 
+            # min.score=min.score, windowSize=windowSize, 
+            # cutoff=cutoff, conservation=conservation)
             ans_list = lapply(pwm, searchAln, aln1, 
                               seqname1=seqname1, seqname2=seqname2,
                               min.score=min.score, 
@@ -212,7 +235,8 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAStringSet", aln2="
           }
           )
 
-setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAString", aln2="DNAString"),
+setMethod("searchAln", 
+          signature(pwm="PWMatrixList", aln1="DNAString", aln2="DNAString"),
           function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
                    min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
@@ -241,7 +265,8 @@ setMethod("searchAln", signature(pwm="PWMatrixList", aln1="DNAString", aln2="DNA
 #          }
 #          )
 
-setMethod("searchAln", signature(pwm="PWMatrix", aln1="character", aln2="character"),
+setMethod("searchAln", 
+          signature(pwm="PWMatrix", aln1="character", aln2="character"),
           function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
                    min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
@@ -253,11 +278,12 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="character", aln2="charact
           }
           )
 
-setMethod("searchAln", signature(pwm="PWMatrix", aln1="character", aln2="missing"),
+setMethod("searchAln", 
+          signature(pwm="PWMatrix", aln1="character", aln2="missing"),
           function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
                    min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
-            if(length(aln1) != 2)
+            if(length(aln1) != 2L)
               stop("'aln1' must be of length 2 when 'aln2' is missing")
             do_sitesearch(pwm, aln1[1], aln1[2], 
                           seqname1=seqname1, seqname2=seqname2,
@@ -268,11 +294,12 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="character", aln2="missing
           }
           )
 
-setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAStringSet", aln2="missing"),
+setMethod("searchAln", 
+          signature(pwm="PWMatrix", aln1="DNAStringSet", aln2="missing"),
           function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
                    min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
-            if(length(aln1) != 2)
+            if(length(aln1) != 2L)
               stop("'aln1' must be of length 2 when 'aln2' is missing")
             do_sitesearch(pwm, as.character(aln1[1]), as.character(aln1[2]),
                           seqname1=seqname1, seqname2=seqname2,
@@ -282,7 +309,8 @@ setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAStringSet", aln2="miss
           }
           )
 
-setMethod("searchAln", signature(pwm="PWMatrix", aln1="DNAString", aln2="DNAString"),
+setMethod("searchAln", 
+          signature(pwm="PWMatrix", aln1="DNAString", aln2="DNAString"),
           function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
                    min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
@@ -328,9 +356,9 @@ setMethod("searchPairBSgenome", signature(pwm="PWMatrixList"),
           )
 
 ### -----------------------------------------------------------------
-### PWMDivergence, computes the normalised Euclidian distance
+### PWMDivergence, computes the normalised Euclidean distance
 ###  (Harbison et al. 2004)
-PWMEuclidian = function(pwm1, pwm2){
+PWMEuclidean = function(pwm1, pwm2){
   # now the pwm1 and pwm2 must have same widths
   stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
   pwm1 = Biostrings:::.normargPwm(pwm1)
@@ -357,13 +385,16 @@ PWMKL = function(pwm1, pwm2){
   stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
   pwm1 = Biostrings:::.normargPwm(pwm1)
   pwm2 = Biostrings:::.normargPwm(pwm2)
-  KL = 0.5 / ncol(pwm1) * sum(colSums(pwm1 * log(pwm1 / pwm2) + pwm2 * log(pwm2 / pwm2)))
+  KL = 0.5 / ncol(pwm1) * sum(colSums(pwm1 * log(pwm1 / pwm2) 
+                                      + pwm2 * log(pwm2 / pwm2)))
   return(KL)
 }
 
-setMethod("PWMSimilarity", signature(pwmSubject="matrix", pwmQuery="matrix"),
+setMethod("PWMSimilarity", 
+          signature(pwmSubject="matrix", pwmQuery="matrix"),
           ## It takes the prob PWM, rather than log prob PWM.
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+          function(pwmSubject, pwmQuery, 
+                   method=c("Euclidean", "Pearson", "KL")){
             pwm1 = pwmSubject
             pwm2 = pwmQuery
             method = match.arg(method)
@@ -374,14 +405,14 @@ setMethod("PWMSimilarity", signature(pwmSubject="matrix", pwmQuery="matrix"),
                 pwm1Temp = pwm1[ ,i:(i+widthMin-1)]
                 pwm2Temp = pwm2[ ,j:(j+widthMin-1)]
                 ansTemp = switch(method,
-                                 "Euclidian"=PWMEuclidian(pwm1Temp, pwm2Temp),
+                                 "Euclidean"=PWMEuclidean(pwm1Temp, pwm2Temp),
                                  "Pearson"=PWMPearson(pwm1Temp, pwm2Temp),
                                  "KL"=PWMKL(pwm1Temp, pwm2Temp))
                 ans = c(ans, ansTemp)
               }
             }
             ans = switch(method,
-                         "Euclidian"=min(ans),
+                         "Euclidean"=min(ans),
                          "Pearson"=max(ans),
                          "KL"=min(ans)
                          )
@@ -389,41 +420,59 @@ setMethod("PWMSimilarity", signature(pwmSubject="matrix", pwmQuery="matrix"),
           }
           )
 
-setMethod("PWMSimilarity", signature(pwmSubject="PWMatrix", pwmQuery="PWMatrix"),
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
-            PWMSimilarity(pwmSubject@matrix, pwmQuery@matrix, method=method)
+setMethod("PWMSimilarity", 
+          signature(pwmSubject="PWMatrix", pwmQuery="PWMatrix"),
+          function(pwmSubject, pwmQuery, 
+                   method=c("Euclidean", "Pearson", "KL")){
+            PWMSimilarity(pwmSubject@matrix, pwmQuery@matrix, 
+                          method=method)
           }
           )
 
-setMethod("PWMSimilarity", signature(pwmSubject="matrix", pwmQuery="PWMatrix"),
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
-            PWMSimilarity(pwmSubject, pwmQuery@matrix, method=method)
+setMethod("PWMSimilarity", 
+          signature(pwmSubject="matrix", pwmQuery="PWMatrix"),
+          function(pwmSubject, pwmQuery, 
+                   method=c("Euclidean", "Pearson", "KL")){
+            PWMSimilarity(pwmSubject, pwmQuery@matrix, 
+                          method=method)
           }
           )
 
-setMethod("PWMSimilarity", signature(pwmSubject="PWMatrix", pwmQuery="matrix"),
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
-            PWMSimilarity(pwmSubject@matrix, pwmQuery, method=method)
+setMethod("PWMSimilarity", 
+          signature(pwmSubject="PWMatrix", pwmQuery="matrix"),
+          function(pwmSubject, pwmQuery, 
+                   method=c("Euclidean", "Pearson", "KL")){
+            PWMSimilarity(pwmSubject@matrix, pwmQuery, 
+                          method=method)
           }
           )
 
-setMethod("PWMSimilarity", signature(pwmSubject="PWMatrixList", pwmQuery="PWMatrix"),
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
+setMethod("PWMSimilarity", 
+          signature(pwmSubject="PWMatrixList", pwmQuery="PWMatrix"),
+          function(pwmSubject, pwmQuery, 
+                   method=c("Euclidean", "Pearson", "KL")){
             #ans = lapply(pwm1, PWMSimilarity, pwm2, method=method)
-            PWMSimilarity(pwmSubject, pwmQuery@matrix, method=method)
+            PWMSimilarity(pwmSubject, pwmQuery@matrix, 
+                          method=method)
           }
           )
 
-setMethod("PWMSimilarity", signature(pwmSubject="PWMatrixList", pwmQuery="matrix"),
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
-            ans = sapply(pwmSubject, PWMSimilarity, pwmQuery, method=method)
+setMethod("PWMSimilarity", 
+          signature(pwmSubject="PWMatrixList", pwmQuery="matrix"),
+          function(pwmSubject, pwmQuery, 
+                   method=c("Euclidean", "Pearson", "KL")){
+            ans = sapply(pwmSubject, PWMSimilarity, pwmQuery,
+                         method=method)
             return(ans)
           }
           )
 
-setMethod("PWMSimilarity", signature(pwmSubject="PWMatrixList", pwmQuery="PWMatrixList"),
-          function(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL")){
-            ans = mapply(PWMSimilarity, pwmSubject, pwmQuery, method=method)
+setMethod("PWMSimilarity", 
+          signature(pwmSubject="PWMatrixList", pwmQuery="PWMatrixList"),
+          function(pwmSubject, pwmQuery, 
+                   method=c("Euclidean", "Pearson", "KL")){
+            ans = mapply(PWMSimilarity, pwmSubject, pwmQuery, 
+                         method=method)
             return(ans)
           }
           )

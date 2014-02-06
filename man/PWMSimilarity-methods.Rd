@@ -12,11 +12,11 @@
 \title{PWMSimilarity method}
 \description{
   This function measures the similarity of two PWM matrix in three measurements:
-  "normalised Euclidian distance", "Pearson correlation" and "Kullback Leibler divergence".
+  "normalised Euclidean distance", "Pearson correlation" and "Kullback Leibler divergence".
 }
 
 \usage{
-  PWMSimilarity(pwmSubject, pwmQuery, method=c("Euclidian", "Pearson", "KL"))
+  PWMSimilarity(pwmSubject, pwmQuery, method=c("Euclidean", "Pearson", "KL"))
 }
 
 \arguments{
@@ -27,7 +27,7 @@
     A \code{matrix} or \code{PWMatrix} object.
   }
   \item{method}{
-    The method can be "Euclidian", "Pearson", "KL".
+    The method can be "Euclidean", "Pearson", "KL".
   }
 }
 
@@ -39,7 +39,7 @@
   
   %Given two PWMs, P^1 and P^2, where l is the length. 
   %P_{i,b} is the values in column i with base b.
-  %The normalised Euclidian distance is computed in
+  %The normalised Euclidean distance is computed in
   %D(a,b) = {1 \over {\sqrt{2}l}} \cdot \sum_{i=1}^{l} \sqrt{\sum_{b \in {\{A,C,G,T\}}} (P_{i,b}^1-P_{i,b}^2)^2}
   %.
   %This distance is between 0 (perfect identity) and 1 (complete dis-similarity).
@@ -96,7 +96,7 @@
   data(MA0004.1)
   pwm1 = toPWM(MA0003.2, type="prob")
   pwm2 = toPWM(MA0004.1, type="prob")
-  PWMSimilarity(pwm1, pwm2, method="Euclidian")
+  PWMSimilarity(pwm1, pwm2, method="Euclidean")
 }
 
 

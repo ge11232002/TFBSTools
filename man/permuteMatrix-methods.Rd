@@ -37,7 +37,6 @@
 }
 
 \examples{
-  \dontrun{
     library(JASPAR2014)
     pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
     pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")  
@@ -47,7 +46,6 @@
     foo = permuteMatrix(pfmQuery)
     foo1 = permuteMatrix(pfmList, type="intra")
     foo2 = permuteMatrix(pfmList, type="inter")
-  }
 }
 
 \keyword{methods}

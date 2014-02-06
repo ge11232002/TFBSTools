@@ -42,7 +42,8 @@ schneider_Hnb_precomputed = function(colsum){
     stop("the colsums must be integers")
   if(colsum < 1 || colsum > 30)
     stop("Precomputed params only available for colsums 1 to 30)")
-  precomputed = c(0, 0.75, 1.11090234442608, 1.32398964833609, 1.46290503577084, 
+  precomputed = c(0, 0.75, 1.11090234442608, 1.32398964833609, 
+                  1.46290503577084, 
                   1.55922640783176, 1.62900374746751, 1.68128673969433,
                   1.7215504663901, 1.75328193031842, 1.77879136615189,
                   1.79965855531179, 1.81699248819687, 1.8315892710679,
@@ -65,7 +66,9 @@ schneider_Hnb_exact = function(colsum, bg_probabilities){
   E_Hnb = 0
   while(1){
     Pnb = factorial(colsum) / 
-    (factorial(ns["na"]) * factorial(ns["nc"]) * factorial(ns["ng"]) * factorial(ns["nt"])) * prod(bg_probabilities^ns)
+    (factorial(ns["na"]) * factorial(ns["nc"]) * 
+     factorial(ns["ng"]) * factorial(ns["nt"])) * 
+    prod(bg_probabilities^ns)
     Hnb = -1 * sum((ns/colsum * log2(ns/colsum))[is.finite(log2(ns/colsum))])
     E_Hnb = E_Hnb + Pnb * Hnb
 
@@ -127,13 +130,16 @@ schneider_correction = function(x, bg_probabilities){
 
 setMethod("toICM", "matrix",
     ## This is validated by the TFBS perl module implemenation.
-          function(x, pseudocounts=0.8, ## This is the recommended value from http://nar.oxfordjournals.org/content/37/3/939.long.
+          function(x, pseudocounts=0.8, 
+                   ## This is the recommended value from 
+                   ## http://nar.oxfordjournals.org/content/37/3/939.long.
                    schneider=FALSE,
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             x = normargPfm(x)
             ## From here 'x' is guaranteed to have at least 1 column and to have
             ## all its columns sum to the same value.
-            ## In fact, these columns sum could be different... Modify the .normargPfm a little bit.
+            ## In fact, these columns sum could be different... 
+            ## Modify the .normargPfm a little bit.
             bg= Biostrings:::.normargPriorParams(bg)
             #nseq = sum(x[ ,1L])
             nseq = colSums(x)
@@ -144,14 +150,17 @@ setMethod("toICM", "matrix",
             #  p = sweep(x + bg_probabilities*pseudocounts, MARGIN=2, nseq + pseudocounts, "/")
             #else
               #p = (x + bg_probabilities %*% t(pseudocounts)) / (nseq + pseudocounts)
-              p = sweep(x + bg %*% t(pseudocounts), MARGIN=2, nseq + priorN * pseudocounts, "/")
+              p = sweep(x + bg %*% t(pseudocounts), MARGIN=2, 
+                        nseq + priorN * pseudocounts, "/")
             D = log2(nrow(x)) + colSums(p * log2(p), na.rm=TRUE)
             #ICMMatrix = t(t(p) * D)
-            ICMMatrix = sweep(p, MARGIN=2, D, "*") ## This core function might be better than the operation above
+            ICMMatrix = sweep(p, MARGIN=2, D, "*") 
+            ## This core function might be better than the operation above
             
             if(schneider){
               correntedColSums = colSums(ICMMatrix) + schneider_correction(x, bg)
-              ICMMatrix = sweep(ICMMatrix, MARGIN=2, correntedColSums/colSums(ICMMatrix), "*")
+              ICMMatrix = sweep(ICMMatrix, MARGIN=2, 
+                                correntedColSums/colSums(ICMMatrix), "*")
             }
             return(ICMMatrix)
           }
@@ -176,7 +185,8 @@ setMethod("seqLogo", "ICMatrix",
             m = Matrix(x)
             m = sweep(m, MARGIN=2, colSums(m), "/")
             m = makePWM(m)
-            seqLogo::seqLogo(m, ic.scale = ic.scale, xaxis = xaxis, yaxis = yaxis,
+            seqLogo::seqLogo(m, ic.scale = ic.scale, 
+                             xaxis = xaxis, yaxis = yaxis,
                              xfontsize = xfontsize, yfontsize = yfontsize)
           }
           )

@@ -59,9 +59,9 @@ Ge Tan
 }
 
 \examples{
-  \dontrun{
-    PFMatrixList(pfm1=pfm, pfm2=pfm, use.names=TRUE)
-  }
+    data(MA0003.2)
+    data(MA0004.1)
+    pfmList = PFMatrixList(pfm1=MA0003.2, pfm2=MA0004.1, use.names=TRUE)
 }
 \keyword{classes}
 

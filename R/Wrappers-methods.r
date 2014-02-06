@@ -4,8 +4,25 @@
 ### The real wrapper function for MEME
 ###
 # inputFastaFn = "/Users/gtan/src/meme_4.9.1/tests/crp0.s"
-run_MEME = function(inputFastaFn, binary="meme", seqtype="DNA", arguments=""){
-  cmd = paste(binary, inputFastaFn, "-text", ifelse(seqtype=="DNA", "-dna", "-protein"), arguments, "2>/dev/null")
+run_MEME = function(inputFastaFn, binary="meme", seqtype="DNA", 
+                    arguments=list()){
+  valueArguments = c("-mod", "-nmotifs", "-evt", "-nsites", 
+                        "-minsites", "-maxsites", "-wnsites",
+                        "-w", "-minw", "-maxw", "-wg", "-ws",
+                        "-bfile", "-maxiter", "-distance",
+                        "-psp", "-prior", "-b", "-plib",
+                        "-spfuzz", "-spmap", "-cons", "-heapsize",
+                        "-maxsize", "-p", "-time", "-sf")
+  booleanArguments = c("-nomatrim", "-noendgaps", "-revcomp", "-pal",
+                       "-x_branch", "-w_branch")
+  arguments1 = arguments[names(arguments) %in% valueArguments]
+  arguments1 = paste(names(arguments), arguments, collapse=" ")
+  arguments2 = arguments[names(arguments) %in% booleanArguments]
+  arguments2 = paste(names(arguments2), collapse=" ")
+  arguments = paste(arguments1, arguments2)
+  cmd = paste(binary, inputFastaFn, "-text", 
+              ifelse(seqtype=="DNA", "-dna", "-protein"), 
+              arguments, "2>/dev/null")
   memeOutput = my.system(cmd, intern=TRUE)
   #conMemeOutput = pipe(cmd, open="rt")
   #on.exit(close(conMemeOutput))
@@ -36,12 +53,19 @@ run_MEME = function(inputFastaFn, binary="meme", seqtype="DNA", arguments=""){
   # get the motifs ranges
   motifList = list()
   for(i in seq_len(length(indexNames))){
-    oneLines = memeOutput[seq(from=indexNames[i]+4, to=indexNames[i]+4+motifOccurrences[i]-1)]
+    oneLines = memeOutput[seq(from=indexNames[i]+4, 
+                              to=indexNames[i]+4+motifOccurrences[i]-1)]
     splittedLines = strsplit(oneLines, "[[:blank:]]+")
     oneRange = GRanges(seqnames=sapply(splittedLines, "[", 1), 
-                       ranges=IRanges(start=as.integer(sapply(splittedLines, "[", ifelse(revcomp, 3, 2))), width=motifWidths[i]),
-                       strand=ifelse(revcomp, sapply(splittedLines, "[", 2), "+"),
-                       score=as.numeric(sapply(splittedLines, "[", ifelse(revcomp, 4, 3)))
+                       ranges=IRanges(start=
+                                      as.integer(sapply(splittedLines, 
+                                                        "[", 
+                                                        ifelse(revcomp, 3, 2))), 
+                                      width=motifWidths[i]),
+                       strand=ifelse(revcomp, 
+                                     sapply(splittedLines, "[", 2), "+"),
+                       score=as.numeric(sapply(splittedLines, 
+                                               "[", ifelse(revcomp, 4, 3)))
                        )
     motifList = c(motifList, oneRange)
   }
@@ -57,25 +81,35 @@ run_MEME = function(inputFastaFn, binary="meme", seqtype="DNA", arguments=""){
 ### The MEME method
 ###
 setMethod("runMEME", "character",
-          function(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir()){
+          function(x, binary="meme", seqtype="DNA", arguments=list(), 
+                   tmpdir=tempdir()){
             seqtype = match.arg(seqtype, c("DNA", "AA"))
-            ans = run_MEME(x, binary=binary, seqtype=seqtype, arguments=arguments)
+            ans = run_MEME(x, binary=binary, seqtype=seqtype, 
+                           arguments=arguments)
             subjectSeqs = switch(seqtype,
-                                 "DNA"=readDNAStringSet(filepath=x, format="fasta",),
-                                 "AA"=readAAStringSet(filepath=x, format="fasta")
+                                 "DNA"=readDNAStringSet(filepath=x, 
+                                                        format="fasta",),
+                                 "AA"=readAAStringSet(filepath=x, 
+                                                      format="fasta")
                                  )
-            ans = MotifSet(motifList=ans[["motifList"]], motifEvalues=ans[["motifEvalues"]], subjectSeqs=subjectSeqs)
+            ans = MotifSet(motifList=ans[["motifList"]], 
+                           motifEvalues=ans[["motifEvalues"]], 
+                           subjectSeqs=subjectSeqs)
             return(ans)
           }
           )
 
 setMethod("runMEME", "DNAStringSet",
-          function(x, binary="meme", seqtype="DNA", arguments="", tmpdir=tempdir()){
-            tmpFile = tempfile(pattern="MEME_", tmpdir=tmpdir, fileext = ".fasta")
+          function(x, binary="meme", seqtype="DNA", arguments=list(), 
+                   tmpdir=tempdir()){
+            tmpFile = tempfile(pattern="MEME_", tmpdir=tmpdir, 
+                               fileext = ".fasta")
             writeXStringSet(x, filepath=tmpFile, format="fasta")
             on.exit(unlink(tmpFile))
-            ans = run_MEME(tmpFile, binary=binary, seqtype=seqtype, arguments=arguments)
-            ans = MotifSet(motifList=ans[["motifList"]], motifEvalues=ans[["motifEvalues"]], subjectSeqs=x)
+            ans = run_MEME(tmpFile, binary=binary, 
+                           seqtype=seqtype, arguments=arguments)
+            ans = MotifSet(motifList=ans[["motifList"]], 
+                           motifEvalues=ans[["motifEvalues"]], subjectSeqs=x)
             return(ans)
           }
           )
