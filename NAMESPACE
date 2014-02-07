@@ -113,6 +113,7 @@ export(
   writeGFF3, writeGFF2,
   relScore,
   views,
+  pvalues,
 
   ## PairwiseAlignment-methods.r
   calConservation,

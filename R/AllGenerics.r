@@ -130,6 +130,8 @@ setGeneric("calConservation",
            function(aln1, aln2, windowSize=51L, which="1")
              standardGeneric("calConservation")
            )
+
+### SiteSet methods
 setGeneric("writeGFF3", signature="x", 
            function(x, scoreType=c("absolute", "relative")) 
              standardGeneric("writeGFF3"))
@@ -138,8 +140,12 @@ setGeneric("writeGFF2", signature="x",
              standardGeneric("writeGFF2"))
 setGeneric("relScore", signature="x", function(x) 
            standardGeneric("relScore"))
+setGeneric("pvalues", signature="x", function(x)
+           standardGeneric("pvalues"))
 setGeneric("clone", signature="x", function(x, ...) 
            standardGeneric("clone"))
+
+### PWM methods
 setGeneric("PWMSimilarity", 
            function(pwmSubject, pwmQuery, 
                     method=c("Euclidean", "Pearson", "KL")) 

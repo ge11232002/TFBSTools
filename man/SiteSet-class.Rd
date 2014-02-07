@@ -23,6 +23,8 @@
 \alias{writeGFF2,SiteSet-method}
 \alias{writeGFF3}
 \alias{writeGFF3,SiteSet-method}
+\alias{pvalues}
+\alias{pvalues,SiteSet-method}
 
 \title{Class \code{"SiteSet"}}
 \description{
@@ -69,7 +71,12 @@ SiteSet(views, score, strand="*", seqname="Unknown", sitesource="TFBS",
     \item{writeGFF3}{\code{signature(x = "SiteSet")}(x, scoreType=c("absolute", "relative")): 
     Returns a standard GFF3 format data frame.
     The score column can have absolute value or relative value.}
-	 }
+   \item{pvalues}{\code{signature(x = "SiteSet")}(x):
+     Calculates the empirical p-values for the scores.
+     The background probability for sampling is based on 
+     the PWM matrix in the \code{SiteSet} object.
+   }
+  }
 }
 
 \author{
@@ -89,8 +96,9 @@ Ge Tan
     data(MA0003.2)
     pwm = toPWM(MA0003.2)
     siteset = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60\%")
-    writeGFF3(siteset)
+    writeGFF3(siteset, scoreType="absolute")
     relScore(siteset)
+    pvalues(siteset)
 }
 
 \keyword{classes}

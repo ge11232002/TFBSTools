@@ -222,15 +222,54 @@ setMethod("relScore", "SiteSetList",
 ### SiteSetList Methods
 ###
 setMethod("writeGFF3", "SiteSetList",
-          function(x){
-            ans = do.call(rbind, lapply(x, writeGFF3))
+          function(x, scoreType=c("absolute", "relative")){
+            ans = do.call(rbind, lapply(x, writeGFF3, scoreType=scoreType))
             return(ans)
           }
           )
 setMethod("writeGFF2", "SiteSetList",
-           function(x){
-             ans = do.call(rbind, lapply(x, writeGFF2))
+           function(x, scoreType=c("absolute", "relative")){
+             ans = do.call(rbind, lapply(x, writeGFF2, scoreType=scoreType))
              return(ans)
            }
            )
 
+### -----------------------------------------------------------------
+### Get the empirical p-values of the scores.
+### Exported!
+setMethod("pvalues", "SiteSet",
+          function(x){
+            pwm = x@pattern@matrix
+            bg = x@pattern@bg
+            #if(ncol(pwm) <= 8){
+              # When the ncol is equal or smaller than or 8
+              # we compute for all the possible combinations.
+              #allScores = rowMeans(expand.grid(as.data.frame(pwm)))
+            #}else{
+              # When the ncol is greater than 8,
+              # we do the sampling for 1e4 times.
+              allScores = replicate(1e4, 
+                                    sum(apply(pwm, 2, sample, 
+                                              size=1, prob=bg)))
+            ## OK! I believe sampling can do a better job.
+            #}
+            pvalues = sapply(x@score, function(x){
+                             sum(x < allScores)/length(allScores)
+                                    }
+            )
+            return(pvalues)
+          }
+          )
+
+setMethod("pvalues", "SiteSetList",
+          function(x){
+            ans = lapply(x, pvalues)
+            return(ans)
+          }
+          )
+
+#setMethod("pvalues", "SitePairSet",
+#          function(x){
+#            list(pvalues(siteset1(x)), pvalues(siteset2(x)))
+#          }
+#          )
