@@ -1,7 +1,7 @@
 
 ### -----------------------------------------------------------------
 ### PFMSimilarity method. compare two position frequency matrix.
-###
+### PFMSimilarity Exported!
 compareMatrix = function(pfmSubject, pfmQuery, openPenalty, extPenalty){
   # The true aligning engine. Taking two ordinary matrixs.
   pfmSubject = normargPfm(pfmSubject)
@@ -94,7 +94,7 @@ setMethod("PFMSimilarity", signature(pfmSubject="PFMatrixList", pfmQuery="charac
 
 ### -----------------------------------------------------------------
 ### permute the PFM
-###
+### Exported!
 setMethod("permuteMatrix", "matrix",
           function(x, type="intra"){
             if(type == "inter")

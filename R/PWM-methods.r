@@ -20,6 +20,39 @@ normargPfm = function(x){
     x
 }
 
+### Typical 'prior.params' vector: c(A=0.25, C=0.25, G=0.25, T=0.25)
+### This is taken from Biostrings package matchPWM.R.
+### Just to get rid of the node during the build.
+normargPriorParams <- function(prior.params)
+{
+    if (!is.numeric(prior.params))
+        stop("'prior.params' must be a numeric vector")
+    if (length(prior.params) != length(DNA_BASES) ||
+        !setequal(names(prior.params), DNA_BASES))
+        stop("'prior.params' elements must be named A, C, G and T")
+    ## Re-order the elements.
+    prior.params <- prior.params[DNA_BASES]
+    if (any(is.na(prior.params)) || any(prior.params < 0))
+        stop("'prior.params' contains NAs and/or negative values")
+    prior.params
+}
+
+### A Position Weight Matrix (PWM) is represented as an ordinary matrix.
+### We don't use an S4 class for this, not even an S3 class.
+### This is taken from Biostrings package matchPWM.R.
+normargPwm <- function(pwm, argname="pwm")
+{
+    if (!is.matrix(pwm) || !is.numeric(pwm))
+        stop("'", argname, "' must be a numeric matrix")
+    if (!identical(rownames(pwm), DNA_BASES))
+        stop("'rownames(", argname, ")' must be the 4 DNA bases ('DNA_BASES')")
+    if (!is.double(pwm))
+        storage.mode(pwm) <- "double"
+    if (any(is.na(pwm)))
+        stop("'", argname, "' contains NAs")
+    pwm
+}
+
 ### ------------------------------------------------------------------------
 ### The "PWM" generic and methods. This is a bit different from the implementation of Biostrings.
 ###
@@ -66,7 +99,7 @@ setMethod("toPWM", "matrix",
           function(x, type="log2probratio", pseudocounts=0.8,
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             x = normargPfm(x)
-            bg = Biostrings:::.normargPriorParams(bg)
+            bg = normargPriorParams(bg)
             type = match.arg(type, c("log2probratio", "prob"))
             nseq = colSums(x)
             priorN = sum(bg)
@@ -361,8 +394,8 @@ setMethod("searchPairBSgenome", signature(pwm="PWMatrixList"),
 PWMEuclidean = function(pwm1, pwm2){
   # now the pwm1 and pwm2 must have same widths
   stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
-  pwm1 = Biostrings:::.normargPwm(pwm1)
-  pwm2 = Biostrings:::.normargPwm(pwm2)
+  pwm1 = normargPwm(pwm1)
+  pwm2 = normargPwm(pwm2)
   width = ncol(pwm1)
   diffMatrix = (pwm1 - pwm2)^2
   PWMDistance = sum(sqrt(colSums(diffMatrix))) / sqrt(2) / width
@@ -372,8 +405,8 @@ PWMEuclidean = function(pwm1, pwm2){
 PWMPearson = function(pwm1, pwm2){
   # now the pwm1 and pwm2 must have the same widths
   stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
-  pwm1 = Biostrings:::.normargPwm(pwm1)
-  pwm2 = Biostrings:::.normargPwm(pwm2)
+  pwm1 = normargPwm(pwm1)
+  pwm2 = normargPwm(pwm2)
   top = colSums((pwm1 - 0.25) * (pwm2 - 0.25))
   bottom = sqrt(colSums((pwm1 - 0.25)^2) * colSums((pwm2 - 0.25)^2))
   r = 1 / ncol(pwm1) * sum((top / bottom))
@@ -383,8 +416,8 @@ PWMPearson = function(pwm1, pwm2){
 PWMKL = function(pwm1, pwm2){
   # now the pwm1 and pwm2 must have the same widths
   stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
-  pwm1 = Biostrings:::.normargPwm(pwm1)
-  pwm2 = Biostrings:::.normargPwm(pwm2)
+  pwm1 = normargPwm(pwm1)
+  pwm2 = normargPwm(pwm2)
   KL = 0.5 / ncol(pwm1) * sum(colSums(pwm1 * log(pwm1 / pwm2) 
                                       + pwm2 * log(pwm2 / pwm2)))
   return(KL)

@@ -1,6 +1,6 @@
 
 ### -----------------------------------------------------------------
-### a bettern system call
+### a better system call
 ### Not Exported!
 my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
   if (echo){

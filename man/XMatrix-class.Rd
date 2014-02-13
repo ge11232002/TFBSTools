@@ -45,6 +45,7 @@
 \alias{totalIC}
 \alias{totalIC-methods}
 \alias{totalIC,ICMatrix-method}
+\alias{as.matrix,XMatrix-method}
 
 \title{\code{"XMatrix"} objects}
 \description{

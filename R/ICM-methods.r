@@ -140,7 +140,7 @@ setMethod("toICM", "matrix",
             ## all its columns sum to the same value.
             ## In fact, these columns sum could be different... 
             ## Modify the .normargPfm a little bit.
-            bg= Biostrings:::.normargPriorParams(bg)
+            bg= normargPriorParams(bg)
             #nseq = sum(x[ ,1L])
             nseq = colSums(x)
             priorN = sum(bg)
