@@ -37,6 +37,7 @@ importFrom(GenomicRanges, GRanges, GRangesList)
 importFrom(methods, is, new)
 importFrom(RSQLite, SQLite)
 importFrom(IRanges, IRanges)
+importFrom(gtools, rdirichlet)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
@@ -130,6 +131,9 @@ export(
   ## PFM-methods
   PFMSimilarity,
   permuteMatrix,
+
+  ## DirichletMixture.r
+  dmmEM, rPWMDmm,
 
   ## Wrappers-methods.r
   runMEME,

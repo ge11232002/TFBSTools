@@ -322,7 +322,7 @@ MotifSet = function(motifList=GRangesList(), motifEvalues=numeric(), subjectSeqs
 
 ### ----------------------------------------------------------------
 ### The MEME object which holds the result of a MEME run
-###
+### Not Exported!
 setClass("MEME",
          slots=c(
                  version="character",
@@ -333,7 +333,7 @@ setClass("MEME",
 
 ### -----------------------------------------------------------------
 ### The MEME object constructor
-###
+### Not Exported!
 MEME = function(version=character(), alphabet=c("A", "C", "G", "T"),
                 command=character(), motifs){
   new("MEME", version=version, alphabet=alphabet, command=command, motifs=motifs)

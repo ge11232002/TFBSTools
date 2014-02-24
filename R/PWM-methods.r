@@ -418,8 +418,8 @@ PWMKL = function(pwm1, pwm2){
   stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
   pwm1 = normargPwm(pwm1)
   pwm2 = normargPwm(pwm2)
-  KL = 0.5 / ncol(pwm1) * sum(colSums(pwm1 * log(pwm1 / pwm2) 
-                                      + pwm2 * log(pwm2 / pwm2)))
+  KL = 0.5 / ncol(pwm1) * sum(colSums(pwm1 * log(pwm1 / pwm2) +
+                                      pwm2 * log(pwm2 / pwm2)))
   return(KL)
 }
 
