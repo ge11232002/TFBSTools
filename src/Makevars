@@ -1,0 +1,6 @@
+include Makevars.common
+OBJECTS = $(PKG_OBJECTS)
+all: $(SHLIB)
+
+clean:$
+	rm -f $(OBJECTS)

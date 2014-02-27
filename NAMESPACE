@@ -1,0 +1,144 @@
+useDynLib(TFBSTools, .registration = TRUE)
+
+
+### -----------------------------------------------------------------
+### Import S4 classes defined in other packages
+###
+importClassesFrom(IRanges, SimpleList, List, Vector, Annotated)
+#importClassesFrom(JASPAR2014, JASPAR2014)
+importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments, XStringViews)
+importClassesFrom(GenomicRanges, GRanges, GRangesList)
+importClassesFrom(methods, ANY, character, integer, missing)
+#importClassesFrom(rtracklayer, Chain)
+
+
+### -----------------------------------------------------------------
+### Import S4 methods defined in other packages
+###
+importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, PairwiseAlignments, pattern, consensusMatrix)
+importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
+importMethodsFrom(XVector, subseq)
+importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-", findOverlaps)
+importMethodsFrom(rtracklayer, import.chain, liftOver)
+importMethodsFrom(BSgenome, getSeq)
+importMethodsFrom(methods, initialize, show)
+importMethodsFrom(IRanges, score, isConstant, subject, ranges,
+                  Views, start, end, findOverlaps,
+                  queryHits, subjectHits)
+
+### -----------------------------------------------------------------
+### Import ordinary functions, variables in other packages
+importFrom(seqLogo, seqLogo, makePWM)
+importFrom(Biostrings, unitScale, PWMscoreStartingAt, 
+                       DNAStringSet, DNA_BASES, DNA_ALPHABET, readDNAStringSet, 
+                       readAAStringSet, writeXStringSet, IUPAC_CODE_MAP)
+importFrom(caTools, runmean)
+importFrom(GenomicRanges, GRanges, GRangesList)
+importFrom(methods, is, new)
+importFrom(RSQLite, SQLite)
+importFrom(IRanges, IRanges)
+importFrom(gtools, rdirichlet)
+
+### -----------------------------------------------------------------
+### Export S4 classes defined in TFBSTools
+###
+exportClasses(PFMatrix, PWMatrix, ICMatrix,
+  PFMatrixList, PWMatrixList, ICMatrixList,
+  SiteSet, SiteSetList, SitePairSet, SitePairSetList,
+  MotifSet
+  #PairwiseAlignmentTFBS
+  )
+
+### -----------------------------------------------------------------
+### Export non-generic functions
+###
+export(
+  ## AllClasses.r
+  PFMatrix, PFMatrixList,
+  ICMatrix, ICMatrixList,
+  PWMatrix, PWMatrixList,
+  MotifSet,
+  SitePairSetList, SitePairSet,
+  SiteSet, SiteSetList
+)
+
+### -----------------------------------------------------------------
+### Export S4 methods for generics not defined in CNEr
+###
+exportMethods(
+  ## XMatrix-methods.r
+  length,
+  ncol,
+  dim,
+  reverseComplement,
+
+  ## coercion-methods.r
+  as.matrix,
+
+  ## Motif-methods.r
+  consensusMatrix
+)
+
+### -----------------------------------------------------------------
+### Export S4 generics defined in TFBSTools + export corresponding methods
+###
+export(
+  ## DB-methods.r
+  storeMatrix,
+  getMatrixSet,
+  getMatrixByID, getMatrixByName,
+  deleteMatrixHavingID,
+  initializeJASPARDB,
+
+  ## AllGenerics.r
+  ID, 
+  name, 
+  matrixClass, 
+  Matrix,
+  "Matrix<-",
+  bg, 
+  tags,
+  matrixType,
+  XMatrixList,
+  #alignments,
+
+  # XMatrix-methods.r
+  colSums,
+  rowSums,
+
+  ## PWM-methods.r
+  toPWM,
+  searchSeq,
+  searchAln,
+  searchPairBSgenome,
+  PWMSimilarity,
+
+  ## ICM-methods.r
+  toICM,
+  seqLogo,
+  totalIC,
+
+  ## SiteSet-methods.r
+  writeGFF3, writeGFF2,
+  relScore,
+  views,
+  pvalues,
+
+  ## PairwiseAlignment-methods.r
+  calConservation,
+  #doSiteSearch
+
+  ## PFM-methods
+  PFMSimilarity,
+  permuteMatrix,
+
+  ## DirichletMixture.r
+  dmmEM, rPWMDmm,
+
+  ## Wrappers-methods.r
+  runMEME,
+  sitesSeq
+  
+)
+
+
