@@ -23,12 +23,52 @@ setClass("PFMatrix",
 setClass("PWMatrix", contains="PFMatrix",
          slots=c(pseudocounts="numeric")
          )
+
 setClass("ICMatrix", contains="PWMatrix",
          slots=c(
                  schneider="logical"
                  )
          )
+
 setClassUnion("XMatrix", c("PFMatrix", "ICMatrix", "PWMatrix"))
+
+
+setValidity("XMatrix",
+            function(object){
+              ## Check the length of arguments
+              if(!isConstant(c(length(object@ID), length(object@name),
+                               length(object@matrixClass), 
+                               length(object@strand), 1L)))
+                return("The lengths of ID, name, matrixClass, strand
+                       must be length 1")
+              ## Check the bg
+              if(length(object@bg) != 0L){
+                if (!is.numeric(object@bg))
+                  return("'bg' must be a numeric vector")
+                if (length(object@bg) != length(DNA_BASES) ||
+                    !setequal(names(object@bg), DNA_BASES))
+                  return(("'bg' elements must be named 
+                          A, C, G and T"))
+                if (any(is.na(object@bg)) || any(object@bg < 0))
+                  return(("'bg' contains NAs and/or negative values"))
+              }
+              ## Check the profileMatrix
+              if(!identical(dim(object@profileMatrix), c(1L,1L))){
+                if (!is.matrix(object@profileMatrix) || 
+                    !is.numeric(object@profileMatrix)){
+                  return("The profileMatrix must be a numeric matrix")
+                }
+                if (!identical(rownames(object@profileMatrix), DNA_BASES)){
+                  return("The profileMatrix must be the 4 DNA bases 
+                         ('DNA_BASES')")
+                }
+                if (any(is.na(object@profileMatrix))){
+                  return("The profileMatrix contains NAs")
+                }
+              return(TRUE)
+              }
+            }
+            )
 
 
 ### ----------------------------------------------------------------------
