@@ -38,19 +38,27 @@ setValidity("XMatrix",
               ## Check the length of arguments
               if(!isConstant(c(length(object@ID), length(object@name),
                                length(object@matrixClass), 
-                               length(object@strand), 1L)))
+                               length(object@strand), 1L))){
                 return("The lengths of ID, name, matrixClass, strand
                        must be length 1")
+              }
+              ## check the strand can only be "+", "-", "*"
+              if(!object@strand %in% c("+", "-", "*")){
+                return("The strand can only be '+', '-' or '*'")
+              }
               ## Check the bg
               if(length(object@bg) != 0L){
-                if (!is.numeric(object@bg))
+                if (!is.numeric(object@bg)){
                   return("'bg' must be a numeric vector")
+                }
                 if (length(object@bg) != length(DNA_BASES) ||
-                    !setequal(names(object@bg), DNA_BASES))
+                    !identical(names(object@bg), DNA_BASES)){
                   return(("'bg' elements must be named 
                           A, C, G and T"))
-                if (any(is.na(object@bg)) || any(object@bg < 0))
+                }
+                if (any(is.na(object@bg)) || any(object@bg < 0)){
                   return(("'bg' contains NAs and/or negative values"))
+                }
               }
               ## Check the profileMatrix
               if(!identical(dim(object@profileMatrix), c(1L,1L))){
