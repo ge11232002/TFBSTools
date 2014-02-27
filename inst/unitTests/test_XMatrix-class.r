@@ -1,5 +1,5 @@
 
-test_Constructor <- function(){
+test_XMatrixConstructor <- function(){
   # just check this does throw an error
   checkException(PFMatrix(pseudocounts=0.8), silent=TRUE)
   # just check this does throw an error
@@ -24,6 +24,13 @@ test_Constructor <- function(){
 
   # check the profileMatrix
   checkException(PFMatrix(profileMatrix=matrix(1, ncol=2, nrow=2)), silent=TRUE)
+}
+
+test_XMatrixListConstructor <- function(){
+  ## PFMatrixList constructor
+  checkException(PFMatrixList(PWMatrix(), PWMatrix()), silent=TRUE)
+  checkException(PWMatrixList(PFMatrix(), PFMatrix()), silent=TRUE)
+  checkException(ICMatrixList(PWMatrix(), PWMatrix()), silent=TRUE)
 }
 
 test_Accessor <- function(){

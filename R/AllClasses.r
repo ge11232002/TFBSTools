@@ -81,7 +81,7 @@ setValidity("XMatrix",
 
 ### ----------------------------------------------------------------------
 ### The XMatrix constructor
-###
+### Exported!!
 PFMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                     strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
                     tags=list(), profileMatrix=matrix()){
@@ -146,13 +146,13 @@ setClassUnion("XMatrixList", c("PFMatrixList", "ICMatrixList", "PWMatrixList"))
 
 ### -----------------------------------------------------------------------
 ### XMatrixList() constructor.
-###
+### Exported!!
 
 setMethod("XMatrixList", "list",
-          function(x, use.names=TRUE, type, ...){
-            ok = sapply(x, is, "XMatrix")
+          function(x, use.names=TRUE, type, matrixClass, ...){
+            ok = sapply(x, class) == matrixClass
             if(!all(ok))
-              stop("XMatrixList() only accepts XMatrix objects!")
+              stop(type,"() only accepts ", matrixClass, " objects!")
             if(!use.names)
               names(x) = NULL
             IRanges:::newList(type, x)
@@ -163,21 +163,24 @@ PFMatrixList = function(..., use.names=TRUE){
   listData = list(...)
   #if(is(listData[[1]], "list"))
   #  listData = listData[[1]]
-  XMatrixList(listData, use.names=use.names, type="PFMatrixList")
+  XMatrixList(listData, use.names=use.names, type="PFMatrixList", 
+              matrixClass="PFMatrix")
 }
 
 PWMatrixList = function(..., use.names=TRUE){
   listData = list(...)
   #if(is(listData[[1]], "list"))
   #  listData = listData[[1]]
-  XMatrixList(listData, use.names=use.names, type="PWMatrixList")
+  XMatrixList(listData, use.names=use.names, type="PWMatrixList",
+              matrixClass="PWMatrix")
 }
 
 ICMatrixList = function(..., use.names=TRUE){
   listData = list(...)
   #if(is(listData[[1]], "list"))
   #  listData = listData[[1]]
-  XMatrixList(listData, use.names=use.names, type="ICMatrixList")
+  XMatrixList(listData, use.names=use.names, type="ICMatrixList",
+              matrixClass="ICMatrix")
 }
 
 ### ---------------------------------------------------------------------
@@ -200,7 +203,7 @@ setClass("SiteSet",
 
 ### -------------------------------------------------------------------
 ### The SiteSet constructor
-###
+### Exportted!
 SiteSet = function(views=Views(subject=""), score=numeric(), strand="*",
                    seqname="Unknown",
                    sitesource="TFBS", primary="TF binding site",
