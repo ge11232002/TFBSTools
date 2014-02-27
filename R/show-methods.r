@@ -21,7 +21,8 @@ setMethod("show", "XMatrix",
             #}
             cat("Tags: \n")
             print(object@tags)
-            cat("Background: ", object@bg, "\n", sep="")
+            cat("Background: ", "\n", sep="")
+            print(object@bg)
             cat("Matrix: ", "\n", sep="")
   # add the tags later and print pretty
             print(object@profileMatrix)
