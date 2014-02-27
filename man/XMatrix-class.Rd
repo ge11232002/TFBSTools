@@ -62,13 +62,13 @@ ICMatrix is a class whose instances are objects representing information content
 ## Constructors:
 PFMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown", 
          strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
-         tags=list(), matrix=matrix())
+         tags=list(), profileMatrix=matrix())
 PWMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
          strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
-         tags=list(), matrix=matrix(), pseudocounts=numeric())
+         tags=list(), profileMatrix=matrix(), pseudocounts=numeric())
 ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
          strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
-         tags=list(), matrix=matrix(), pseudocounts=numeric(),
+         tags=list(), profileMatrix=matrix(), pseudocounts=numeric(),
          schneider=logical())
 ## Accessor-like methods:
 \S4method{ID}{XMatrix}(x)
@@ -110,7 +110,7 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
      
       (9) "comment": For some matrices, a curator comment is added.
     }
-    \item{matrix}{Object of class \code{"matrix"}: This is the matrix information.}
+    \item{profileMatrix}{Object of class \code{"matrix"}: This is the matrix information.}
     \item{pseudocounts}{Object of class \code{"numeric"}: This is the pseudocounts used when computing ICM or PWM from PFM. 
       By default, a threshold of 0.8 is used based on the previous research (doi:10.1093/nar/gkn1019).}
     \item{schneider}{Obejct of class \code{"logical"}: this logical value indicates whether the schneider correction is used during the conversion from PFM to ICM.}
@@ -170,11 +170,12 @@ Ge Tan
         tags=list(family="Helix-Loop-Helix", species="10090", tax_group="vertebrates",
         medline="7592839", type="SELEX", ACC="P53762", pazar_tf_id="TF0000003",
         TFBSshape_ID="11", TFencyclopedia_ID="580"),
-        matrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
-                16L, 0L,  20L, 0L,  0L,  0L,
-                0L,  1L,  0L,  20L, 0L,  20L,
-                0L,  0L,  0L,  0L,  20L, 0L), 
-                byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T")))
+        profileMatrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
+                               16L, 0L,  20L, 0L,  0L,  0L,
+                               0L,  1L,  0L,  20L, 0L,  20L,
+                               0L,  0L,  0L,  0L,  20L, 0L), 
+                             byrow=TRUE, nrow=4, 
+                             dimnames=list(c("A", "C", "G", "T")))
         )
   
   ## Coersion
