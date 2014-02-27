@@ -4,7 +4,7 @@
 setMethod("ID", "XMatrix", function(x) x@ID)
 setMethod("name", "XMatrix", function(x) x@name)
 setMethod("matrixClass", "XMatrix", function(x) x@matrixClass)
-setMethod("Matrix", "XMatrix", function(x) x@matrix)
+setMethod("Matrix", "XMatrix", function(x) x@profileMatrix)
 setMethod("strand", "XMatrix", function(x) x@strand)
 setMethod("bg", "XMatrix", function(x) x@bg)
 setMethod("tags", "XMatrix", function(x) x@tags)
@@ -13,9 +13,9 @@ setMethod("matrixType", "ICMatrix", function(x) "ICM")
 setMethod("matrixType", "PWMatrix", function(x) "PWM")
 setMethod("pseudocounts", "PWMatrix", function(x) x@pseudocounts)
 setMethod("schneider", "ICMatrix", function(x) x@schneider)
-setMethod("colSums", "XMatrix", function(x) colSums(x@matrix))
-setMethod("rowSums", "XMatrix", function(x) rowSums(x@matrix))
-setMethod("dim", "XMatrix", function(x) dim(x@matrix))
+setMethod("colSums", "XMatrix", function(x) colSums(x@profileMatrix))
+setMethod("rowSums", "XMatrix", function(x) rowSums(x@profileMatrix))
+setMethod("dim", "XMatrix", function(x) dim(x@profileMatrix))
 
 ### -----------------------------------------------------------------
 ### Setters
@@ -57,7 +57,7 @@ setReplaceMethod("bg", "XMatrix",
 
 setReplaceMethod("Matrix", "XMatrix",
                  function(x, value){
-                   x@matrix = value
+                   x@profileMatrix= value
                    return(x)
                  }
                  )

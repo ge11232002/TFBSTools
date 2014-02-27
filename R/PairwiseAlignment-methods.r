@@ -252,9 +252,9 @@ do_PairBSgenomeSearchPositive = function(pwm, BSgenome1, BSgenome2,
   # extend the ranges a bit. Let's use ncol of matrix
   site2GRanges2 = GRanges(seqnames=as.character(seqnames(site2GRanges)), 
                          ranges=IRanges(as.integer(start(site2GRanges)) - 
-                                        ncol(pwm@matrix), 
+                                        ncol(pwm@profileMatrix), 
                                         as.integer(end(site2GRanges)) + 
-                                        ncol(pwm@matrix)
+                                        ncol(pwm@profileMatrix)
                                         ),
                          strand=as.character(strand(site2GRanges))
                          )
@@ -314,8 +314,10 @@ do_PairBSgenomeSearchNegative = function(pwm, BSgenome1, BSgenome2,
   site1 = site1[as.integer(names(site2GRanges))]
   site2GRanges2 =
     GRanges(seqnames=as.character(seqnames(site2GRanges)),
-            ranges=IRanges(as.integer(start(site2GRanges)) - ncol(pwm@matrix),
-                           as.integer(end(site2GRanges)) + ncol(pwm@matrix)
+            ranges=IRanges(as.integer(start(site2GRanges)) - 
+                           ncol(pwm@profileMatrix),
+                           as.integer(end(site2GRanges)) + 
+                           ncol(pwm@profileMatrix)
                            ),
             strand=as.character(strand(site2GRanges))
             )

@@ -239,7 +239,7 @@ setMethod("writeGFF2", "SiteSetList",
 ### Exported!
 setMethod("pvalues", "SiteSet",
           function(x){
-            pwm = x@pattern@matrix
+            pwm = x@pattern@profileMatrix
             bg = x@pattern@bg
             #if(ncol(pwm) <= 8){
               # When the ncol is equal or smaller than or 8

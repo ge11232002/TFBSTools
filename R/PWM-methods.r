@@ -503,7 +503,7 @@ setMethod("PWMSimilarity",
           signature(pwmSubject="PWMatrix", pwmQuery="PWMatrix"),
           function(pwmSubject, pwmQuery, 
                    method=c("Euclidean", "Pearson", "KL")){
-            PWMSimilarity(pwmSubject@matrix, pwmQuery@matrix, 
+            PWMSimilarity(pwmSubject@profileMatrix, pwmQuery@profileMatrix, 
                           method=method)
           }
           )
@@ -512,7 +512,7 @@ setMethod("PWMSimilarity",
           signature(pwmSubject="matrix", pwmQuery="PWMatrix"),
           function(pwmSubject, pwmQuery, 
                    method=c("Euclidean", "Pearson", "KL")){
-            PWMSimilarity(pwmSubject, pwmQuery@matrix, 
+            PWMSimilarity(pwmSubject, pwmQuery@profileMatrix, 
                           method=method)
           }
           )
@@ -521,7 +521,7 @@ setMethod("PWMSimilarity",
           signature(pwmSubject="PWMatrix", pwmQuery="matrix"),
           function(pwmSubject, pwmQuery, 
                    method=c("Euclidean", "Pearson", "KL")){
-            PWMSimilarity(pwmSubject@matrix, pwmQuery, 
+            PWMSimilarity(pwmSubject@profileMatrix, pwmQuery, 
                           method=method)
           }
           )
@@ -531,7 +531,7 @@ setMethod("PWMSimilarity",
           function(pwmSubject, pwmQuery, 
                    method=c("Euclidean", "Pearson", "KL")){
             #ans = lapply(pwm1, PWMSimilarity, pwm2, method=method)
-            PWMSimilarity(pwmSubject, pwmQuery@matrix, 
+            PWMSimilarity(pwmSubject, pwmQuery@profileMatrix, 
                           method=method)
           }
           )
