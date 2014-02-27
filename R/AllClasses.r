@@ -17,7 +17,7 @@ setClass("PFMatrix",
                  strand="character",
                  bg="numeric",
                  tags="list",
-                 matrix="matrix")
+                 profileMatrix="matrix")
          )
 
 setClass("PWMatrix", contains="PFMatrix",
@@ -36,30 +36,32 @@ setClassUnion("XMatrix", c("PFMatrix", "ICMatrix", "PWMatrix"))
 ###
 PFMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                     strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
-                    tags=list(), matrix=matrix()){
+                    tags=list(), profileMatrix=matrix()){
   new("PFMatrix", ID=ID, name=name, matrixClass=matrixClass, 
       strand=strand, bg=bg,
       tags=tags,
-      matrix=matrix)
+      profileMatrix=profileMatrix)
 }
 
 ICMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                     strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
-                    tags=list(), matrix=matrix(),
+                    tags=list(), profileMatrix=matrix(),
                     pseudocounts=numeric(), schneider=logical()){
   new("ICMatrix", ID=ID, name=name, matrixClass=matrixClass, 
       strand=strand, bg=bg,
       tags=tags,
-      matrix=matrix, pseudocounts=pseudocounts, schneider=schneider)
+      profileMatrix=profileMatrix, pseudocounts=pseudocounts, 
+      schneider=schneider)
 }
+
 PWMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                     strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
-                    tags=list(), matrix=matrix(),
+                    tags=list(), profileMatrix=matrix(),
                     pseudocounts=numeric()){
   new("PWMatrix", ID=ID, name=name, matrixClass=matrixClass, 
       strand=strand, bg=bg,
       tags=tags,
-      matrix=matrix, pseudocounts=pseudocounts)
+      profileMatrix=profileMatrix, pseudocounts=pseudocounts)
 }
 
 ### -----------------------------------------------------------------
@@ -151,7 +153,7 @@ setClass("SiteSet",
 ### -------------------------------------------------------------------
 ### The SiteSet constructor
 ###
-SiteSet = function(views, score, strand="*",
+SiteSet = function(views=Views(subject=""), score=numeric(), strand="*",
                    seqname="Unknown",
                    sitesource="TFBS", primary="TF binding site",
                    pattern){
