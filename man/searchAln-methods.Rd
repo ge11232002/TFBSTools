@@ -24,7 +24,8 @@
 \usage{
   searchAln(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
             min.score="80\%", windowSize=51L, 
-            cutoff=0.7, strand="*", type="any", conservation=NULL)
+            cutoff=0.7, strand="*", type="any", conservation=NULL,
+            mc.cores=1)
 }
 
 \arguments{
@@ -68,6 +69,9 @@
   \item{conservation}{
     A vector of conservation profile. 
     If not supplied, the conservation profile will be computed internally on the fly.
+  }
+  \item{mc.cores}{
+    The number of cpu threads to use. 1 by default.
   }
 }
 

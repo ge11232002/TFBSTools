@@ -69,11 +69,12 @@ Schneider, T. D., Stormo, G. D., Gold, L., & Ehrenfeucht, A. (1986). Information
         tags=list(family="Helix-Loop-Helix", species="10090", tax_group="vertebrates",
         medline="7592839", type="SELEX", ACC="P53762", pazar_tf_id="TF0000003",
         TFBSshape_ID="11", TFencyclopedia_ID="580"),
-        matrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
-                16L, 0L,  20L, 0L,  0L,  0L,
-                0L,  1L,  0L,  20L, 0L,  20L,
-                0L,  0L,  0L,  0L,  20L, 0L),
-                byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T")))
+        profileMatrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
+                               16L, 0L,  20L, 0L,  0L,  0L,
+                               0L,  1L,  0L,  20L, 0L,  20L,
+                               0L,  0L,  0L,  0L,  20L, 0L),
+                             byrow=TRUE, nrow=4, 
+                             dimnames=list(c("A", "C", "G", "T")))
         )
    ## Convert it into a PWMatrix 
   icm = toICM(pfm, pseudocounts=0.8, schneider=TRUE)

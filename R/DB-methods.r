@@ -234,7 +234,7 @@
                      matrixClass=matrixClass,
                      strand="+",
                      tags=tags,
-                     matrix=FMatrix
+                     profileMatrix=FMatrix
                      )
   #if(type == "PFM")
     return(ans_pfm)

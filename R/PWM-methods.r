@@ -86,7 +86,7 @@ setMethod("toPWM", "PFMatrix",
             pwm = PWMatrix(ID=ID(x), name=name(x), 
                            matrixClass=matrixClass(x),
                            strand=strand(x), bg=bg, 
-                           tags=tags(x), matrix=pwmMatrix,
+                           tags=tags(x), profileMatrix=pwmMatrix,
                            pseudocounts=pseudocounts)
             pwm
           }

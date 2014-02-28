@@ -85,11 +85,12 @@ pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+"
         tags=list(family="Helix-Loop-Helix", species="10090", tax_group="vertebrates",
         medline="7592839", type="SELEX", ACC="P53762", pazar_tf_id="TF0000003",
         TFBSshape_ID="11", TFencyclopedia_ID="580"),
-        matrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
-                16L, 0L,  20L, 0L,  0L,  0L,
-                0L,  1L,  0L,  20L, 0L,  20L,
-                0L,  0L,  0L,  0L,  20L, 0L),
-                byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T")))
+        profileMatrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
+                               16L, 0L,  20L, 0L,  0L,  0L,
+                               0L,  1L,  0L,  20L, 0L,  20L,
+                               0L,  0L,  0L,  0L,  20L, 0L),
+                             byrow=TRUE, nrow=4, 
+                             dimnames=list(c("A", "C", "G", "T")))
         )
 
 ## coerced to matrix
@@ -229,8 +230,7 @@ seqLogo(icm)
 In some cases, it is beneficial to assess similarity to input data 
 (as with using BLAST for sequence data comparison when using Genbank).
 
-<<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
-
+<<rtl-PFMSimi, eval=TRUE, results = verbatim>>=
 ## one to one comparison
 data(MA0003.2)
 data(MA0004.1)
@@ -252,7 +252,7 @@ This method simply shuffles the columns in matrices.
 This can either be done by just shuffling columns within each selected matrix,
 or by shuffling columns almong all selected matrices.
 
-<<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
+<<permuteMatrix, eval=TRUE, results = verbatim>>=
 #library(JASPAR2014)
 #pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
 #pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
