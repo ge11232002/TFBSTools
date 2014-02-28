@@ -227,6 +227,7 @@ setClass("SiteSetList",
                    elementType="SiteSet"
                    )
          )
+
 ### -------------------------------------------------------------
 ### SiteSetList() constructor
 ###

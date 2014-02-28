@@ -107,6 +107,13 @@ do_sitesearchOneStrand = function(pwm, aln1, aln2,
   ranges2_in_aln = IRanges(start=seq22aln[start(siteset2)],
                            end=seq22aln[end(siteset2)])
   matchedPairs = findLargestOverlaps(ranges1_in_aln, ranges2_in_aln)
+  
+  ## if no match, return empty ans_siteset
+  if(length(matchedPairs) == 0L){
+    return(list(ans_siteset1=site1[FALSE], ans_siteset2=site2[FALSE]))
+  }
+  
+  # From now, we have matches
   #conservations1 = mapply(window, start=start(siteset1), 
   #                        end=end(siteset1), MoreArgs=list(conservation), 
   #                        SIMPLIFY=FALSE)[!is.na(matchedPairs)]
