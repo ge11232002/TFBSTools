@@ -33,7 +33,8 @@ importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
 importFrom(seqLogo, seqLogo, makePWM)
 importFrom(Biostrings, unitScale, PWMscoreStartingAt, 
                        DNAStringSet, DNA_BASES, DNA_ALPHABET, readDNAStringSet, 
-                       readAAStringSet, writeXStringSet, IUPAC_CODE_MAP)
+                       readAAStringSet, writeXStringSet, IUPAC_CODE_MAP,
+                       DNAString)
 importFrom(caTools, runmean)
 importFrom(GenomicRanges, GRanges, GRangesList)
 importFrom(methods, is, new)

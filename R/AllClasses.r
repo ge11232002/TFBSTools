@@ -191,7 +191,8 @@ ICMatrixList = function(..., use.names=TRUE){
 ###
 
 setClass("SiteSet",
-         slots=c(views="XStringViews",
+         slots=c(
+                 views="XStringViews", 
                  score="numeric",    # vector
                  strand="character",  ## make it Rle() later.
                  seqname="character", # length 1
@@ -204,10 +205,11 @@ setClass("SiteSet",
 ### -------------------------------------------------------------------
 ### The SiteSet constructor
 ### Exportted!
-SiteSet = function(views=Views(subject=""), score=numeric(), strand="*",
+SiteSet = function(views=Views(subject=DNAString("")), 
+                   score=numeric(), strand="*",
                    seqname="Unknown",
                    sitesource="TFBS", primary="TF binding site",
-                   pattern){
+                   pattern=PWMatrix()){
   new("SiteSet", views=views, seqname=seqname, score=score, strand=strand,
       sitesource=sitesource, primary=primary, pattern=pattern)
 }
