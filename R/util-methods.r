@@ -19,6 +19,7 @@ my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
 findLargestOverlaps = function(query, subject){
   hits = findOverlaps(query, subject, select="all")
   if(length(hits) == 0L){
+    ## if no overlaps, return hits with length 0.
     return(hits)
   }
   hitsQuery = query[queryHits(hits)]
