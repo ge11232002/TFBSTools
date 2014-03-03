@@ -1,22 +1,36 @@
-@article{Bailey:1994wq,
-author = {Bailey, T L and Elkan, C},
-title = {{Fitting a mixture model by expectation maximization to discover motifs in biopolymers.}},
-journal = {Proceedings / ... International Conference on Intelligent Systems for Molecular Biology ; ISMB. International Conference on Intelligent Systems for Molecular Biology},
-year = {1994},
-volume = {2},
-pages = {28--36}
-}
+@article{bailey_fitting_1994,
+  title = {Fitting a mixture model by expectation maximization to discover motifs in biopolymers},
+  volume = {2},
+  issn = {1553-0833},
+  abstract = {The algorithm described in this paper discovers one or more motifs in a collection of {DNA} or protein sequences by using the technique of expectation maximization to fit a two-component finite mixture model to the set of sequences. Multiple motifs are found by fitting a mixture model to the data, probabilistically erasing the occurrences of the motif thus found, and repeating the process to find successive motifs. The algorithm requires only a set of unaligned sequences and a number specifying the width of the motifs as input. It returns a model of each motif and a threshold which together can be used as a Bayes-optimal classifier for searching for occurrences of the motif in other databases. The algorithm estimates how many times each motif occurs in each sequence in the dataset and outputs an alignment of the occurrences of the motif. The algorithm is capable of discovering several different motifs with differing numbers of occurrences in a single dataset.},
+  language = {eng},
+  journal = {Proc Int Conf Intell Syst Mol Biol},
+  author = {Bailey, T L and Elkan, C},
+  year = {1994},
+  note = {{PMID:} 7584402},
+  keywords = {Algorithms, Animals, Biopolymers, Humans, Models, Theoretical, Sequence Analysis},
+  pages = {28--36},
+  file = {bailey-1994-ismb-meme.pdf:/Users/gtan/Library/Application Support/Zotero/Profiles/tr8mv463.default/zotero/storage/CS88SCDG/bailey-1994-ismb-meme.pdf:application/pdf}
+},
 
-@article{Lenhard:2002up,
-author = {Lenhard, Boris and Wasserman, Wyeth W},
-title = {{TFBS: Computational framework for transcription factor binding site analysis.}},
-journal = {Bioinformatics (Oxford, England)},
-year = {2002},
-volume = {18},
-number = {8},
-pages = {1135--1136},
-month = aug
-}
+
+@article{lenhard_tfbs:_2002,
+  title = {{TFBS:} Computational framework for transcription factor binding site analysis},
+  volume = {18},
+  issn = {1367-4803},
+  shorttitle = {{TFBS}},
+  abstract = {{MOTIVATION:} {TFBS} is a set of integrated, object-oriented Perl modules for transcription factor binding site detection and analysis. It implements objects representing specificity profile matrices, binding sites and sets thereof, pattern generators, and pattern database interfaces. The modules are interoperable with the {BioPerl} open source system.
+{AVAILABILITY} {AND} {SUPPLEMENTARY} {INFORMATION:} The module package with documentation and example scripts are available at {http://forkhead.cgb.ki.se/TFBS/}},
+  language = {eng},
+  number = {8},
+  journal = {Bioinformatics},
+  author = {Lenhard, Boris and Wasserman, Wyeth W},
+  month = aug,
+  year = {2002},
+  note = {{PMID:} 12176838},
+  keywords = {Binding Sites, Databases, Nucleic Acid, {DNA}, Internet, Pattern Recognition, Automated, Programming Languages, Regulatory Sequences, Nucleic Acid, Sequence Analysis, {DNA}, Software, Transcription Factors, Transcription, Genetic},
+  pages = {1135--1136}
+},
 
 @article{Wasserman:2004ec,
 author = {Wasserman, Wyeth W and Sandelin, Albin},
@@ -29,6 +43,23 @@ pages = {276--287},
 month = apr
 }
 
+@article{wasserman_applied_2004,
+  title = {Applied bioinformatics for the identification of regulatory elements},
+  volume = {5},
+  issn = {1471-0056},
+  doi = {10.1038/nrg1315},
+  language = {eng},
+  number = {4},
+  journal = {Nat. Rev. Genet.},
+  author = {Wasserman, Wyeth W and Sandelin, Albin},
+  month = apr,
+  year = {2004},
+  note = {{PMID:} 15131651},
+  keywords = {Computational Biology, Genome, Human, Humans, Models, Genetic, Promoter Regions, Genetic, Regulatory Sequences, Nucleic Acid, Transcription, Genetic},
+  pages = {276--287},
+  file = {nrg1315.pdf:/Users/gtan/Library/Application Support/Zotero/Profiles/tr8mv463.default/zotero/storage/FVW9U625/nrg1315.pdf:application/pdf}
+},
+
 @article{Nishida:2009kf,
 author = {Nishida, K and Frith, M C and Nakai, K},
 title = {{Pseudocounts for transcription factor binding sites}},
@@ -39,6 +70,24 @@ number = {3},
 pages = {939--944},
 month = feb
 }
+
+@article{nishida_pseudocounts_2009,
+  title = {Pseudocounts for transcription factor binding sites},
+  volume = {37},
+  issn = {1362-4962},
+  doi = {10.1093/nar/gkn1019},
+  abstract = {To represent the sequence specificity of transcription factors, the position weight matrix ({PWM)} is widely used. In most cases, each element is defined as a log likelihood ratio of a base appearing at a certain position, which is estimated from a finite number of known binding sites. To avoid bias due to this small sample size, a certain numeric value, called a pseudocount, is usually allocated for each position, and its fraction according to the background base composition is added to each element. So far, there has been no consensus on the optimal pseudocount value. In this study, we simulated the sampling process by artificially generating binding sites based on observed nucleotide frequencies in a public {PWM} database, and then the generated matrix with an added pseudocount value was compared to the original frequency matrix using various measures. Although the results were somewhat different between measures, in many cases, we could find an optimal pseudocount value for each matrix. These optimal values are independent of the sample size and are clearly correlated with the entropy of the original matrices, meaning that larger pseudocount vales are preferable for less conserved binding sites. As a simple representative, we suggest the value of 0.8 for practical uses.},
+  language = {eng},
+  number = {3},
+  journal = {Nucleic Acids Res.},
+  author = {Nishida, Keishin and Frith, Martin C and Nakai, Kenta},
+  month = feb,
+  year = {2009},
+  note = {{PMID:} 19106141},
+  keywords = {Binding Sites, Regulatory Elements, Transcriptional, Sample Size, Sequence Analysis, {DNA}, Transcription Factors},
+  pages = {939--944},
+  file = {Nucl. Acids Res.-2009-Nishida-939-44.pdf:/Users/gtan/Library/Application Support/Zotero/Profiles/tr8mv463.default/zotero/storage/WE454G9C/Nucl. Acids Res.-2009-Nishida-939-44.pdf:application/pdf}
+},
 
 @article{Schneider:1986ur,
 author = {Schneider, T D and Stormo, G D and Gold, L and Ehrenfeucht, A},
@@ -51,14 +100,40 @@ pages = {415--431},
 month = apr
 }
 
-@article{Linhart:2008gy,
-  author = {Linhart, C and Halperin, Y and Shamir, R},
-  title = {{Transcription factor and microRNA motif discovery: The Amadeus platform and a compendium of metazoan target sets}},
-  journal = {Genome Research},
-  year = {2008},
+@article{schneider_information_1986,
+  title = {Information content of binding sites on nucleotide sequences},
+  volume = {188},
+  issn = {0022-2836},
+  abstract = {Repressors, polymerases, ribosomes and other macromolecules bind to specific nucleic acid sequences. They can find a binding site only if the sequence has a recognizable pattern. We define a measure of the information (R sequence) in the sequence patterns at binding sites. It allows one to investigate how information is distributed across the sites and to compare one site to another. One can also calculate the amount of information (R frequency) that would be required to locate the sites, given that they occur with some frequency in the genome. Several Escherichia coli binding sites were analyzed using these two independent empirical measurements. The two amounts of information are similar for most of the sites we analyzed. In contrast, bacteriophage T7 {RNA} polymerase binding sites contain about twice as much information as is necessary for recognition by the T7 polymerase, suggesting that a second protein may bind at T7 promoters. The extra information can be accounted for by a strong symmetry element found at the T7 promoters. This element may be an operator. If this model is correct, these promoters and operators do not share much information. The comparisons between R sequence and R frequency suggest that the information at binding sites is just sufficient for the sites to be distinguished from the rest of the genome.},
+  language = {eng},
+  number = {3},
+  journal = {J. Mol. Biol.},
+  author = {Schneider, T D and Stormo, G D and Gold, L and Ehrenfeucht, A},
+  month = apr,
+  year = {1986},
+  note = {{PMID:} 3525846},
+  keywords = {Bacterial Proteins, Base Sequence, Binding Sites, {DNA-Binding} Proteins, {DNA-Directed} {RNA} Polymerases, {DNA}, Bacterial, Escherichia coli, Lac Operon, Operator Regions, Genetic, Operon, Repressor Proteins, Ribosomes, Serine Endopeptidases, Statistics as Topic, T-Phages, Tryptophan, Viral Proteins, Viral Regulatory and Accessory Proteins},
+  pages = {415--431},
+  file = {1-s2.0-0022283686901658-main.pdf:/Users/gtan/Library/Application Support/Zotero/Profiles/tr8mv463.default/zotero/storage/JIFIM3V7/1-s2.0-0022283686901658-main.pdf:application/pdf}
+},
+
+
+@article{linhart_transcription_2008,
+  title = {Transcription factor and {microRNA} motif discovery: the Amadeus platform and a compendium of metazoan target sets},
   volume = {18},
+  issn = {1088-9051},
+  shorttitle = {Transcription factor and {microRNA} motif discovery},
+  doi = {10.1101/gr.076117.108},
+  abstract = {We present a threefold contribution to the computational task of motif discovery, a key component in the effort of delineating the regulatory map of a genome: (1) We constructed a comprehensive large-scale, publicly-available compendium of transcription factor and {microRNA} target gene sets derived from diverse high-throughput experiments in several metazoans. We used the compendium as a benchmark for motif discovery tools. (2) We developed Amadeus, a highly efficient, user-friendly software platform for genome-scale detection of novel motifs, applicable to a wide range of motif discovery tasks. Amadeus improves upon extant tools in terms of accuracy, running time, output information, and ease of use and is the only program that attained a high success rate on the metazoan compendium. (3) We demonstrate that by searching for motifs based on their genome-wide localization or chromosomal distributions (without using a predefined target set), Amadeus uncovers diverse known phenomena, as well as novel regulatory motifs.},
+  language = {eng},
   number = {7},
+  journal = {Genome Res.},
+  author = {Linhart, Chaim and Halperin, Yonit and Shamir, Ron},
+  month = jul,
+  year = {2008},
+  note = {{PMID:} 18411406},
+  keywords = {Algorithms, Amino Acid Motifs, Animals, Binding Sites, Computational Biology, Humans, Mice, {MicroRNAs}, Protein Structure, Tertiary, Sequence Alignment, Sequence Analysis, Protein, Sequence Analysis, {RNA}, Software, Transcription Factors},
   pages = {1180--1189},
-  month = jul
-}
+  file = {Genome Res.-2008-Linhart-1180-9.pdf:/Users/gtan/Library/Application Support/Zotero/Profiles/tr8mv463.default/zotero/storage/CSC63ZH5/Genome Res.-2008-Linhart-1180-9.pdf:application/pdf}
+},
 
