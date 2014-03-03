@@ -41,6 +41,7 @@ importFrom(methods, is, new)
 importFrom(RSQLite, SQLite)
 importFrom(IRanges, IRanges)
 importFrom(gtools, rdirichlet)
+importFrom(BiocParallel, MulticoreParam, bpmapply)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
