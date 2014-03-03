@@ -327,7 +327,8 @@ relScore(sitesetList)
 @
 
 \subsection{searchAln}
-\Rfunction{searchAln} scans a pairwise alignment with the pattern represented by the PWM.
+\Rfunction{searchAln} scans a pairwise alignment with the pattern 
+represented by the PWM.
 It reports only those hits that are present in equivalent positions of both sequences 
 and exceed a specified threshold score in both, 
 AND are found in regions of the alignment above the specified.
@@ -344,6 +345,18 @@ sitePairSet = searchAln(pwm, aln1, aln2, seqname1="seq1", seqname2="seq2",
 ## generate gff style output
 head(writeGFF3(sitePairSet))
 head(writeGFF2(sitePairSet))
+
+## search the Axt alignment
+library(CNEr)
+axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="CNEr"),
+                                 "hg19.danRer7.net.axt")
+axtHg19DanRer7 <- readAxt(axtFilesHg19DanRer7)
+sitePairSet <-  searchAln(pwm, axtHg19DanRer7, min.score="80%",
+                          windowSize=51L, cutoff=0.7, strand="*",
+                          type="any", conservation=NULL, mc.cores=2)
+GRangesTFBS <- genomicCoor(sitePairSet, axtHg19DanRer7)
+GRangesTFBS$targetTFBS
+GRangesTFBS$queryTFBS
 @
 
 \subsection{searchPairBSgenome}

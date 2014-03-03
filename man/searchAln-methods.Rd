@@ -5,7 +5,7 @@
 \alias{searchAln,PWMatrix,character,missing-method}
 \alias{searchAln,PWMatrix,DNAString,DNAString-method}
 \alias{searchAln,PWMatrix,DNAStringSet,missing-method}
-\alias{searchAln,PWMatrix,Axt,missing-metho}
+\alias{searchAln,PWMatrix,Axt,missing-method}
 %\alias{searchAln,PWMatrix,PairwiseAlignmentTFBS,missing-method}
 \alias{searchAln,PWMatrixList,character,character-method}
 \alias{searchAln,PWMatrixList,character,missing-method}
