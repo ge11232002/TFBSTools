@@ -319,7 +319,7 @@ setMethod("pvalues", "SiteSetList",
 ### get the genomic coordinates in the view of SitePairSet 
 ### from searchAln for Axt.
 ### Exported!
-setMethod("genomeCor", "SitePairSetList",
+setMethod("genomicCor", "SitePairSetList",
           signature=(x="SitePairSetList", axt="Axt"),
           function(x, axt){
             if(length(axt) != length(x)){
