@@ -319,8 +319,8 @@ setMethod("pvalues", "SiteSetList",
 ### get the genomic coordinates in the view of SitePairSet 
 ### from searchAln for Axt.
 ### Exported!
-setMethod("genomicCor", "SitePairSetList",
-          signature=(x="SitePairSetList", axt="Axt"),
+setMethod("genomicCoor",
+          signature(x="SitePairSetList", axt="Axt"),
           function(x, axt){
             if(length(axt) != length(x)){
               stop("The length of SitePairSetList must be equal to

@@ -4,8 +4,6 @@
 \alias{SiteSetList}
 \alias{SiteSetList-class}
 \alias{relScore,SiteSetList-method}
-\alias{writeGFF2,SiteSetList-method}
-\alias{writeGFF3,SiteSetList-method}
 \alias{pvalues,SiteSetList-method}
 
 \title{Class \code{"SiteSetList"}}
@@ -32,10 +30,6 @@
 
 \section{Methods}{
   \describe{
-    \item{writeGFF2}{\code{signature(x = "SiteSetList")}(x, scoreType=c("absolute", "relative")): 
-      Returns a standard GFF2 format data frame.}
-    \item{writeGFF3}{\code{signature(x = "SiteSetList")}(x, scoreType=c("absolute", "relative")): 
-      Returns a standard GFF3 format data frame.}
     \item{pvalues}{\code{signature(x = "SiteSetList")}(x):
       Calculates the empirical p-values for the scores.
 	 }
