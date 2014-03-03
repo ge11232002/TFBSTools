@@ -107,6 +107,13 @@ do_sitesearchOneStrand = function(pwm, aln1, aln2,
   ranges2_in_aln = IRanges(start=seq22aln[start(siteset2)],
                            end=seq22aln[end(siteset2)])
   matchedPairs = findLargestOverlaps(ranges1_in_aln, ranges2_in_aln)
+  
+  ## if no match, return empty ans_siteset
+  if(length(matchedPairs) == 0L){
+    return(list(ans_siteset1=site1[FALSE], ans_siteset2=site2[FALSE]))
+  }
+  
+  # From now, we have matches
   #conservations1 = mapply(window, start=start(siteset1), 
   #                        end=end(siteset1), MoreArgs=list(conservation), 
   #                        SIMPLIFY=FALSE)[!is.na(matchedPairs)]
@@ -252,9 +259,9 @@ do_PairBSgenomeSearchPositive = function(pwm, BSgenome1, BSgenome2,
   # extend the ranges a bit. Let's use ncol of matrix
   site2GRanges2 = GRanges(seqnames=as.character(seqnames(site2GRanges)), 
                          ranges=IRanges(as.integer(start(site2GRanges)) - 
-                                        ncol(pwm@matrix), 
+                                        ncol(pwm@profileMatrix), 
                                         as.integer(end(site2GRanges)) + 
-                                        ncol(pwm@matrix)
+                                        ncol(pwm@profileMatrix)
                                         ),
                          strand=as.character(strand(site2GRanges))
                          )
@@ -314,8 +321,10 @@ do_PairBSgenomeSearchNegative = function(pwm, BSgenome1, BSgenome2,
   site1 = site1[as.integer(names(site2GRanges))]
   site2GRanges2 =
     GRanges(seqnames=as.character(seqnames(site2GRanges)),
-            ranges=IRanges(as.integer(start(site2GRanges)) - ncol(pwm@matrix),
-                           as.integer(end(site2GRanges)) + ncol(pwm@matrix)
+            ranges=IRanges(as.integer(start(site2GRanges)) - 
+                           ncol(pwm@profileMatrix),
+                           as.integer(end(site2GRanges)) + 
+                           ncol(pwm@profileMatrix)
                            ),
             strand=as.character(strand(site2GRanges))
             )

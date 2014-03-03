@@ -10,6 +10,7 @@ importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments, XStringViews)
 importClassesFrom(GenomicRanges, GRanges, GRangesList)
 importClassesFrom(methods, ANY, character, integer, missing)
 #importClassesFrom(rtracklayer, Chain)
+importClassesFrom(CNEr, Axt)
 
 
 ### -----------------------------------------------------------------
@@ -25,19 +26,22 @@ importMethodsFrom(methods, initialize, show)
 importMethodsFrom(IRanges, score, isConstant, subject, ranges,
                   Views, start, end, findOverlaps,
                   queryHits, subjectHits)
+importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
 
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
 importFrom(seqLogo, seqLogo, makePWM)
 importFrom(Biostrings, unitScale, PWMscoreStartingAt, 
                        DNAStringSet, DNA_BASES, DNA_ALPHABET, readDNAStringSet, 
-                       readAAStringSet, writeXStringSet, IUPAC_CODE_MAP)
+                       readAAStringSet, writeXStringSet, IUPAC_CODE_MAP,
+                       DNAString)
 importFrom(caTools, runmean)
 importFrom(GenomicRanges, GRanges, GRangesList)
 importFrom(methods, is, new)
 importFrom(RSQLite, SQLite)
 importFrom(IRanges, IRanges)
 importFrom(gtools, rdirichlet)
+importFrom(BiocParallel, MulticoreParam, bpmapply)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
@@ -123,6 +127,7 @@ export(
   relScore,
   views,
   pvalues,
+  genomicCoor,
 
   ## PairwiseAlignment-methods.r
   calConservation,

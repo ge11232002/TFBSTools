@@ -6,24 +6,26 @@
 setMethod("show", "XMatrix",
           function(object){
             cat("An object of class ", class(object), "\n", sep="")
-            printList = list(
-                             ID=ID(object),
-                             Name=name(object),
-                             "Matrix class"=matrixClass(object),
-                             Strand=strand(object)
-                             )
-            if(is(object, "PWMatrix"))
-              printList = c(printList, 
-                            list(Pseudocounts=pseudocounts(object)))
-            if(is(object, "ICMatrix"))
-              printList = c(printList, 
-                            list("Schneider correction"=schneider(object)))
-            printList = as.data.frame(c(printList, tags(object)))
-            print(printList)
-            cat("Background:", bg(object), "\n")
-            cat("Matrix:", "\n")
+            cat("ID: ", object@ID, "\n", sep="")
+            cat("Name: ", object@name, "\n", sep="")
+            cat("Matrix Class: ", object@matrixClass, "\n", sep="")
+            cat("strand: ", object@strand, "\n", sep="")
+            if(is(object, "PWMatrix")){
+              cat("Pseudocounts: ", object@pseudocounts, "\n", sep="")
+            }
+            if(is(object, "ICMatrix")){
+              cat("Schneider correction: ", object@schneider, "\n", sep="")
+            }
+            #for(i in 1:length(object@tags)){
+            #  cat(names(object@tags)[i], ": ", object@tags[[i]], "\n", sep="")
+            #}
+            cat("Tags: \n")
+            print(object@tags)
+            cat("Background: ", "\n", sep="")
+            print(object@bg)
+            cat("Matrix: ", "\n", sep="")
   # add the tags later and print pretty
-            print(Matrix(object))
+            print(object@profileMatrix)
           }
           )
 

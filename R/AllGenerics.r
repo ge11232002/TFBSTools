@@ -51,6 +51,12 @@ setGeneric("seqlength", signature="x", function(x)
            standardGeneric("seqlength"))
 setGeneric("alnlength", signature="x", function(x) 
            standardGeneric("alnlength"))
+setGeneric("genomicCoor", function(x, axt)
+           standardGeneric("genomicCoor"))
+setGeneric("seqname1", signature="x", function(x)
+           standardGeneric("seqname1"))
+setGeneric("seqname2", signature="x", function(x)
+           standardGeneric("seqname2"))
 
 
 ## Constructors
@@ -109,7 +115,7 @@ setGeneric("searchSeq", signature="x",
 setGeneric("searchAln",
            function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
                     min.score="80%", windowSize=51L, cutoff=0.7,
-                    strand="*", type="any", conservation=NULL)
+                    strand="*", type="any", conservation=NULL, mc.cores=1)
              standardGeneric("searchAln")
            )
 

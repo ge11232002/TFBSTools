@@ -28,7 +28,7 @@ setMethod("toICM", "PFMatrix",
                               schneider=schneider, bg=bg)
             icm = ICMatrix(ID=ID(x), name=name(x), matrixClass=matrixClass(x),
                            strand=strand(x), bg=bg, 
-                           tags=tags(x), matrix=icmMatrix,
+                           tags=tags(x), profileMatrix=icmMatrix,
                            pseudocounts=pseudocounts, schneider=schneider)
             return(icm)
           }

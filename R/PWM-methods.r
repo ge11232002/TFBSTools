@@ -65,6 +65,7 @@ setMethod("toPWM", "character",
                   bg=bg)
           }
           )
+
 setMethod("toPWM", "DNAStringSet",
           function(x, type="log2probratio", pseudocounts=0.8,
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
@@ -76,6 +77,7 @@ setMethod("toPWM", "DNAStringSet",
                   bg=bg)
           }
           )
+
 setMethod("toPWM", "PFMatrix",
           function(x, type="log2probratio", pseudocounts=0.8, bg=NULL){
             if(is.null(bg))
@@ -86,7 +88,7 @@ setMethod("toPWM", "PFMatrix",
             pwm = PWMatrix(ID=ID(x), name=name(x), 
                            matrixClass=matrixClass(x),
                            strand=strand(x), bg=bg, 
-                           tags=tags(x), matrix=pwmMatrix,
+                           tags=tags(x), profileMatrix=pwmMatrix,
                            pseudocounts=pseudocounts)
             pwm
           }
@@ -119,6 +121,7 @@ setMethod("toPWM", "matrix",
             return(ans)
           }
           )
+
 ### ---------------------------------------------------------------------
 ### searchSeq: scans a nucleotide sequence with the pattern represented by the PWM
 ### Currently we make it as a normal function. Is it necessary to make it a setMethod? Yes. It's necessary to make it a setMethod.
@@ -366,8 +369,59 @@ setMethod("searchAln",
 #          }
 #          )
 
+setMethod("searchAln",
+          signature(pwm="PWMatrix", aln1="Axt", aln2="missing"),
+          function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
+                   min.score="80%", windowSize=51L, cutoff=0.7,
+                   strand="*", type="any", conservation=NULL,
+                   mc.cores=1){
+            ## current strategy is to apply searchAln to each alignment, 
+            ## and try to do it in parallel.
+            multicoreParam <- MulticoreParam(workers=mc.cores)
+            swapFunNULL <- function(aln1, aln2, seqname1, seqname2, 
+                                    pwm, min.score,
+                                    windowSize, cutoff, strand, type, 
+                                    conservation=NULL){
+              searchAln(pwm, aln1, aln2, seqname1, seqname2, min.score,
+                        windowSize, cutoff, strand, type, 
+                        conservation)
+            }
+            swapFunNotNULL <- function(aln1, aln2, seqname1, seqname2,
+                                       conservation,
+                                       pwm, min.score,
+                                       windowSize, cutoff, strand, type){
+              searchAln(pwm, aln1, aln2, seqname1, seqname2, min.score,
+                        windowSize, cutoff, strand, type,
+                        conservation)
+            }
+            if(is.null(conservation)){
+              ans <- bpmapply(swapFunNULL, targetSeqs(aln1), querySeqs(aln1),
+                       as.character(seqnames(targetRanges(aln1))),
+                       as.character(seqnames(queryRanges(aln1))),
+                       MoreArgs=list(pwm=pwm, min.score=min.score, 
+                                     windowSize=windowSize,
+                                     cutoff=cutoff, strand=strand, type=type,
+                                     conservation=NULL),
+                       BPPARAM=multicoreParam)
+              ans <- do.call(SitePairSetList, ans)
+            }else{
+              ans <- bpmapply(swapFunNotNULL, targetSeqs(aln1), querySeqs(aln1),
+                       as.character(seqnames(targetRanges(aln1))),
+                       as.character(seqnames(queryRanges(aln1))),
+                       conservation,
+                       MoreArgs=list(pwm=pwm, min.score=min.score, 
+                                     windowSize=windowSize, cutoff=cutoff, 
+                                     strand=strand, type=type),
+                       BPPARAM=multicoreParam)
+              ans <- do.call(SitePairSetList, ans)
+            }
+            return(ans)
+          }
+          )
+         
+
 ### -----------------------------------------------------------------
-### searchPairSeq, it search two unaligned sequences, usually the genome wise. and find the shared binding sites.
+### searchPairBSgenome, it search two unaligned sequences, usually the genome wise. and find the shared binding sites.
 ###
 setMethod("searchPairBSgenome", signature(pwm="PWMatrix"),
           function(pwm, BSgenome1, BSgenome2, chr1, chr2,
@@ -389,8 +443,9 @@ setMethod("searchPairBSgenome", signature(pwm="PWMatrixList"),
           )
 
 ### -----------------------------------------------------------------
-### PWMDivergence, computes the normalised Euclidean distance
+### PWMSimilarity, computes the normalised Euclidean distance
 ###  (Harbison et al. 2004)
+### Exported!
 PWMEuclidean = function(pwm1, pwm2){
   # now the pwm1 and pwm2 must have same widths
   stopifnot(isConstant(c(ncol(pwm1), ncol(pwm2))))
@@ -457,7 +512,7 @@ setMethod("PWMSimilarity",
           signature(pwmSubject="PWMatrix", pwmQuery="PWMatrix"),
           function(pwmSubject, pwmQuery, 
                    method=c("Euclidean", "Pearson", "KL")){
-            PWMSimilarity(pwmSubject@matrix, pwmQuery@matrix, 
+            PWMSimilarity(pwmSubject@profileMatrix, pwmQuery@profileMatrix, 
                           method=method)
           }
           )
@@ -466,7 +521,7 @@ setMethod("PWMSimilarity",
           signature(pwmSubject="matrix", pwmQuery="PWMatrix"),
           function(pwmSubject, pwmQuery, 
                    method=c("Euclidean", "Pearson", "KL")){
-            PWMSimilarity(pwmSubject, pwmQuery@matrix, 
+            PWMSimilarity(pwmSubject, pwmQuery@profileMatrix, 
                           method=method)
           }
           )
@@ -475,7 +530,7 @@ setMethod("PWMSimilarity",
           signature(pwmSubject="PWMatrix", pwmQuery="matrix"),
           function(pwmSubject, pwmQuery, 
                    method=c("Euclidean", "Pearson", "KL")){
-            PWMSimilarity(pwmSubject@matrix, pwmQuery, 
+            PWMSimilarity(pwmSubject@profileMatrix, pwmQuery, 
                           method=method)
           }
           )
@@ -485,7 +540,7 @@ setMethod("PWMSimilarity",
           function(pwmSubject, pwmQuery, 
                    method=c("Euclidean", "Pearson", "KL")){
             #ans = lapply(pwm1, PWMSimilarity, pwm2, method=method)
-            PWMSimilarity(pwmSubject, pwmQuery@matrix, 
+            PWMSimilarity(pwmSubject, pwmQuery@profileMatrix, 
                           method=method)
           }
           )

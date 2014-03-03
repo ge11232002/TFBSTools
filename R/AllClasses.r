@@ -17,49 +17,99 @@ setClass("PFMatrix",
                  strand="character",
                  bg="numeric",
                  tags="list",
-                 matrix="matrix")
+                 profileMatrix="matrix")
          )
 
 setClass("PWMatrix", contains="PFMatrix",
          slots=c(pseudocounts="numeric")
          )
+
 setClass("ICMatrix", contains="PWMatrix",
          slots=c(
                  schneider="logical"
                  )
          )
+
 setClassUnion("XMatrix", c("PFMatrix", "ICMatrix", "PWMatrix"))
+
+
+setValidity("XMatrix",
+            function(object){
+              ## Check the length of arguments
+              if(!isConstant(c(length(object@ID), length(object@name),
+                               length(object@matrixClass), 
+                               length(object@strand), 1L))){
+                return("The lengths of ID, name, matrixClass, strand
+                       must be length 1")
+              }
+              ## check the strand can only be "+", "-", "*"
+              if(!object@strand %in% c("+", "-", "*")){
+                return("The strand can only be '+', '-' or '*'")
+              }
+              ## Check the bg
+              if(length(object@bg) != 0L){
+                if (!is.numeric(object@bg)){
+                  return("'bg' must be a numeric vector")
+                }
+                if (length(object@bg) != length(DNA_BASES) ||
+                    !identical(names(object@bg), DNA_BASES)){
+                  return(("'bg' elements must be named 
+                          A, C, G and T"))
+                }
+                if (any(is.na(object@bg)) || any(object@bg < 0)){
+                  return(("'bg' contains NAs and/or negative values"))
+                }
+              }
+              ## Check the profileMatrix
+              if(!identical(dim(object@profileMatrix), c(1L,1L))){
+                if (!is.matrix(object@profileMatrix) || 
+                    !is.numeric(object@profileMatrix)){
+                  return("The profileMatrix must be a numeric matrix")
+                }
+                if (!identical(rownames(object@profileMatrix), DNA_BASES)){
+                  return("The profileMatrix must be the 4 DNA bases 
+                         ('DNA_BASES')")
+                }
+                if (any(is.na(object@profileMatrix))){
+                  return("The profileMatrix contains NAs")
+                }
+              return(TRUE)
+              }
+            }
+            )
 
 
 ### ----------------------------------------------------------------------
 ### The XMatrix constructor
-###
+### Exported!!
 PFMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                     strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
-                    tags=list(), matrix=matrix()){
+                    tags=list(), profileMatrix=matrix()){
   new("PFMatrix", ID=ID, name=name, matrixClass=matrixClass, 
       strand=strand, bg=bg,
       tags=tags,
-      matrix=matrix)
+      profileMatrix=profileMatrix)
 }
 
 ICMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                     strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
-                    tags=list(), matrix=matrix(),
+                    tags=list(), profileMatrix=matrix(),
                     pseudocounts=numeric(), schneider=logical()){
   new("ICMatrix", ID=ID, name=name, matrixClass=matrixClass, 
       strand=strand, bg=bg,
       tags=tags,
-      matrix=matrix, pseudocounts=pseudocounts, schneider=schneider)
+      profileMatrix=profileMatrix, pseudocounts=pseudocounts, 
+      schneider=schneider)
 }
+
 PWMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                     strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
-                    tags=list(), matrix=matrix(),
+                    tags=list(), profileMatrix=matrix(),
                     pseudocounts=numeric()){
   new("PWMatrix", ID=ID, name=name, matrixClass=matrixClass, 
       strand=strand, bg=bg,
       tags=tags,
-      matrix=matrix, pseudocounts=pseudocounts)
+      profileMatrix=profileMatrix, pseudocounts=pseudocounts)
 }
 
 ### -----------------------------------------------------------------
@@ -96,13 +146,13 @@ setClassUnion("XMatrixList", c("PFMatrixList", "ICMatrixList", "PWMatrixList"))
 
 ### -----------------------------------------------------------------------
 ### XMatrixList() constructor.
-###
+### Exported!!
 
 setMethod("XMatrixList", "list",
-          function(x, use.names=TRUE, type, ...){
-            ok = sapply(x, is, "XMatrix")
+          function(x, use.names=TRUE, type, matrixClass, ...){
+            ok = sapply(x, class) == matrixClass
             if(!all(ok))
-              stop("XMatrixList() only accepts XMatrix objects!")
+              stop(type,"() only accepts ", matrixClass, " objects!")
             if(!use.names)
               names(x) = NULL
             IRanges:::newList(type, x)
@@ -113,21 +163,24 @@ PFMatrixList = function(..., use.names=TRUE){
   listData = list(...)
   #if(is(listData[[1]], "list"))
   #  listData = listData[[1]]
-  XMatrixList(listData, use.names=use.names, type="PFMatrixList")
+  XMatrixList(listData, use.names=use.names, type="PFMatrixList", 
+              matrixClass="PFMatrix")
 }
 
 PWMatrixList = function(..., use.names=TRUE){
   listData = list(...)
   #if(is(listData[[1]], "list"))
   #  listData = listData[[1]]
-  XMatrixList(listData, use.names=use.names, type="PWMatrixList")
+  XMatrixList(listData, use.names=use.names, type="PWMatrixList",
+              matrixClass="PWMatrix")
 }
 
 ICMatrixList = function(..., use.names=TRUE){
   listData = list(...)
   #if(is(listData[[1]], "list"))
   #  listData = listData[[1]]
-  XMatrixList(listData, use.names=use.names, type="ICMatrixList")
+  XMatrixList(listData, use.names=use.names, type="ICMatrixList",
+              matrixClass="ICMatrix")
 }
 
 ### ---------------------------------------------------------------------
@@ -138,7 +191,8 @@ ICMatrixList = function(..., use.names=TRUE){
 ###
 
 setClass("SiteSet",
-         slots=c(views="XStringViews",
+         slots=c(
+                 views="XStringViews", 
                  score="numeric",    # vector
                  strand="character",  ## make it Rle() later.
                  seqname="character", # length 1
@@ -150,11 +204,12 @@ setClass("SiteSet",
 
 ### -------------------------------------------------------------------
 ### The SiteSet constructor
-###
-SiteSet = function(views, score, strand="*",
+### Exportted!
+SiteSet = function(views=Views(subject=DNAString("")), 
+                   score=numeric(), strand="*",
                    seqname="Unknown",
                    sitesource="TFBS", primary="TF binding site",
-                   pattern){
+                   pattern=PWMatrix()){
   new("SiteSet", views=views, seqname=seqname, score=score, strand=strand,
       sitesource=sitesource, primary=primary, pattern=pattern)
 }
@@ -172,6 +227,7 @@ setClass("SiteSetList",
                    elementType="SiteSet"
                    )
          )
+
 ### -------------------------------------------------------------
 ### SiteSetList() constructor
 ###

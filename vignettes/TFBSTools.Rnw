@@ -39,7 +39,7 @@ with various degree of degeneracy.
 
 This \Rpackage{TFBSTools} package is designed to be a compuational framework
 for transcription factor binding site analysis. 
-Based on the famous perl module TFBS \citep{Lenhard:2002up},
+Based on the famous perl module TFBS \citep{lenhard_tfbs:_2002},
 we extended the class definitions and enhanced implementations in an interactive environment.
 So far this package contains a set of integrated R S4 style classes,
 tools , JASPAR database interface functions.
@@ -54,7 +54,7 @@ patterns.
 
 \Rpackage{TFBSTools} aims to support all these functionalities
 in the environment \R{R}, except the external motif finding software,
-such as MEME \citep{Bailey:1994wq}. 
+such as MEME \citep{bailey_fitting_1994}. 
 %However, only the JASPAR database interface functions are exported
 %in this release to accompany \Rpackage{JASPAR2014}. 
 %More functions will be included in future release after well tested.
@@ -82,14 +82,16 @@ Compared with \Rclass{PWMatrix}, it has one extra slot \Rfunarg{schneider}.
 library(TFBSTools)
 pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+",
         bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
-        tags=list(family="Helix-Loop-Helix", species="10090", tax_group="vertebrates",
-        medline="7592839", type="SELEX", ACC="P53762", pazar_tf_id="TF0000003",
-        TFBSshape_ID="11", TFencyclopedia_ID="580"),
-        matrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
-                16L, 0L,  20L, 0L,  0L,  0L,
-                0L,  1L,  0L,  20L, 0L,  20L,
-                0L,  0L,  0L,  0L,  20L, 0L),
-                byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T")))
+        tags=list(family="Helix-Loop-Helix", species="10090", 
+                  tax_group="vertebrates",medline="7592839", type="SELEX", 
+                  ACC="P53762", pazar_tf_id="TF0000003",
+                  TFBSshape_ID="11", TFencyclopedia_ID="580"),
+        profileMatrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
+                               16L, 0L,  20L, 0L,  0L,  0L,
+                               0L,  1L,  0L,  20L, 0L,  20L,
+                               0L,  0L,  0L,  0L,  20L, 0L),
+                             byrow=TRUE, nrow=4, 
+                             dimnames=list(c("A", "C", "G", "T")))
         )
 
 ## coerced to matrix
@@ -196,7 +198,7 @@ Second, we can specify customized \Rfunarg{pseudocounts}.
 \Rfunarg{pseudocounts} is necessary for correcting the small number of counts
 or eliminating the zero values before log transformation.
 In TFBS perl module, the square root of the number of sequences contributing to each column. 
-However, it has been shown to too harsh \citep{Nishida:2009kf}.
+However, it has been shown to too harsh \citep{nishida_pseudocounts_2009}.
 Hence, a default value of 0.8 is used. 
 Of course, it can be changed to other customized value or even different values for each column.
 
@@ -206,7 +208,7 @@ pwm
 @
 
 \subsection{PFM to ICM}
-The method \Rfunarg{toICM} can convert PFM to ICM \citep{Schneider:1986ur}.
+The method \Rfunarg{toICM} can convert PFM to ICM \citep{schneider_information_1986}.
 Besides the similar \Rfunarg{pseudocounts}, \Rfunarg{bg}, 
 you can also choose to do the \Rfunarg{schneider} correction.
 
@@ -229,8 +231,7 @@ seqLogo(icm)
 In some cases, it is beneficial to assess similarity to input data 
 (as with using BLAST for sequence data comparison when using Genbank).
 
-<<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
-
+<<rtl-PFMSimi, eval=TRUE, results = verbatim>>=
 ## one to one comparison
 data(MA0003.2)
 data(MA0004.1)
@@ -252,7 +253,7 @@ This method simply shuffles the columns in matrices.
 This can either be done by just shuffling columns within each selected matrix,
 or by shuffling columns almong all selected matrices.
 
-<<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
+<<permuteMatrix, eval=TRUE, results = verbatim>>=
 #library(JASPAR2014)
 #pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
 #pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
@@ -267,7 +268,7 @@ permuteMatrix(pfmList, type="inter")
 \subsection{PWM similarity}
 To measure the similarity of two PWM matrix in three measurements:
 "normalised Euclidean distance", "Pearson correlation" 
-and "Kullback Leibler divergence" \citep{Linhart:2008gy}.
+and "Kullback Leibler divergence" \citep{linhart_transcription_2008}.
 Given two PWMs, $P^1$ and $P^2$, where l is the length. 
 $P_{i,b}$ is the values in column i with base b.
 The normalised Euclidean distance is computed in
@@ -308,7 +309,8 @@ When it is "*", both strands will be scanned.
 library(Biostrings)
 data(MA0003.2)
 data(MA0004.1)
-pwmList = PWMatrixList(MA0003.2=toPWM(MA0003.2), MA0004.1=toPWM(MA0004.1), use.names=TRUE)
+pwmList = PWMatrixList(MA0003.2=toPWM(MA0003.2), MA0004.1=toPWM(MA0004.1), 
+                       use.names=TRUE)
 subject = DNAString("GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG")
 siteset = searchSeq(pwm, subject, seqname="seq1", min.score="60%", strand="*")
 
@@ -327,7 +329,8 @@ relScore(sitesetList)
 @
 
 \subsection{searchAln}
-\Rfunction{searchAln} scans a pairwise alignment with the pattern represented by the PWM.
+\Rfunction{searchAln} scans a pairwise alignment with the pattern 
+represented by the PWM.
 It reports only those hits that are present in equivalent positions of both sequences 
 and exceed a specified threshold score in both, 
 AND are found in regions of the alignment above the specified.
@@ -344,6 +347,18 @@ sitePairSet = searchAln(pwm, aln1, aln2, seqname1="seq1", seqname2="seq2",
 ## generate gff style output
 head(writeGFF3(sitePairSet))
 head(writeGFF2(sitePairSet))
+
+## search the Axt alignment
+library(CNEr)
+axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="CNEr"),
+                                 "hg19.danRer7.net.axt")
+axtHg19DanRer7 <- readAxt(axtFilesHg19DanRer7)
+sitePairSet <-  searchAln(pwm, axtHg19DanRer7, min.score="80%",
+                          windowSize=51L, cutoff=0.7, strand="*",
+                          type="any", conservation=NULL, mc.cores=2)
+GRangesTFBS <- genomicCoor(sitePairSet, axtHg19DanRer7)
+GRangesTFBS$targetTFBS
+GRangesTFBS$queryTFBS
 @
 
 \subsection{searchPairBSgenome}
