@@ -40,6 +40,7 @@ setMethod("writeGFF3", "SitePairSet",
             return(ans)
           }
           )
+
 setMethod("writeGFF2", "SitePairSet",
           function(x, scoreType=c("absolute", "relative")){
             if(length(x) == 0)
@@ -51,9 +52,25 @@ setMethod("writeGFF2", "SitePairSet",
           }
           )
 
+setMethod("writeGFF3", "SitePairSetList",
+          function(x, scoreType=c("absolute", "relative")){
+            ans = lapply(x, writeGFF3, scoreType)
+            ans = do.call(rbind, ans)
+            return(ans)
+          }
+          )
+
+setMethod("writeGFF2", "SitePairSetList",
+          function(x, scoreType=c("absolute", "relative")){
+            ans = lapply(x, writeGFF2, scoreType)
+            ans = do.call(rbind, ans)
+            return(ans)
+          }
+          )
+
 ### -----------------------------------------------------------
 ### The SitePairSetList accessor-like methods
-###
+### Exported!
 setMethod("siteset1", "SitePairSetList",
           function(x){
             #ans = SiteSetList(lapply(x, siteset1))
@@ -61,10 +78,25 @@ setMethod("siteset1", "SitePairSetList",
             return(ans)
           }
           )
+
 setMethod("siteset2", "SitePairSetList",
           function(x){
             #ans = SiteSetList(lapply(x, siteset2))
             ans = do.call(SiteSetList, lapply(x, siteset2))
+            return(ans)
+          }
+          )
+
+setMethod("seqname1", "SitePairSetList",
+          function(x){
+            ans = sapply(x, function(x){x@siteset1@seqname})
+            return(ans)
+          }
+          )
+
+setMethod("seqname2", "SitePairSetList",
+          function(x){
+            ans = sapply(x, function(x){x@siteset2@seqname})
             return(ans)
           }
           )
@@ -82,6 +114,7 @@ setMethod("[", "SiteSet",
             clone(x, views=ans_views, score=ans_score, strand=ans_strand)
           }
           )
+
 ### -----------------------------------------------------------------
 ### Combining
 ### Can only apply to SiteSet based on same seq, with same pattern matrix.
@@ -227,7 +260,7 @@ setMethod("relScore", "SiteSetList",
 
 ### ----------------------------------------------------------------
 ### SiteSetList Methods
-###
+### Exported!
 setMethod("writeGFF3", "SiteSetList",
           function(x, scoreType=c("absolute", "relative")){
             ans = do.call(rbind, lapply(x, writeGFF3, scoreType=scoreType))
@@ -280,3 +313,83 @@ setMethod("pvalues", "SiteSetList",
 #            list(pvalues(siteset1(x)), pvalues(siteset2(x)))
 #          }
 #          )
+
+
+### -----------------------------------------------------------------
+### get the genomic coordinates in the view of SitePairSet 
+### from searchAln for Axt.
+### Exported!
+setMethod("genomeCor", "SitePairSetList",
+          signature=(x="SitePairSetList", axt="Axt"),
+          function(x, axt){
+            if(length(axt) != length(x)){
+              stop("The length of SitePairSetList must be equal to
+                   the length of axt object")
+            }
+            #if(!all(seqname1(x) %in% seqnames(targetBSgenome))){
+            #  stop("The target seqnames of SitePairSetList are not subset of 
+            #       the seqnames of target BSgenome")
+            #}
+            #if(!all(seqname2(x) %in% seqnames(queryBSgenome))){
+            #  stop("The query seqnames of SitePairSetList are not subset of
+            #       the seqnames of query BSgenome")
+            #}
+            indexNoneZero <- which(sapply(x, length) != 0L)
+            x <- x[indexNoneZero]
+            axt <- axt[indexNoneZero]
+            eachLengths <- sapply(x, length)
+            targetTFBS <- 
+              GRanges(seqnames=rep(sapply(x, 
+                                     function(x){x@siteset1@seqname}),
+                                                eachLengths),
+                      ranges=IRanges(start=
+                        unlist(lapply(x, 
+                          function(x){start(x@siteset1@views)})) + 
+                                     rep(start(axt@targetRanges), 
+                                         eachLengths) - 1,
+                                     end=
+                        unlist(lapply(x,
+                          function(x){end(x@siteset1@views)})) +
+                                     rep(start(axt@targetRanges),
+                                         eachLengths) - 1
+                                     ),
+                      strand="+",
+                      mcols=data.frame(ID=rep(sapply(x, 
+                                         function(x){x@siteset1@pattern@ID}),
+                                              eachLengths),
+                                       strand=unlist(sapply(x, 
+                                         function(x){x@siteset1@strand})),
+                                       score=unlist(sapply(x,
+                                         function(x){x@siteset1@score}))
+                                       )
+                      )
+            queryTFBS <- 
+              GRanges(seqnames=rep(sapply(x,
+                                     function(x){x@siteset2@seqname}),
+                                                eachLengths),
+                      ranges=IRanges(start=
+                        unlist(lapply(x,
+                          function(x){start(x@siteset2@views)})) +
+                                     rep(start(axt@queryRanges),
+                                         eachLengths) - 1,
+                                     end=
+                        unlist(lapply(x,
+                          function(x){end(x@siteset2@views)})) +
+                                     rep(start(axt@queryRanges),
+                                         eachLengths) - 1
+                                     ),
+                      strand=rep(strand(queryRanges(axt)), eachLengths),
+                      mcols=data.frame(ID=rep(sapply(x,
+                                         function(x){x@siteset2@pattern@ID}),
+                                              eachLengths),
+                                       strand=unlist(sapply(x,
+                                         function(x){x@siteset2@strand})),
+                                       score=unlist(sapply(x,
+                                         function(x){x@siteset2@score}))
+                                       )
+                      )
+            return(list(targetTFBS=targetTFBS, queryTFBS=queryTFBS))
+          }
+          )
+
+

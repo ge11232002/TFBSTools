@@ -51,6 +51,12 @@ setGeneric("seqlength", signature="x", function(x)
            standardGeneric("seqlength"))
 setGeneric("alnlength", signature="x", function(x) 
            standardGeneric("alnlength"))
+setGeneric("genomeCor", signature="x", function(x)
+           standardGeneric("correct"))
+setGeneric("seqname1", signature="x", function(x)
+           standardGeneric("seqname1"))
+setGeneric("seqname2", signature="x", function(x)
+           standardGeneric("seqname2"))
 
 
 ## Constructors
