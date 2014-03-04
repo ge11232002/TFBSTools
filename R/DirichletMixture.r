@@ -113,6 +113,7 @@ dirichletMixtureEMEstimation <- function(inputMatrix, K,
       Alpha0 <- colSums(alpha0)
     }
     if(isTRUE(all.equal(ite %% iteouter_max / 10, 0))){
+      cat("Iteration: ", ite, "\n")
       print(dll)
       print(sum(abs(dalpha0)))
       print(pmix)
