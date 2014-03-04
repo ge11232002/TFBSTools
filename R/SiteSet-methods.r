@@ -319,7 +319,7 @@ setMethod("pvalues", "SiteSetList",
 ### get the genomic coordinates in the view of SitePairSet 
 ### from searchAln for Axt.
 ### Exported!
-setMethod("genomicCoor",
+setMethod("toGRangesList",
           signature(x="SitePairSetList", axt="Axt"),
           function(x, axt){
             if(length(axt) != length(x)){
@@ -354,14 +354,17 @@ setMethod("genomicCoor",
                                          eachLengths) - 1
                                      ),
                       strand="+",
-                      mcols=data.frame(ID=rep(sapply(x, 
-                                         function(x){x@siteset1@pattern@ID}),
-                                              eachLengths),
-                                       strand=unlist(sapply(x, 
-                                         function(x){x@siteset1@strand})),
-                                       score=unlist(sapply(x,
-                                         function(x){x@siteset1@score}))
-                                       )
+                      matrix.ID=rep(sapply(x, 
+                                      function(x){x@siteset1@pattern@ID}),
+                                    eachLengths),
+                      matrix.strand=unlist(lapply(x, 
+                                      function(x){x@siteset1@strand})),
+                      abs.score=unlist(lapply(x,
+                                  function(x){x@siteset1@score})),
+                      rel.score=unlist(lapply(x, 
+                                  function(x){relScore(x@siteset1)})),
+                      sitesSeq=DNAStringSet(unlist(lapply(x, 
+                                 function(x){as.character(x@siteset1@views)})))
                       )
             queryTFBS <- 
               GRanges(seqnames=rep(sapply(x,
@@ -379,16 +382,19 @@ setMethod("genomicCoor",
                                          eachLengths) - 1
                                      ),
                       strand=rep(strand(queryRanges(axt)), eachLengths),
-                      mcols=data.frame(ID=rep(sapply(x,
-                                         function(x){x@siteset2@pattern@ID}),
-                                              eachLengths),
-                                       strand=unlist(sapply(x,
-                                         function(x){x@siteset2@strand})),
-                                       score=unlist(sapply(x,
-                                         function(x){x@siteset2@score}))
-                                       )
+                      matrix.ID=rep(sapply(x,
+                                      function(x){x@siteset2@pattern@ID}),
+                                    eachLengths),
+                      matrix.strand=unlist(lapply(x,
+                                      function(x){x@siteset2@strand})),
+                      abs.score=unlist(lapply(x,
+                                      function(x){x@siteset2@score})),
+                      rel.score=unlist(lapply(x,
+                                      function(x){relScore(x@siteset2)})),
+                      sitesSeq=DNAStringSet(unlist(lapply(x, 
+                                 function(x){as.character(x@siteset2@views)})))
                       )
-            return(list(targetTFBS=targetTFBS, queryTFBS=queryTFBS))
+            return(GRangesList(targetTFBS=targetTFBS, queryTFBS=queryTFBS))
           }
           )
 

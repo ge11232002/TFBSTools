@@ -1,9 +1,9 @@
-\name{genomicCoor-methods}
+\name{toGRangesList-methods}
 \docType{methods}
-\alias{genomicCoor}
-\alias{genomicCoor-methods}
-\alias{genomicCoor,SitePairSetList,Axt-method}
-\title{genomicCoor function}
+\alias{toGRangesList}
+\alias{toGRangesList-methods}
+\alias{toGRangesList,SitePairSetList,Axt-method}
+\title{toGRangesList function}
 \description{
   Get the genomic coordinates from SitePairSetList.
 }
@@ -38,7 +38,7 @@
   sitePairSet <-  searchAln(pwm, axtHg19DanRer7, min.score="80\%",
                             windowSize=51L, cutoff=0.7, strand="*",
                             type="any", conservation=NULL, mc.cores=2)
-  genomicCoor(sitePairSet, axtHg19DanRer7)
+  toGRangesList(sitePairSet, axtHg19DanRer7)
 }
 
 

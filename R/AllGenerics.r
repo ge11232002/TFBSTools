@@ -51,8 +51,6 @@ setGeneric("seqlength", signature="x", function(x)
            standardGeneric("seqlength"))
 setGeneric("alnlength", signature="x", function(x) 
            standardGeneric("alnlength"))
-setGeneric("genomicCoor", function(x, axt)
-           standardGeneric("genomicCoor"))
 setGeneric("seqname1", signature="x", function(x)
            standardGeneric("seqname1"))
 setGeneric("seqname2", signature="x", function(x)
@@ -118,6 +116,8 @@ setGeneric("searchAln",
                     strand="*", type="any", conservation=NULL, mc.cores=1)
              standardGeneric("searchAln")
            )
+setGeneric("toGRangesList", function(x, axt)
+           standardGeneric("toGRangesList"))
 
 setGeneric("doSiteSearch",
            function(pwm, aln1, aln2, min.score="80%", windowSize=51L, 

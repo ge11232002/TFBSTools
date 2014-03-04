@@ -127,7 +127,7 @@ export(
   relScore,
   views,
   pvalues,
-  genomicCoor,
+  toGRangesList,
 
   ## PairwiseAlignment-methods.r
   calConservation,
