@@ -3,22 +3,34 @@
 ### Exported!
 
 setMethod("dmmEM", signature(x="matrix"),
-          function(x, K, alpha0=NULL, pmix=NULL){
-            dirichletMixtureEMEstimation(t(x), K, alpha0, pmix)
+          function(x, K=6, alg=c("C", "R")){
+            alg <- match.arg(alg)
+            if(alg == "C"){
+              fit <- lapply(1:K, dmn, count=x, verbose=TRUE)
+              lplc <- sapply(fit, laplace)
+              best <- fit[[which.min(lplc)]]
+              ans <- list(alpha0=fitted(best), pmix=mixturewt(best)$pi,
+                          ll=laplace(best))
+            }else{
+              ans <- dirichletMixtureEMEstimation(t(x), K, alpha0=NULL, 
+                                                  pmix=NULL)
+            }
+            return(ans)
           }
           )
 
 setMethod("dmmEM", signature(x="PFMatrixList"),
-          function(x, K, alpha0=NULL, pmix=NULL){
+          function(x, K=6, alg=c("C", "R")){
             allMatrix <- do.call(cbind, Matrix(x))
-            dirichletMixtureEMEstimation(t(allMatrix), K, alpha0, pmix)
+            #dirichletMixtureEMEstimation(t(allMatrix), K, alpha0, pmix)
+            dmmEM(t(allMatrix), K, alg=alg)
           }
           )
 
 setMethod("dmmEM", signature(x="ANY"),
-          function(x, K, alpha0=NULL, pmix=NULL){
+          function(x, K=6, alg=c("C", "R")){
             allMatrix <- getMatrixSet(x, opts=list(all=TRUE))
-            dmmEM(allMatrix, K, alpha0, pmix)
+            dmmEM(allMatrix, K, alg=alg)
           }
           )
 
