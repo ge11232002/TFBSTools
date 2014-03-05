@@ -7,11 +7,11 @@
 \alias{dmmEM,PFMatrixList-method}
 \title{dmmEM method}
 \description{
-  Train Dirichlet mixture models parameters for matrix.
+  Training Dirichlet mixture models parameters for matrix.
 }
 
 \usage{
-  dmmEM(x, K, alpha0=NULL, pmix=NULL)
+  dmmEM(x, K=6, alg=c("C", "R"))
 }
 
 \arguments{
@@ -20,16 +20,25 @@
     \code{JASPAR2014} to be trained.
   }
   \item{K}{
-    The number of components in the mixture model.
+    The maximal number of components to test in the mixture model when 
+    alg is "C". 
+    The fixed number of components to use when alg is "R".
+    The default is 6.
   }
-  \item{alpha0}{
-    The initial Dirichlet mixture parameters matrix with dimensions A * K.
-    A is the row number of x. It can be missing.
+  \item{alg}{
+    The algorithm to use.
+    "C" uses the implementation from \code{DirichletMultinomial} package
+    which has more advanced feature and performance.
+    "R" uses our initial implemention in R.
   }
-  \item{pmix}{
-    The mixing proportions with length K and the sum should be 1.
-    It can be missing.
-  }
+}
+
+\details{
+  When using the implementation from \code{DirichletMultinomial} package,
+  the final number of components can be 1:K.
+  An internal selection will be made based on the maximum likelihood.
+
+  When using the implementation of R, the number of component is fixed to K.
 }
 
 \value{
@@ -61,7 +70,7 @@
     data(MA0003.2)
     data(MA0004.1)
     pfmList <- PFMatrixList(pfm1=MA0003.2, pfm2=MA0004.1, use.names=TRUE)
-    dmmParameters <- dmmEM(pfmList, 6)
+    dmmParameters <- dmmEM(pfmList, K=6, alg="C")
   }
 }
 

@@ -168,7 +168,7 @@ setGeneric("permuteMatrix", signature="x",
            function(x, type="intra") standardGeneric("permuteMatrix"))
 
 setGeneric("dmmEM", signature="x",
-           function(x, K=6, alpha0=NULL, pmix=NULL)
+           function(x, K=6, alg=c("C", "R"))
              standardGeneric("dmmEM"))
 setGeneric("rPWMDmm", signature="x",
            function(x,alpha0, pmix, N=1, W=6)

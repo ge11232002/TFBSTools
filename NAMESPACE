@@ -27,6 +27,7 @@ importMethodsFrom(IRanges, score, isConstant, subject, ranges,
                   Views, start, end, findOverlaps,
                   queryHits, subjectHits)
 importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
+importMethodsFrom(DirichletMultinomial, fitted)
 
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
@@ -42,6 +43,7 @@ importFrom(RSQLite, SQLite)
 importFrom(IRanges, IRanges)
 importFrom(gtools, rdirichlet)
 importFrom(BiocParallel, MulticoreParam, bpmapply)
+importFrom(DirichletMultinomial, dmn, laplace, mixturewt)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
