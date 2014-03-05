@@ -7,7 +7,7 @@
 \alias{dmmEM,PFMatrixList-method}
 \title{dmmEM method}
 \description{
-  Train Dirichlet mixture models parameters for matrix.
+  Training Dirichlet mixture models parameters for matrix.
 }
 
 \usage{
