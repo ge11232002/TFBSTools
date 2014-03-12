@@ -69,7 +69,7 @@ export(
 )
 
 ### -----------------------------------------------------------------
-### Export S4 methods for generics not defined in CNEr
+### Export S4 methods for generics not defined in TFBSTools
 ###
 exportMethods(
   ## XMatrix-methods.r
