@@ -56,7 +56,7 @@
 \examples{
     library(JASPAR2014)
     ## one to one comparison
-    pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
+    pfmSubject = getMatrixByID(JASPAR2014, ID="MA0043")
     pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
     score = PFMSimilarity(pfmSubject, pfmQuery)
     ## one to several comparsion
