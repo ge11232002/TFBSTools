@@ -319,83 +319,83 @@ setMethod("pvalues", "SiteSetList",
 ### get the genomic coordinates in the view of SitePairSet 
 ### from searchAln for Axt.
 ### Exported!
-setMethod("toGRangesList",
-          signature(x="SitePairSetList", axt="Axt"),
-          function(x, axt){
-            if(length(axt) != length(x)){
-              stop("The length of SitePairSetList must be equal to
-                   the length of axt object")
-            }
-            #if(!all(seqname1(x) %in% seqnames(targetBSgenome))){
-            #  stop("The target seqnames of SitePairSetList are not subset of 
-            #       the seqnames of target BSgenome")
-            #}
-            #if(!all(seqname2(x) %in% seqnames(queryBSgenome))){
-            #  stop("The query seqnames of SitePairSetList are not subset of
-            #       the seqnames of query BSgenome")
-            #}
-            indexNoneZero <- which(sapply(x, length) != 0L)
-            x <- x[indexNoneZero]
-            axt <- axt[indexNoneZero]
-            eachLengths <- sapply(x, length)
-            targetTFBS <- 
-              GRanges(seqnames=rep(sapply(x, 
-                                     function(x){x@siteset1@seqname}),
-                                                eachLengths),
-                      ranges=IRanges(start=
-                        unlist(lapply(x, 
-                          function(x){start(x@siteset1@views)})) + 
-                                     rep(start(axt@targetRanges), 
-                                         eachLengths) - 1,
-                                     end=
-                        unlist(lapply(x,
-                          function(x){end(x@siteset1@views)})) +
-                                     rep(start(axt@targetRanges),
-                                         eachLengths) - 1
-                                     ),
-                      strand="+",
-                      matrix.ID=rep(sapply(x, 
-                                      function(x){x@siteset1@pattern@ID}),
-                                    eachLengths),
-                      matrix.strand=unlist(lapply(x, 
-                                      function(x){x@siteset1@strand})),
-                      abs.score=unlist(lapply(x,
-                                  function(x){x@siteset1@score})),
-                      rel.score=unlist(lapply(x, 
-                                  function(x){relScore(x@siteset1)})),
-                      sitesSeq=DNAStringSet(unlist(lapply(x, 
-                                 function(x){as.character(x@siteset1@views)})))
-                      )
-            queryTFBS <- 
-              GRanges(seqnames=rep(sapply(x,
-                                     function(x){x@siteset2@seqname}),
-                                                eachLengths),
-                      ranges=IRanges(start=
-                        unlist(lapply(x,
-                          function(x){start(x@siteset2@views)})) +
-                                     rep(start(axt@queryRanges),
-                                         eachLengths) - 1,
-                                     end=
-                        unlist(lapply(x,
-                          function(x){end(x@siteset2@views)})) +
-                                     rep(start(axt@queryRanges),
-                                         eachLengths) - 1
-                                     ),
-                      strand=rep(strand(queryRanges(axt)), eachLengths),
-                      matrix.ID=rep(sapply(x,
-                                      function(x){x@siteset2@pattern@ID}),
-                                    eachLengths),
-                      matrix.strand=unlist(lapply(x,
-                                      function(x){x@siteset2@strand})),
-                      abs.score=unlist(lapply(x,
-                                      function(x){x@siteset2@score})),
-                      rel.score=unlist(lapply(x,
-                                      function(x){relScore(x@siteset2)})),
-                      sitesSeq=DNAStringSet(unlist(lapply(x, 
-                                 function(x){as.character(x@siteset2@views)})))
-                      )
-            return(GRangesList(targetTFBS=targetTFBS, queryTFBS=queryTFBS))
-          }
-          )
-
+#setMethod("toGRangesList",
+#          signature(x="SitePairSetList", axt="Axt"),
+#          function(x, axt){
+#            if(length(axt) != length(x)){
+#              stop("The length of SitePairSetList must be equal to
+#                   the length of axt object")
+#            }
+#            #if(!all(seqname1(x) %in% seqnames(targetBSgenome))){
+#            #  stop("The target seqnames of SitePairSetList are not subset of 
+#            #       the seqnames of target BSgenome")
+#            #}
+#            #if(!all(seqname2(x) %in% seqnames(queryBSgenome))){
+#            #  stop("The query seqnames of SitePairSetList are not subset of
+#            #       the seqnames of query BSgenome")
+#            #}
+#            indexNoneZero <- which(sapply(x, length) != 0L)
+#            x <- x[indexNoneZero]
+#            axt <- axt[indexNoneZero]
+#            eachLengths <- sapply(x, length)
+#            targetTFBS <- 
+#              GRanges(seqnames=rep(sapply(x, 
+#                                     function(x){x@siteset1@seqname}),
+#                                                eachLengths),
+#                      ranges=IRanges(start=
+#                        unlist(lapply(x, 
+#                          function(x){start(x@siteset1@views)})) + 
+#                                     rep(start(axt@targetRanges), 
+#                                         eachLengths) - 1,
+#                                     end=
+#                        unlist(lapply(x,
+#                          function(x){end(x@siteset1@views)})) +
+#                                     rep(start(axt@targetRanges),
+#                                         eachLengths) - 1
+#                                     ),
+#                      strand="+",
+#                      matrix.ID=rep(sapply(x, 
+#                                      function(x){x@siteset1@pattern@ID}),
+#                                    eachLengths),
+#                      matrix.strand=unlist(lapply(x, 
+#                                      function(x){x@siteset1@strand})),
+#                      abs.score=unlist(lapply(x,
+#                                  function(x){x@siteset1@score})),
+#                      rel.score=unlist(lapply(x, 
+#                                  function(x){relScore(x@siteset1)})),
+#                      sitesSeq=DNAStringSet(unlist(lapply(x, 
+#                                 function(x){as.character(x@siteset1@views)})))
+#                      )
+#            queryTFBS <- 
+#              GRanges(seqnames=rep(sapply(x,
+#                                     function(x){x@siteset2@seqname}),
+#                                                eachLengths),
+#                      ranges=IRanges(start=
+#                        unlist(lapply(x,
+#                          function(x){start(x@siteset2@views)})) +
+#                                     rep(start(axt@queryRanges),
+#                                         eachLengths) - 1,
+#                                     end=
+#                        unlist(lapply(x,
+#                          function(x){end(x@siteset2@views)})) +
+#                                     rep(start(axt@queryRanges),
+#                                         eachLengths) - 1
+#                                     ),
+#                      strand=rep(strand(queryRanges(axt)), eachLengths),
+#                      matrix.ID=rep(sapply(x,
+#                                      function(x){x@siteset2@pattern@ID}),
+#                                    eachLengths),
+#                      matrix.strand=unlist(lapply(x,
+#                                      function(x){x@siteset2@strand})),
+#                      abs.score=unlist(lapply(x,
+#                                      function(x){x@siteset2@score})),
+#                      rel.score=unlist(lapply(x,
+#                                      function(x){relScore(x@siteset2)})),
+#                      sitesSeq=DNAStringSet(unlist(lapply(x, 
+#                                 function(x){as.character(x@siteset2@views)})))
+#                      )
+#            return(GRangesList(targetTFBS=targetTFBS, queryTFBS=queryTFBS))
+#          }
+#          )
+#
 

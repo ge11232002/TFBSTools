@@ -255,7 +255,7 @@ or by shuffling columns almong all selected matrices.
 
 <<permuteMatrix, eval=TRUE, results = verbatim>>=
 #library(JASPAR2014)
-#pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
+#pfmSubject = getMatrixByID(JASPAR2014, ID="MA0043")
 #pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
 #opts = list()
 #opts[["class"]] = "Ig-fold"
@@ -349,16 +349,16 @@ head(writeGFF3(sitePairSet))
 head(writeGFF2(sitePairSet))
 
 ## search the Axt alignment
-library(CNEr)
-axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="CNEr"),
-                                 "hg19.danRer7.net.axt")
-axtHg19DanRer7 <- readAxt(axtFilesHg19DanRer7)
-sitePairSet <-  searchAln(pwm, axtHg19DanRer7, min.score="80%",
-                          windowSize=51L, cutoff=0.7, strand="*",
-                          type="any", conservation=NULL, mc.cores=2)
-GRangesTFBS <- toGRangesList(sitePairSet, axtHg19DanRer7)
-GRangesTFBS$targetTFBS
-GRangesTFBS$queryTFBS
+#library(CNEr)
+#axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="CNEr"),
+#                                 "hg19.danRer7.net.axt")
+#axtHg19DanRer7 <- readAxt(axtFilesHg19DanRer7)
+#sitePairSet <-  searchAln(pwm, axtHg19DanRer7, min.score="80%",
+#                          windowSize=51L, cutoff=0.7, strand="*",
+#                          type="any", conservation=NULL, mc.cores=2)
+#GRangesTFBS <- toGRangesList(sitePairSet, axtHg19DanRer7)
+#GRangesTFBS$targetTFBS
+#GRangesTFBS$queryTFBS
 @
 
 \subsection{searchPairBSgenome}

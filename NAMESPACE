@@ -10,7 +10,7 @@ importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments, XStringViews)
 importClassesFrom(GenomicRanges, GRanges, GRangesList)
 importClassesFrom(methods, ANY, character, integer, missing)
 #importClassesFrom(rtracklayer, Chain)
-importClassesFrom(CNEr, Axt)
+#importClassesFrom(CNEr, Axt)
 
 
 ### -----------------------------------------------------------------
@@ -26,7 +26,7 @@ importMethodsFrom(methods, initialize, show)
 importMethodsFrom(IRanges, score, isConstant, subject, ranges,
                   Views, start, end, findOverlaps,
                   queryHits, subjectHits)
-importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
+#importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
 importMethodsFrom(DirichletMultinomial, fitted)
 
 ### -----------------------------------------------------------------
@@ -42,7 +42,7 @@ importFrom(methods, is, new)
 importFrom(RSQLite, SQLite)
 importFrom(IRanges, IRanges)
 importFrom(gtools, rdirichlet)
-importFrom(BiocParallel, MulticoreParam, bpmapply)
+#importFrom(BiocParallel, MulticoreParam, bpmapply)
 importFrom(DirichletMultinomial, dmn, laplace, mixturewt)
 
 ### -----------------------------------------------------------------
@@ -69,7 +69,7 @@ export(
 )
 
 ### -----------------------------------------------------------------
-### Export S4 methods for generics not defined in CNEr
+### Export S4 methods for generics not defined in TFBSTools
 ###
 exportMethods(
   ## XMatrix-methods.r
@@ -129,7 +129,7 @@ export(
   relScore,
   views,
   pvalues,
-  toGRangesList,
+  #toGRangesList,
 
   ## PairwiseAlignment-methods.r
   calConservation,

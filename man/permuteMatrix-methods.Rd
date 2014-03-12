@@ -38,7 +38,7 @@
 
 \examples{
     library(JASPAR2014)
-    pfmSubject = getMatrixByID(JASPAR2014, ID="MA0055")
+    pfmSubject = getMatrixByID(JASPAR2014, ID="MA0043")
     pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")  
     opts = list()
     opts[["class"]] = "Ig-fold"
