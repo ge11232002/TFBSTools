@@ -4,7 +4,8 @@ useDynLib(TFBSTools, .registration = TRUE)
 ### -----------------------------------------------------------------
 ### Import S4 classes defined in other packages
 ###
-importClassesFrom(IRanges, SimpleList, List, Vector, Annotated)
+importClassesFrom(S4Vectors, Annotated)
+importClassesFrom(IRanges, SimpleList, List, Vector)
 #importClassesFrom(JASPAR2014, JASPAR2014)
 importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments, XStringViews)
 importClassesFrom(GenomicRanges, GRanges, GRangesList)
