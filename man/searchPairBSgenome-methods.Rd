@@ -60,13 +60,15 @@
     library(JASPAR2014)
     library(BSgenome.Hsapiens.UCSC.hg19)
     library(BSgenome.Mmusculus.UCSC.mm10)
-    pfm = getMatrixByID(JASPAR2014, ID="MA0004.1")
-    pwm=toPWM(pfm)
-    chain = import.chain("Downloads/hg19ToMm10.over.chain")
-    sitepairset = searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
-                                     BSgenome.Mmusculus.UCSC.mm10,
-                                     chr1="chr1", chr2="chr1",
-                                     min.score="90%", strand="+", chain=chain)
+    #pfm = getMatrixByID(JASPAR2014, ID="MA0004.1")
+    data("MA0004.1")
+    pfm <- MA0004.1
+    pwm <- toPWM(pfm)
+    chain <- import.chain("Downloads/hg19ToMm10.over.chain")
+    sitepairset <- searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
+                                      BSgenome.Mmusculus.UCSC.mm10,
+                                      chr1="chr1", chr2="chr1",
+                                      min.score="90%", strand="+", chain=chain)
   }
 }
 

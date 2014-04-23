@@ -78,16 +78,19 @@
 }
 
 \examples{
+  \donttest{
     library(JASPAR2014)
-    db = file.path(system.file("extdata", package="JASPAR2014"), "JASPAR2014.sqlite")
-    opts = list()
-    opts[["species"]] = 9606
-    opts[["name"]] = "RUNX1"
+    db <- file.path(system.file("extdata", package="JASPAR2014"), 
+                    "JASPAR2014.sqlite")
+    opts <- list()
+    opts[["species"]] <- 9606
+    opts[["name"]] <- "RUNX1"
     #opts[["class"]] = "Ig-fold"
-    opts[["type"]] = "SELEX"
-    opts[["all_versions"]] = TRUE
-    siteList = getMatrixSet(db, opts)
-    siteList2 = getMatrixSet(JASPAR2014, opts)
+    opts[["type"]] <- "SELEX"
+    opts[["all_versions"]] <- TRUE
+    siteList <- getMatrixSet(db, opts)
+    siteList2 <- getMatrixSet(JASPAR2014, opts)
+  }
 }
 
 \keyword{methods}

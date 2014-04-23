@@ -56,14 +56,19 @@
 \examples{
     library(JASPAR2014)
     ## one to one comparison
-    pfmSubject = getMatrixByID(JASPAR2014, ID="MA0043")
-    pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
-    score = PFMSimilarity(pfmSubject, pfmQuery)
+    data("MA0043")
+    pfmSubject <- MA0043
+    data("MA0048")
+    pfmQuery <- MA0048
+    #pfmSubject = getMatrixByID(JASPAR2014, ID="MA0043")
+    #pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
+    score <- PFMSimilarity(pfmSubject, pfmQuery)
     ## one to several comparsion
-    opts = list()
-    opts[["class"]] = "Ig-fold"
-    pfmList = getMatrixSet(JASPAR2014, opts)
-    scores = PFMSimilarity(pfmList, pfmQuery)
+    #opts = list()
+    #opts[["class"]] = "Ig-fold"
+    #pfmList = getMatrixSet(JASPAR2014, opts)
+    pfmList <- PFMatrixList(pfmSubject, pfmQuery)
+    scores <- PFMSimilarity(pfmList, pfmQuery)
 }
 
 \keyword{methods}

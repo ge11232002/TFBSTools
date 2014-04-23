@@ -37,12 +37,17 @@
 }
 
 \examples{
-    library(JASPAR2014)
-    pfmSubject = getMatrixByID(JASPAR2014, ID="MA0043")
-    pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")  
-    opts = list()
-    opts[["class"]] = "Ig-fold"
-    pfmList = getMatrixSet(JASPAR2014, opts)
+    #library(JASPAR2014)
+    #pfmSubject = getMatrixByID(JASPAR2014, ID="MA0043")
+    #pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")  
+    data("MA0043")
+    pfmSubject <- MA0043
+    data("MA0048")
+    pfmQuery <- MA0048
+    #opts = list()
+    #opts[["class"]] = "Ig-fold"
+    #pfmList = getMatrixSet(JASPAR2014, opts)
+    pfmList <- PFMatrixList(pfmSubject, pfmQuery)
     foo = permuteMatrix(pfmQuery)
     foo1 = permuteMatrix(pfmList, type="intra")
     foo2 = permuteMatrix(pfmList, type="inter")

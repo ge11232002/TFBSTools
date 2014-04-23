@@ -69,11 +69,14 @@
 }
 
 \examples{
+  \donttest{  
     library(JASPAR2014)
-    db = file.path(system.file("extdata", package="JASPAR2014"), "JASPAR2014.sqlite")
-    pfm = getMatrixByID(db, ID="MA0003")
-    pfm2 = getMatrixByName(db, name="TFAP2A")
-    pfm3 = getMatrixByID(JASPAR2014, ID="MA0003")
+    db <- file.path(system.file("extdata", package="JASPAR2014"), 
+                    "JASPAR2014.sqlite")
+    pfm <- getMatrixByID(db, ID="MA0003")
+    pfm2 <- getMatrixByName(db, name="TFAP2A")
+    pfm3 <- getMatrixByID(JASPAR2014, ID="MA0003")
+  }
 }
 
 \keyword{methods}
