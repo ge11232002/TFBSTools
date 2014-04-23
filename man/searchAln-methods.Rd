@@ -5,7 +5,7 @@
 \alias{searchAln,PWMatrix,character,missing-method}
 \alias{searchAln,PWMatrix,DNAString,DNAString-method}
 \alias{searchAln,PWMatrix,DNAStringSet,missing-method}
-%\alias{searchAln,PWMatrix,Axt,missing-method}
+\alias{searchAln,PWMatrix,Axt,missing-method}
 %\alias{searchAln,PWMatrix,PairwiseAlignmentTFBS,missing-method}
 \alias{searchAln,PWMatrixList,character,character-method}
 \alias{searchAln,PWMatrixList,character,missing-method}
@@ -34,8 +34,7 @@
     A \link{PWMatrix} object or a \link{PWMatrixList} object.
   }
   \item{aln1}{
-    A \code{DNAString}, \code{character} or \code{DNAStringSet} 
-    % or \code{Axt}
+    A \code{DNAString}, \code{character}, \code{DNAStringSet} or \code{Axt}
     %\link{PairwiseAlignmentTFBS} 
     object can be used to represent the pairwise alignment.
     When the last two objects are used and have a length of 2, the argument \code{aln2}
@@ -43,14 +42,13 @@
   }
   \item{aln2}{
     A \code{DNAString}, \code{character}.
-    It can be missing when aln1 is \code{DNAStringSet} object.
-    %\code{Axt} object.
+    It can be missing when aln1 is \code{DNAStringSet} or \code{Axt} object.
   }
   \item{seqname1,seqname2}{
     A \code{chracter} object for the name of sequence. 
     "Unknown1" and "Unknown2" are used by default.
-    %These two arguments are ignored when aln1 is \code{Axt}. 
-    %seqname is taken from \code{Axt}.
+    These two arguments are ignored when aln1 is \code{Axt}. 
+    seqname is taken from \code{Axt}.
   }
   \item{min.score}{
     The minimum score for the hit. Can be given an character string in th format
@@ -77,7 +75,7 @@
     If not supplied, the conservation profile will be computed internally on the fly.
   }
   \item{mc.cores}{
-    The number of cpu threads to use. %when searching \code{Axt}. 
+    The number of cpu threads to use when searching \code{Axt}. 
     1 is assigned by default.
   }
 }
@@ -104,13 +102,15 @@
   sitePairSet <- searchAln(pwm, aln1, aln2, min.score="50\%",
                            cutoff=0.5, strand="*", type="any")
 
-  #library(CNEr)
-  #axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="CNEr"), 
-  #                                 "hg19.danRer7.net.axt")
-  #axtHg19DanRer7 <- readAxt(axtFilesHg19DanRer7)
-  #sitePairSet <-  searchAln(pwm, axtHg19DanRer7, min.score="80\%", 
-  #                          windowSize=51L, cutoff=0.7, strand="*", 
-  #                          type="any", conservation=NULL, mc.cores=2)
+  ## scan axt object
+  library(CNEr)
+  axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="CNEr"), 
+                                   "hg19.danRer7.net.axt")
+  axtHg19DanRer7 <- readAxt(axtFilesHg19DanRer7)
+  sitePairSet <-  searchAln(pwm, axtHg19DanRer7, min.score="80\%", 
+                            windowSize=51L, cutoff=0.7, strand="*", 
+                            type="any", conservation=NULL, mc.cores=2)
+
 }
 
 \keyword{methods}

@@ -369,55 +369,55 @@ setMethod("searchAln",
 #          }
 #          )
 
-#setMethod("searchAln",
-#          signature(pwm="PWMatrix", aln1="Axt", aln2="missing"),
-#          function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
-#                   min.score="80%", windowSize=51L, cutoff=0.7,
-#                   strand="*", type="any", conservation=NULL,
-#                   mc.cores=1){
-#            ## current strategy is to apply searchAln to each alignment, 
-#            ## and try to do it in parallel.
-#            multicoreParam <- MulticoreParam(workers=mc.cores)
-#            swapFunNULL <- function(aln1, aln2, seqname1, seqname2, 
-#                                    pwm, min.score,
-#                                    windowSize, cutoff, strand, type, 
-#                                    conservation=NULL){
-#              searchAln(pwm, aln1, aln2, seqname1, seqname2, min.score,
-#                        windowSize, cutoff, strand, type, 
-#                        conservation)
-#            }
-#            swapFunNotNULL <- function(aln1, aln2, seqname1, seqname2,
-#                                       conservation,
-#                                       pwm, min.score,
-#                                       windowSize, cutoff, strand, type){
-#              searchAln(pwm, aln1, aln2, seqname1, seqname2, min.score,
-#                        windowSize, cutoff, strand, type,
-#                        conservation)
-#            }
-#            if(is.null(conservation)){
-#              ans <- bpmapply(swapFunNULL, targetSeqs(aln1), querySeqs(aln1),
-#                       as.character(seqnames(targetRanges(aln1))),
-#                       as.character(seqnames(queryRanges(aln1))),
-#                       MoreArgs=list(pwm=pwm, min.score=min.score, 
-#                                     windowSize=windowSize,
-#                                     cutoff=cutoff, strand=strand, type=type,
-#                                     conservation=NULL),
-#                       BPPARAM=multicoreParam)
-#              ans <- do.call(SitePairSetList, ans)
-#            }else{
-#              ans <- bpmapply(swapFunNotNULL, targetSeqs(aln1), querySeqs(aln1),
-#                       as.character(seqnames(targetRanges(aln1))),
-#                       as.character(seqnames(queryRanges(aln1))),
-#                       conservation,
-#                       MoreArgs=list(pwm=pwm, min.score=min.score, 
-#                                     windowSize=windowSize, cutoff=cutoff, 
-#                                     strand=strand, type=type),
-#                       BPPARAM=multicoreParam)
-#              ans <- do.call(SitePairSetList, ans)
-#            }
-#            return(ans)
-#          }
-#          )
+setMethod("searchAln",
+          signature(pwm="PWMatrix", aln1="Axt", aln2="missing"),
+          function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
+                   min.score="80%", windowSize=51L, cutoff=0.7,
+                   strand="*", type="any", conservation=NULL,
+                   mc.cores=1){
+            ## current strategy is to apply searchAln to each alignment, 
+            ## and try to do it in parallel.
+            multicoreParam <- MulticoreParam(workers=mc.cores)
+            swapFunNULL <- function(aln1, aln2, seqname1, seqname2, 
+                                    pwm, min.score,
+                                    windowSize, cutoff, strand, type, 
+                                    conservation=NULL){
+              searchAln(pwm, aln1, aln2, seqname1, seqname2, min.score,
+                        windowSize, cutoff, strand, type, 
+                        conservation)
+            }
+            swapFunNotNULL <- function(aln1, aln2, seqname1, seqname2,
+                                       conservation,
+                                       pwm, min.score,
+                                       windowSize, cutoff, strand, type){
+              searchAln(pwm, aln1, aln2, seqname1, seqname2, min.score,
+                        windowSize, cutoff, strand, type,
+                        conservation)
+            }
+            if(is.null(conservation)){
+              ans <- bpmapply(swapFunNULL, targetSeqs(aln1), querySeqs(aln1),
+                       as.character(seqnames(targetRanges(aln1))),
+                       as.character(seqnames(queryRanges(aln1))),
+                       MoreArgs=list(pwm=pwm, min.score=min.score, 
+                                     windowSize=windowSize,
+                                     cutoff=cutoff, strand=strand, type=type,
+                                     conservation=NULL),
+                       BPPARAM=multicoreParam)
+              ans <- do.call(SitePairSetList, ans)
+            }else{
+              ans <- bpmapply(swapFunNotNULL, targetSeqs(aln1), querySeqs(aln1),
+                       as.character(seqnames(targetRanges(aln1))),
+                       as.character(seqnames(queryRanges(aln1))),
+                       conservation,
+                       MoreArgs=list(pwm=pwm, min.score=min.score, 
+                                     windowSize=windowSize, cutoff=cutoff, 
+                                     strand=strand, type=type),
+                       BPPARAM=multicoreParam)
+              ans <- do.call(SitePairSetList, ans)
+            }
+            return(ans)
+          }
+          )
          
 
 ### -----------------------------------------------------------------
