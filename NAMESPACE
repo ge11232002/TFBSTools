@@ -4,8 +4,8 @@ useDynLib(TFBSTools, .registration = TRUE)
 ### -----------------------------------------------------------------
 ### Import S4 classes defined in other packages
 ###
-importClassesFrom(S4Vectors, Annotated)
-importClassesFrom(IRanges, SimpleList, List, Vector)
+importClassesFrom(S4Vectors, Annotated, Vector)
+importClassesFrom(IRanges, SimpleList, List)
 #importClassesFrom(JASPAR2014, JASPAR2014)
 importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments, XStringViews)
 importClassesFrom(GenomicRanges, GRanges, GRangesList)
@@ -24,10 +24,9 @@ importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-", findOverlaps)
 importMethodsFrom(rtracklayer, import.chain, liftOver)
 importMethodsFrom(BSgenome, getSeq)
 importMethodsFrom(methods, initialize, show)
-importMethodsFrom(S4Vectors, isConstant)
+importMethodsFrom(S4Vectors, isConstant, queryHits, subjectHits)
 importMethodsFrom(IRanges, score, subject, ranges,
-                  Views, start, end, findOverlaps,
-                  queryHits, subjectHits)
+                  Views, start, end, findOverlaps)
 importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
 importMethodsFrom(DirichletMultinomial, fitted)
 
