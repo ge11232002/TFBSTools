@@ -68,6 +68,33 @@
   return(ifelse(count==0, TRUE, FALSE))
 }
 
+.fixTAXID <- function(con, x){
+  ## This function report the TAX_ID from TAX table when given a SPECIES NAME.
+  sqlCMD <- paste0("select TAX_ID from TAX where SPECIES='", x, "'")
+  ans <- dbGetQuery(con, sqlCMD)
+  if(nrow(ans) == 1L){
+    return(ans[1, "TAX_ID"])
+  }
+  if(nrow(ans) == 0L){
+    return(x)
+  }
+  if(nrow(ans) >= 2L){
+    stop("This SPECIES name has two TAX_ID in table TAX!")
+  }
+}
+
+.TAXIDToSpecies <- function(taxID, con){
+  ## This function fetches the species name from TAX table give a taxID.
+  sqlCMD <- paste0("select SPECIES from TAX where TAX_ID='", taxID, "'")
+  ans <- dbGetQuery(con, sqlCMD)
+  if(nrow(ans) == 1L){
+    return(ans[1, "SPECIES"])
+  }
+  if(nrow(ans) == 0L){
+    return("")
+  }
+}
+
 .get_IDlist_by_query = function(con, opts){
   # returns a set of internal IDs with whicj to get the actual matrices
   if(opts[["all"]]){
@@ -123,6 +150,7 @@
   # in species table: tax.id: possibly many species with OR in between
   if(!is.null(opts[["species"]])){
     sqlTables = c(sqlTables, "MATRIX_SPECIES S")
+    opts[["species"]] <- .fixTAXID(con, opts[["species"]])
     sqlCMD = paste0("TAX_ID='", opts[["species"]], "'", collapse=" or ")
     sqlCMD = paste0(" M.ID=S.ID and (", sqlCMD, ")")
     sqlAnds = c(sqlAnds, sqlCMD)
@@ -206,8 +234,11 @@
   tempTable = dbGetQuery(con, sqlCMD)
   tax_ids = tempTable[["TAX_ID"]] 
   ## need to convert to taxs, fix this here or some place.
-  if(length(tax_ids) == 0)
+  if(length(tax_ids) == 0L){
     tax_ids = ""
+  }else{
+    tax_ids <- sapply(tax_ids, .TAXIDToSpecies, con)
+  }
 
   # get acc
   sqlCMD = paste0("SELECT ACC FROM MATRIX_PROTEIN WHERE ID='", int_id, "'")

@@ -34,24 +34,54 @@
   
   \code{all=c(TRUE, FALSE)} 
   
-  \code{ID}, \code{name} 
+  \code{ID}: a unique identifier for each model. 
+    CORE matrices always have a "MAnnnnIDs.Version".
   
-  \code{collection=c("CORE", "CNE", "PHYLOFACTS", "SPLICE", "POLII", "FAM", "PBM", "PBM_HOMEO", "PBM_HLH"}
+  \code{name}: The name of the transcription factor. 
+    As far as possible, the name is based on the standardized 
+    Entrez gene symbols. 
+    In the case the model describes a transcription factor hetero-dimer, 
+    two names are concatenated, such as RXR-VDR. 
+    In a few cases, different splice forms of the same gene 
+    have different binding specificity: in this case 
+    the splice form information is added to the name, 
+    based on the relevant literature.
+  
+  \code{collection=c("CORE", "CNE", "PHYLOFACTS", "SPLICE", 
+    "POLII", "FAM", "PBM", "PBM_HOMEO", "PBM_HLH"}
   
   \code{all_versions=c(TRUE,FALSE)}
   
-  \code{species}, \code{matrixtype=c("PFM", "PWM", "ICM")}
+  \code{species}: The species source for the sequences, in Latin (Homo sapiens)
+    or NCBI tax IDs (9606).
+  
+  \code{matrixtype=c("PFM", "PWM", "ICM")}
 
   (2) Tags based criterias: 
   
-  \code{class}: "Zipper-Type"", "Helix-Turn-Helix", etc.
+  \code{class}: Structural class of the transcription factor, 
+    based on the TFCaT system. 
+    Examples: "Zipper-Type"", "Helix-Turn-Helix", etc.
   
-  \code{type}: "SELEX", "ChIP-seq", "PBM", etc.
+  \code{type}: Methodology used for matrix construction: 
+    "SELEX", "ChIP-seq", "PBM", etc.
   
-  \code{tax_group}: "plants", "vertebrates", "insects", "urochordat", "nematodes", "fungi".
+  \code{tax_group}: Group of species, 
+    currently consisting of "plants", "vertebrates", "insects", 
+    "urochordat", "nematodes", "fungi".
   
-  \code{family}, \code{medline}, 
-
+  \code{family}: Structural sub-class of the transcription factor, 
+    based on the TFCaT system.
+  
+  \code{Acc}: A representative protein accession number in Genbank 
+    for the transcription factor. 
+    Human takes precedence if several exists. 
+  
+  \code{medline}: relevant publication reporting the sites 
+  used in the mode building.
+  
+  \code{Pazar_tf_id}: PAZAR database id.
+  
   (3) Further criterias: 
   
   \code{min_ic} (minimum total information content of the matrix)
