@@ -278,32 +278,31 @@ setMethod("writeGFF2", "SiteSetList",
 ### Get the empirical p-values of the scores.
 ### Exported!
 setMethod("pvalues", "SiteSet",
-          function(x){
+          function(x, type=c("TFMPvalue", "sampling")){
             pwm = x@pattern@profileMatrix
             bg = x@pattern@bg
-            #if(ncol(pwm) <= 8){
-              # When the ncol is equal or smaller than or 8
-              # we compute for all the possible combinations.
-              #allScores = rowMeans(expand.grid(as.data.frame(pwm)))
-            #}else{
-              # When the ncol is greater than 8,
-              # we do the sampling for 1e4 times.
+            type <- match.arg(type)
+            if(type == "TFMPvalue"){
+              pvalues <- sapply(x@score, function(x, mat, bg){
+                                TFMsc2pv(mat, score=x, bg=bg, type="PWM")
+                       }, pwm, bg)
+              return(pvalues)
+            }else if(type == "sampling"){
               allScores = replicate(1e4, 
                                     sum(apply(pwm, 2, sample, 
                                               size=1, prob=bg)))
-            ## OK! I believe sampling can do a better job.
-            #}
-            pvalues = sapply(x@score, function(x){
+              pvalues = sapply(x@score, function(x){
                              sum(x < allScores)/length(allScores)
                                     }
             )
             return(pvalues)
+            }
           }
           )
 
 setMethod("pvalues", "SiteSetList",
-          function(x){
-            ans = lapply(x, pvalues)
+          function(x, type=c("TFMPvalue", "sampling")){
+            ans = lapply(x, pvalues, type)
             return(ans)
           }
           )
