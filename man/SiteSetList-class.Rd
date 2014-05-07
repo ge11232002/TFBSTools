@@ -30,7 +30,7 @@
 
 \section{Methods}{
   \describe{
-    \item{pvalues}{\code{signature(x = "SiteSetList")}(x):
+    \item{pvalues}{\code{signature(x = "SiteSetList")}(x, type=c("TFMPvalue", "sampling")):
       Calculates the empirical p-values for the scores.
 	 }
   }
@@ -52,7 +52,8 @@
     sitesetList = searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
                             min.score="50\%")
     writeGFF3(sitesetList, scoreType="absolute")
-    pvalues(sitesetList)
-
+    pvalues(sitesetList, type="TFMPvalue")
+    pvalues(sitesetList, type="sampling")
 }
+
 \keyword{classes}

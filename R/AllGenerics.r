@@ -146,7 +146,8 @@ setGeneric("writeGFF2", signature="x",
              standardGeneric("writeGFF2"))
 setGeneric("relScore", signature="x", function(x) 
            standardGeneric("relScore"))
-setGeneric("pvalues", signature="x", function(x)
+setGeneric("pvalues", signature="x", 
+           function(x, type=c("TFMPvalue", "sampling"))
            standardGeneric("pvalues"))
 setGeneric("clone", signature="x", function(x, ...) 
            standardGeneric("clone"))

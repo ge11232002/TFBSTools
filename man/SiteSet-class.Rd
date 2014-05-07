@@ -61,7 +61,7 @@ SiteSet(views, score, strand="*", seqname="Unknown", sitesource="TFBS",
     \item{seqname}{\code{signature(x = "SiteSet")}: Returns the sequence name of the sequence which contains these sites.}
     \item{strand}{\code{signature(x = "SiteSet")}: Returns the strand information.}
     \item{views}{\code{signature(x = "SiteSet")}: Returns the views object.}
-   \item{pvalues}{\code{signature(x = "SiteSet")}(x):
+   \item{pvalues}{\code{signature(x = "SiteSet")}(x, type=c("TFMPvalue", "sampling")):
      Calculates the empirical p-values for the scores.
      The background probability for sampling is based on 
      the PWM matrix in the \code{SiteSet} object.
@@ -85,10 +85,12 @@ Ge Tan
 \examples{
     data(MA0003.2)
     pwm = toPWM(MA0003.2)
-    siteset = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60\%")
+    siteset = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
+                        min.score="60\%")
     writeGFF3(siteset, scoreType="absolute")
     relScore(siteset)
-    pvalues(siteset)
+    pvalues(siteset, type="TFMPvalue")
+    pvalues(siteset, type="sampling")
 }
 
 \keyword{classes}

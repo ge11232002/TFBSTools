@@ -45,6 +45,7 @@ importFrom(IRanges, IRanges)
 importFrom(gtools, rdirichlet)
 importFrom(BiocParallel, MulticoreParam, bpmapply)
 importFrom(DirichletMultinomial, dmn, laplace, mixturewt)
+importFrom(TFMPvalue, TFMsc2pv)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
