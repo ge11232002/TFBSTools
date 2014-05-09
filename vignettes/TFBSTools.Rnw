@@ -1,34 +1,21 @@
 \documentclass{article}
 %\VignetteIndexEntry{TFBSTools}
-\usepackage[usenames,dvipsnames]{color}
-\usepackage[colorlinks=true, linkcolor=Blue, urlcolor=Blue,
-   citecolor=Blue]{hyperref}
-\usepackage[round]{natbib}
+\usepackage[authoryear,round]{natbib}
 
-\newcommand{\Rfunction}[1]{{\texttt{#1}}}
-\newcommand{\Robject}[1]{{\texttt{#1}}}
-\newcommand{\Rpackage}[1]{{\textit{#1}}}
-\newcommand{\Rmethod}[1]{{\texttt{#1}}}
-\newcommand{\Rfunarg}[1]{{\texttt{#1}}}
-\newcommand{\Rclass}[1]{{\textit{#1}}}
-\newcommand{\Rcode}[1]{{\texttt{#1}}}
-
-\newcommand{\software}[1]{\textsf{#1}}
-\newcommand{\R}{\software{R}}
-\newcommand{\IRanges}{\Rpackage{IRanges}}
-\usepackage{amsmath}
-
-\title{The \textbf{TFBSTools} package overview}
-\author{Ge Tan}
-
-\begin{document}
-\SweaveOpts{concordance=TRUE}
-\maketitle
-<<initialize, echo=FALSE>>=
-options(width=70)
+<<style, eval=TRUE, echo=FALSE, results=tex>>=
+BiocStyle::latex(use.unsrturl=FALSE)
 @
 
+\title{The \Biocpkg{TFBSTools} package overview}
+\author{Ge Tan \footnote{ge.tan09@imperial.ac.uk}}
+\date{Edited: May 2014; Compiled: \today}
+
+\begin{document}
+\maketitle
+
 \tableofcontents
+
+\SweaveOpts{concordance=TRUE}
 
 \section{Introduction}
 
@@ -37,7 +24,7 @@ discovered transcription factor binding sites,
 which can be represented as sequence patterns 
 with various degree of degeneracy.
 
-This \Rpackage{TFBSTools} package is designed to be a compuational framework
+This \Biocpkg{TFBSTools} package is designed to be a compuational framework
 for transcription factor binding site analysis. 
 Based on the famous perl module TFBS \citep{lenhard_tfbs:_2002},
 we extended the class definitions and enhanced implementations in an interactive environment.
@@ -52,17 +39,14 @@ Finally, in advanced cases, predictive statistical models of regulatory
 regions are constructed based on  mutiple occurrences of the detected
 patterns. 
 
-\Rpackage{TFBSTools} aims to support all these functionalities
+\Biocpkg{TFBSTools} aims to support all these functionalities
 in the environment \R{R}, except the external motif finding software,
-such as MEME \citep{bailey_fitting_1994}. 
-%However, only the JASPAR database interface functions are exported
-%in this release to accompany \Rpackage{JASPAR2014}. 
-%More functions will be included in future release after well tested.
+such as \software{MEME} \citep{bailey_fitting_1994}. 
 
 \section{S4 classes in TFBSTools}
 The package is built around a number of S4 class of which the \Rclass{XMatrix}, 
 \Rclass{SiteSet} classes are the most important.
-The section will briefly explain most of them defined in \Rpackage{TFBSTools}.
+The section will briefly explain most of them defined in \Biocpkg{TFBSTools}.
 %These classes were designed to store necessary information relevant to 
 
 \subsection{XMatrix and its subclasses}
@@ -73,10 +57,10 @@ for one raw position frequency matrix (PFM).
 This object is compatible with one record from JASPAR database.
 
 \Rclass{PWMatrix} is used to store a position weight matrix (PWM). 
-Compared with \Rclass{PFMatrix}, it has one extra slot \Rfunarg{pseudocounts}.
+Compared with \Rclass{PFMatrix}, it has one extra slot \Rcode{pseudocounts}.
 
 \Rclass{ICMatrix} is used to store a information content matrix (ICM).
-Compared with \Rclass{PWMatrix}, it has one extra slot \Rfunarg{schneider}.
+Compared with \Rclass{PWMatrix}, it has one extra slot \Rcode{schneider}.
 
 <<rtl-PFMatrix, eval=TRUE, results = verbatim>>=
 library(TFBSTools)
@@ -113,7 +97,6 @@ icm
 
 ## get the reverse complment matrix with all the same information except the strand.
 reverseComplement(pwm)
-
 @
 
 \subsection{XMatrixList and its subclasses}
@@ -141,7 +124,7 @@ To store the results from scanning a pairwise alignment,
 
 \subsection{MotifSet}
 This \Rclass{MotifSet} class is used to store the generated motifs from 
-motifs discovery software, such as MEME.
+motifs discovery software, such as \software{MEME}.
 
 \section{Database interfaces for JASPAR2014 database}
 This section will demonstrate how to operate on the JASPAR 2014 database.
@@ -187,15 +170,15 @@ This section will give an introduction of matrix conversion from PFM.
 
 \subsection{PFM to PWM}
 The method \Rfunction{toPWM} can convert PFM to PWM \citep{Wasserman:2004ec}. 
-Optional parameters include \Rfunarg{type}, \Rfunarg{pseudocounts}, \Rfunarg{bg}. 
-The implementation in this package is a bit different from \Rpackage{Biostrings}.
+Optional parameters include \Rcode{type}, \Rcode{pseudocounts}, \Rcode{bg}. 
+The implementation in this package is a bit different from \Biocpkg{Biostrings}.
 
 First of all, \Rfunction{toPWM} allows the input matrix to have different column sums,
 which means the count matrix can have an unequal number of sequences contributing
 to each column. This scenario is rare, but exists in JASPAR SELEX data.
 
-Second, we can specify customized \Rfunarg{pseudocounts}. 
-\Rfunarg{pseudocounts} is necessary for correcting the small number of counts
+Second, we can specify customized \Rcode{pseudocounts}. 
+\Rcode{pseudocounts} is necessary for correcting the small number of counts
 or eliminating the zero values before log transformation.
 In TFBS perl module, the square root of the number of sequences contributing to each column. 
 However, it has been shown to too harsh \citep{nishida_pseudocounts_2009}.
@@ -208,16 +191,16 @@ pwm
 @
 
 \subsection{PFM to ICM}
-The method \Rfunarg{toICM} can convert PFM to ICM \citep{schneider_information_1986}.
-Besides the similar \Rfunarg{pseudocounts}, \Rfunarg{bg}, 
-you can also choose to do the \Rfunarg{schneider} correction.
+The method \Rcode{toICM} can convert PFM to ICM \citep{schneider_information_1986}.
+Besides the similar \Rcode{pseudocounts}, \Rcode{bg}, 
+you can also choose to do the \Rcode{schneider} correction.
 
 <<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
 icm = toICM(pfm, pseudocounts=0.8, schneider=TRUE)
 icm
 @
 
-To plot the sequence logo, we use the package \Rpackage{seqlogo}.
+To plot the sequence logo, we use the package \Biocpkg{seqlogo}.
 
 %\begin{figure}
 %\centering
@@ -398,16 +381,15 @@ sitesSeq(motifSet, type="none")
 consensusMatrix(motifSet)
 @
 
-
-
 \section{Conclusion}
 The following is the session info that generated this vignette:
 <<session-info>>=
   sessionInfo()
 @
 
+
 \newpage
-\bibliographystyle{jss}
+\bibliographystyle{plainnat}
 \bibliography{TFBSTools}
 
 \end{document}
