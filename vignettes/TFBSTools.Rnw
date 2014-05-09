@@ -1,4 +1,5 @@
 \documentclass{article}
+%\VignetteIndexEntry{TFBSTools}
 \usepackage[authoryear,round]{natbib}
 
 <<style, eval=TRUE, echo=FALSE, results=tex>>=
