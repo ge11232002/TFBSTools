@@ -155,7 +155,7 @@ setMethod("XMatrixList", "list",
               stop(type,"() only accepts ", matrixClass, " objects!")
             if(!use.names)
               names(x) = NULL
-            IRanges:::newList(type, x)
+            S4Vectors:::new_SimpleList_from_list(type, x)
           }
           )
 
@@ -240,7 +240,7 @@ SiteSetList = function(..., use.names=TRUE){
     stop("SiteSetList() only accepts SiteSet objects!")
   if(!use.names)
     names(listData) = NULL
-  IRanges:::newList("SiteSetList", listData)
+  S4Vectors:::new_SimpleList_from_list("SiteSetList", listData)
 }
 
 
@@ -288,7 +288,7 @@ SitePairSetList = function(..., use.names=TRUE){
     stop("SitePairSetList() only accepts SitePairSet objects!")
   if(!use.names)
     names(listData) = NULL
-  IRanges:::newList("SitePairSetList", listData)
+  S4Vectors:::new_SimpleList_from_list("SitePairSetList", listData)
 }
 
 ### ----------------------------------------------------------------

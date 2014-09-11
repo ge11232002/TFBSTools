@@ -57,11 +57,11 @@ struct alignment score(int width1, int width2, float **matrix1, float **matrix2,
   float end_continue;
   float sum_i; // counter for sums in a position in profile1
   float sum_j; // counter for sums in a position in profile2
-  int align_i[40]; // keeping alignment for printing
-  int align_j[40];
+  //int align_i[40]; // keeping alignment for printing
+  //int align_j[40];
   int align_length; // length of alignment
   int counter;   // another counter variable
-  int number_of_gaps=0; // number of gaps
+  //int number_of_gaps=0; // number of gaps
   int nucleotide; // nucleotide, 0-3 =ACGT
    
   for(i=0; i<=width1; i++){
@@ -218,8 +218,8 @@ struct alignment score(int width1, int width2, float **matrix1, float **matrix2,
   align_length = 0;
   struct entry *current_pntr = best_pntr; // for walking, start with the best score
   while (current_pntr->father != NULL){ // while the father of the current pointer exists, walk through the best posible alignment
-    align_i[counter] = current_pntr->align[0];
-    align_j[counter]=  current_pntr->align[1];
+    //align_i[counter] = current_pntr->align[0];
+    //align_j[counter]=  current_pntr->align[1];
     align_length++;
     current_pntr = current_pntr->father;
     counter ++;
