@@ -65,7 +65,9 @@ export(
   PWMatrix, PWMatrixList,
   MotifSet,
   SitePairSetList, SitePairSet,
-  SiteSet, SiteSetList
+  SiteSet, SiteSetList,
+  ## util-methods.r
+  shannon.entropy
 )
 
 ### -----------------------------------------------------------------
