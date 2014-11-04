@@ -19,6 +19,8 @@
 \alias{strand,SiteSet-method}
 \alias{views}
 \alias{views,SiteSet-method}
+\alias{start,SiteSet-method}
+\alias{end,SiteSet-method}
 \alias{pvalues}
 \alias{pvalues,SiteSet-method}
 
@@ -40,28 +42,42 @@ SiteSet(views, score, strand="*", seqname="Unknown", sitesource="TFBS",
     \item{views}{Object of class \code{"XStringViews"}: 
       It holds the start, end and the nucleotide sequence information 
       of the transcription factor binding sites.}
-    \item{score}{Object of class \code{"numeric"}: A vector of PWM score for each putative binding site.}
+    \item{score}{Object of class \code{"numeric"}: 
+      A vector of PWM score for each putative binding site.}
     \item{strand}{Object of class \code{"character"}: 
-      The binding site is from the positive ("+"), negative ("-") or unknown("*") strand.}
-    \item{seqname}{Object of class \code{"character"}: the seqname of the sequence which contains these binding sites.}
-    \item{sitesource}{Object of class \code{"character"}: Currently it is set to "TFBS"}
-    \item{primary}{Object of class \code{"character"}: Currently it is set to "TF binding site"}
-    \item{pattern}{Object of class \code{"PWMatrix"}: The PWMatrix object which is used to search the binding sites.}
+      The binding site is from the positive ("+"), negative ("-") or 
+      unknown("*") strand.}
+    \item{seqname}{Object of class \code{"character"}: 
+      The seqname of the sequence which contains these binding sites.}
+    \item{sitesource}{Object of class \code{"character"}: 
+      Currently it is set to "TFBS"}
+    \item{primary}{Object of class \code{"character"}: 
+      Currently it is set to "TF binding site"}
+    \item{pattern}{Object of class \code{"PWMatrix"}: 
+      The PWMatrix object which is used to search the binding sites.}
 }
 
 \section{Methods}{
   \describe{
     \item{[}{\code{signature(x = "SiteSet")}: Getter function.}
-    \item{length}{\code{signature(x = "SiteSet")}: The number of binding sites in this SiteSet.}
+    \item{length}{\code{signature(x = "SiteSet")}: 
+      The number of binding sites in this SiteSet.}
     \item{pattern}{\code{signature(x = "SiteSet")}: Returns the PWMatrix used.}
     \item{relScore}{\code{signature(x = "SiteSet")}: 
       Gets relative score (between 0.0 to 1.0) with respect of the score 
       range of the associated pattern (PWMatrix).}
-    \item{score}{\code{signature(x = "SiteSet")}: Returns the score of each site.}
-    \item{seqname}{\code{signature(x = "SiteSet")}: Returns the sequence name of the sequence which contains these sites.}
-    \item{strand}{\code{signature(x = "SiteSet")}: Returns the strand information.}
+    \item{score}{\code{signature(x = "SiteSet")}: 
+      Returns the score of each site.}
+    \item{seqname}{\code{signature(x = "SiteSet")}: 
+      Returns the sequence name of the sequence which contains these sites.}
+    \item{strand}{\code{signature(x = "SiteSet")}: 
+      Returns the strand information.}
     \item{views}{\code{signature(x = "SiteSet")}: Returns the views object.}
-   \item{pvalues}{\code{signature(x = "SiteSet")}(x, type=c("TFMPvalue", "sampling")):
+    \item{start}{\code{signature(x = "SiteSet")}: 
+      Returns the start coordinates.}
+    \item{end}{\code{signature(x = "SiteSet")}: Returns the end coordinates.}
+   \item{pvalues}{\code{signature(x = "SiteSet")}
+     (x, type=c("TFMPvalue", "sampling")):
      Calculates the empirical p-values for the scores.
      The background probability for sampling is based on 
      the PWM matrix in the \code{SiteSet} object.
