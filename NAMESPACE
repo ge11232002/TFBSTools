@@ -18,13 +18,14 @@ importClassesFrom(CNEr, Axt)
 importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, PairwiseAlignments, pattern, consensusMatrix)
 importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
 importMethodsFrom(XVector, subseq)
-importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-", findOverlaps)
+importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-", findOverlaps,
+    reduce)
 importMethodsFrom(rtracklayer, import.chain, liftOver)
 importMethodsFrom(BSgenome, getSeq)
 importMethodsFrom(methods, initialize, show)
 importMethodsFrom(S4Vectors, isConstant, queryHits, subjectHits)
-importMethodsFrom(IRanges, score, subject, ranges,
-                  Views, start, end, findOverlaps)
+importMethodsFrom(IRanges, score, subject, ranges, "ranges<-",
+                  Views, start, end, findOverlaps, width)
 importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
 importMethodsFrom(DirichletMultinomial, fitted)
 
@@ -79,6 +80,9 @@ exportMethods(
   ncol,
   dim,
   reverseComplement,
+  
+  ## SiteSet-methods.r
+  start, end,
 
   ## coercion-methods.r
   as.matrix,

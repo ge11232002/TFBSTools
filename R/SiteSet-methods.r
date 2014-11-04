@@ -3,6 +3,8 @@
 ### The SiteSet accessor-like method
 ###
 setMethod("views", "SiteSet", function(x) x@views)
+setMethod("start", "SiteSet", function(x) start(x@views))
+setMethod("end",   "SiteSet", function(x) end(x@views))
 
 setMethod("score", "SiteSet", function(x) x@score)
 setMethod("strand", "SiteSet", function(x) x@strand)
