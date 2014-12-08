@@ -68,7 +68,8 @@
     sitepairset <- searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
                                       BSgenome.Mmusculus.UCSC.mm10,
                                       chr1="chr1", chr2="chr1",
-                                      min.score="90%", strand="+", chain=chain)
+                                      min.score="90\%", strand="+", 
+                                      chain=chain)
   }
 }
 
