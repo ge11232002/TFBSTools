@@ -274,7 +274,7 @@ do_PairBSgenomeSearchPositive = function(pwm, BSgenome1, BSgenome2,
   site1 = site1[lengths > 0L]
   if(length(site2) == 0L){
     site2 = site1
-    return(site1=site1, site2=site2)
+    return(list(site1=site1, site2=site2))
   }
   site2 = do.call(c, site2)
   site2GRanges2 = site2GRanges2[lengths > 0L]
@@ -337,7 +337,7 @@ do_PairBSgenomeSearchNegative = function(pwm, BSgenome1, BSgenome2,
   site1 = site1[lengths > 0L]
   if(length(site2) == 0L){
     site2 = site1
-    return(site1=site1, site2=site2)
+    return(list(site1=site1, site2=site2))
   }
   site2 = do.call(c, site2)
   site2GRanges2 = site2GRanges2[lengths > 0L]
