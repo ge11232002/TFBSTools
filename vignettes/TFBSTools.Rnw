@@ -256,7 +256,7 @@ such as JASPAR, to a newly discovered matrix
 or a PFM with IUPAC string, using a modified Needleman-Wunsch algorithm 
 \cite{sandelin_integrated_2003}.
 
-<<rtl-PFMSimi, eval=TRUE, results = "markup">>=
+<<rtl-PFMSimi, eval=TRUE, results = "markup", cache=TRUE>>=
 ## one to one comparison
 data(MA0003.2)
 data(MA0004.1)
@@ -296,7 +296,7 @@ The Kullback-Leibler divergence is computed in
   KL(P^1, P^2) = {1 \over {2l}} \cdot \sum_{i=1}^l \sum_{b \in \{A,C,G,T\}} (P_{i,b}^1\log{ P_{i,b}^1 \over P_{i,b}^2}+ P_{i,b}^2\log{P_{i,b}^2 \over {P_{i,b}^1}}).
 \end{equation}
 
-<<rtl-PWMSimilarity, eval=TRUE, results = "markup">>=
+<<rtl-PWMSimilarity, eval=TRUE, results = "markup", cache=TRUE>>=
   data(MA0003.2)
   data(MA0004.1)
   pwm1 = toPWM(MA0003.2, type="prob")
@@ -308,21 +308,38 @@ The Kullback-Leibler divergence is computed in
 
 
 \subsection{Dynamic random profile generation}
-In this section, we will demonstrate the matrix permutation.
-This method simply shuffles the columns in matrices.
-This can either be done by just shuffling columns within each selected matrix,
-or by shuffling columns almong all selected matrices.
+In this section, we will demonstrate the capability of random profile matrices generation with matrix permutation and probabilitis sampling.
+In many computational/simulation studies, 
+it is particularly desired to have a set of random matrices. 
+Some cases includes the estimation of distance between putative TFBS
+and transcription start site, the evaluation of comparison between matrices \cite{bryne_jaspar_2008}.
+These random matrices are expected to have same statistical properties with
+the selcted profiles, such as nucleotide content or information content.
 
-<<permuteMatrix, eval=TRUE, results = "markup">>=
-#library(JASPAR2014)
-#pfmSubject = getMatrixByID(JASPAR2014, ID="MA0043")
-#pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
-#opts = list()
-#opts[["class"]] = "Ig-fold"
-#pfmList = getMatrixSet(JASPAR2014, opts)
+The permutation method is relatively easy. 
+It simply shuffles the columns either constrainted in each matrix, or columns almong all selected matrices.
+The probabilistic sampling is more complicated and can be done in two steps:
+\begin{enumerate}
+  \item A Dirichlet multinomial mixture model is trained on all available matrices in JASPAR.
+  \item Random columns are sampled from the posterior distribution of the trained Dirichlet model based on selected profiles.
+\end{enumerate}
+
+<<permuteMatrix, eval=TRUE, results = "markup", cache=TRUE>>=
+## Matrice permutation
 permuteMatrix(pfmQuery)
 permuteMatrix(pfmList, type="intra")
 permuteMatrix(pfmList, type="inter")
+@
+
+<<samplingMatrix, eval=FALSE, results = "markup", cache=TRUE>>=
+## Dirichlet model training
+data(MA0003.2)
+data(MA0004.1)
+pfmList <- PFMatrixList(pfm1=MA0003.2, pfm2=MA0004.1, use.names=TRUE)
+dmmParameters <- dmmEM(pfmList, K=6, alg="C")
+## Matrice sampling from trained Dirichlet model
+pwmSampled <- rPWMDmm(MA0003.2, dmmParameters$alpha0, dmmParameters$pmix, 
+                      N=1, W=6)
 @
 
 
@@ -330,11 +347,11 @@ permuteMatrix(pfmList, type="inter")
 \section{Scan sequence and alignments with PWM pattern}
 \label{sec:Scanning}
 \subsection{searchSeq}
-\Rfunction{searchSeq} scans a nucleotide sequence with the pattern represented by the PWM.
+\Rfunction{searchSeq} scans a nucleotide sequence with the pattern represented in the PWM.
 The strand argument controls which strand of the sequence will be searched.
 When it is ``*'', both strands will be scanned.
 
-<<searchSeq, eval=TRUE, results = "markup">>=
+<<searchSeq, eval=TRUE, results = "markup", cache=TRUE>>=
 library(Biostrings)
 data(MA0003.2)
 data(MA0004.1)
@@ -347,7 +364,7 @@ sitesetList = searchSeq(pwmList, subject, seqname="seq1",
                         min.score="60%", strand="*")
 
 
-## generate gff style output
+## generate gff2 or gff3 style output
 head(writeGFF3(siteset))
 head(writeGFF3(sitesetList))
 head(writeGFF2(siteset))
@@ -364,15 +381,15 @@ It reports only those hits that are present in equivalent positions of both sequ
 and exceed a specified threshold score in both, 
 AND are found in regions of the alignment above the specified.
 
-<<searchAln, eval=TRUE, results = "markup">>=
+<<searchAln, eval=TRUE, results = "markup", cache=TRUE>>=
 library(Biostrings)
 data(MA0003.2)
-pwm = toPWM(MA0003.2)
-aln1 = DNAString("ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG")
-aln2 = DNAString("GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC")
-sitePairSet = searchAln(pwm, aln1, aln2, seqname1="seq1", seqname2="seq2",
-                        min.score="50%", cutoff=0.5, 
-                        strand="*", type="any")
+pwm <- toPWM(MA0003.2)
+aln1 <- DNAString("ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG")
+aln2 <- DNAString("GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC")
+sitePairSet <- searchAln(pwm, aln1, aln2, seqname1="seq1", seqname2="seq2",
+                         min.score="50%", cutoff=0.5, 
+                         strand="*", type="any")
 ## generate gff style output
 head(writeGFF3(sitePairSet))
 head(writeGFF2(sitePairSet))
@@ -400,29 +417,31 @@ library(rtracklayer)
 library(JASPAR2014)
 library(BSgenome.Hsapiens.UCSC.hg19)
 library(BSgenome.Mmusculus.UCSC.mm10)
-pfm = getMatrixByID(JASPAR2014, ID="MA0004.1")
-pwm=toPWM(pfm)
-chain = import.chain("Downloads/hg19ToMm10.over.chain")
-sitePairSet = searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
+pfm <- getMatrixByID(JASPAR2014, ID="MA0004.1")
+pwm <- toPWM(pfm)
+chain <- import.chain("Downloads/hg19ToMm10.over.chain")
+sitePairSet <- searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
                                  BSgenome.Mmusculus.UCSC.mm10,
                                  chr1="chr1", chr2="chr1",
                                  min.score="90%", strand="+", chain=chain)
 @
 
-\section{Use external pattern generators}
+\section{Use \textit{de novo} motif discovery software}
 In this section, we will introduce wrapper functions for external motif discovery programs. 
-So far, MEME is supported.
-\subsection{MEME}
+So far, \software{MEME} is supported.
+\subsection{\software{MEME}}
 \Rfunction{runMEME} takes a \Rclass{DNAStringSet} or a set of \Rclass{characters} as input,
 and returns a \Rclass{MotifSet} object.
 
 <<MEME-wrapper, eval=FALSE, results = "hide">>=
-motifSet = runMEME(file.path(system.file("extdata", 
-                                         package="TFBSTools"), "crp0.s"),
-                   binary="meme",
-                   arguments=list("-nmotifs"=3)
-                  )
+motifSet <- runMEME(file.path(system.file("extdata", 
+                                          package="TFBSTools"), "crp0.s"),
+                    binary="meme",
+                    arguments=list("-nmotifs"=3)
+                   )
+## Get the sites sequences and surrounding sequences
 sitesSeq(motifSet, type="all")
+## Get the sites sequences only
 sitesSeq(motifSet, type="none")
 consensusMatrix(motifSet)
 @
