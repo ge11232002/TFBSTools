@@ -374,7 +374,7 @@ setMethod("searchAln",
           function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
                    min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL,
-                   mc.cores=1){
+                   mc.cores=1L){
             ## current strategy is to apply searchAln to each alignment, 
             ## and try to do it in parallel.
             multicoreParam <- MulticoreParam(workers=mc.cores)
@@ -394,7 +394,11 @@ setMethod("searchAln",
                         windowSize, cutoff, strand, type,
                         conservation)
             }
+            if(mc.cores > 1L){
+              multicoreParam <- MulticoreParam(workers=mc.cores)
+            }
             if(is.null(conservation)){
+              if(mc.cores > 1L){
               ans <- bpmapply(swapFunNULL, targetSeqs(aln1), querySeqs(aln1),
                        as.character(seqnames(targetRanges(aln1))),
                        as.character(seqnames(queryRanges(aln1))),
@@ -403,8 +407,19 @@ setMethod("searchAln",
                                      cutoff=cutoff, strand=strand, type=type,
                                      conservation=NULL),
                        BPPARAM=multicoreParam)
+              }else{
+                ans <- mapply(swapFunNULL, targetSeqs(aln1), querySeqs(aln1),
+                              as.character(seqnames(targetRanges(aln1))),
+                              as.character(seqnames(queryRanges(aln1))),
+                              MoreArgs=list(pwm=pwm, min.score=min.score,
+                                            windowSize=windowSize,
+                                            cutoff=cutoff, strand=strand, type=type,
+                                            conservation=NULL)
+                              )
+              }
               ans <- do.call(SitePairSetList, ans)
             }else{
+              if(mc.cores > 1L){
               ans <- bpmapply(swapFunNotNULL, targetSeqs(aln1), querySeqs(aln1),
                        as.character(seqnames(targetRanges(aln1))),
                        as.character(seqnames(queryRanges(aln1))),
@@ -413,6 +428,16 @@ setMethod("searchAln",
                                      windowSize=windowSize, cutoff=cutoff, 
                                      strand=strand, type=type),
                        BPPARAM=multicoreParam)
+              }else{
+                ans <- mapply(swapFunNotNULL, targetSeqs(aln1), querySeqs(aln1),
+                              as.character(seqnames(targetRanges(aln1))),
+                              as.character(seqnames(queryRanges(aln1))),
+                              conservation,
+                              MoreArgs=list(pwm=pwm, min.score=min.score,
+                                            windowSize=windowSize, cutoff=cutoff,
+                                            strand=strand, type=type)
+                              )
+              }
               ans <- do.call(SitePairSetList, ans)
             }
             return(ans)

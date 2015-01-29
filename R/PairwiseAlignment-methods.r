@@ -167,10 +167,18 @@ do_sitesearch = function(pwm, aln1, aln2,
                                         conservation=conservations1, 
                                         cutoff=cutoff, type=type)
   }
-  ans_siteset1 = do.call(c, list(sitesetPos$ans_siteset1, 
-                                 sitesetNeg$ans_siteset1))
-  ans_siteset2 = do.call(c, list(sitesetPos$ans_siteset2, 
-                                 sitesetNeg$ans_siteset2))
+  if(is.null(sitesetPos) && !is.null(sitesetNeg)){
+    ans_siteset1 <- sitesetNeg$ans_siteset1
+    ans_siteset2 <- sitesetNeg$ans_siteset2
+  }else if(!is.null(sitesetPos) && is.null(sitesetNeg)){
+    ans_siteset1 <- sitesetPos$ans_siteset1
+    ans_siteset2 <- sitesetPos$ans_siteset2
+  }else{
+    ans_siteset1 = do.call(c, list(sitesetPos$ans_siteset1, 
+                                   sitesetNeg$ans_siteset1))
+    ans_siteset2 = do.call(c, list(sitesetPos$ans_siteset2, 
+                                   sitesetNeg$ans_siteset2))
+  }
   return(SitePairSet(siteset1=ans_siteset1, siteset2=ans_siteset2))
 }
 
