@@ -122,7 +122,7 @@
   sitePairSet <-  searchAln(pwm, axtHg19DanRer7, min.score="80\%", 
                             windowSize=51L, cutoff=0.7, strand="*", 
                             type="any", conservation=NULL, mc.cores=2)
-
+  GRangesTFBS <- toGRangesList(sitePairSet, axtHg19DanRer7)
 }
 
 \keyword{methods}
