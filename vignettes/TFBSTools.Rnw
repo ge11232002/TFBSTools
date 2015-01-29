@@ -1,34 +1,51 @@
-\documentclass{article}
-%\VignetteIndexEntry{TFBSTools}
-\usepackage[authoryear,round]{natbib}
+%\VignetteIndexEntry{transcription factor binding site (TFBS) analysis with the "TFBSTools" package}
+%\VignettePackage{TFBSTools}
+%\VignetteEngine{knitr::knitr}
 
-<<style, eval=TRUE, echo=FALSE, results=tex>>=
-BiocStyle::latex(use.unsrturl=FALSE)
+\documentclass[a4paper,11pt]{article}
+
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+## set global chunk options
+opts_chunk$set(fig.path='figure/manual-', cache.path='cache/manual-', fig.align='center', fig.show='hold', par=TRUE)
+## I use = but I can replace it with <-; set code/output width to be 68
+options(replace.assign=TRUE, width=68, digits=4)
+## tune details of base graphics (http://yihui.name/knitr/hooks)
+knit_hooks$set(par=function(before, options, envir){
+if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
+})
 @
 
-\title{The \Biocpkg{TFBSTools} package overview}
+<<style-knitr, eval=TRUE, echo=FALSE, results="asis">>=
+BiocStyle::latex()
+@
+
+<<loadTFBSTools, echo=FALSE, warning=FALSE>>=
+library("TFBSTools")
+@
+\usepackage{amssymb,amsmath}
+
+\bioctitle{The \Biocpkg{TFBSTools} package overview}
 \author{Ge Tan \footnote{ge.tan09@imperial.ac.uk}}
-\date{Edited: May 2014; Compiled: \today}
+\date{Edited: Jan 2015; Compiled: \today}
 
 \begin{document}
 \maketitle
 
 \tableofcontents
 
-\SweaveOpts{concordance=TRUE}
-
 \section{Introduction}
 
 Eukaryotic regulatory regions are characterized based a set of 
-discovered transcription factor binding sites, 
+discovered transcription factor binding sites (TFBSs), 
 which can be represented as sequence patterns 
 with various degree of degeneracy.
 
 This \Biocpkg{TFBSTools} package is designed to be a compuational framework
-for transcription factor binding site analysis. 
-Based on the famous perl module TFBS \citep{lenhard_tfbs:_2002},
+for TFBSs analysis. 
+Based on the famous perl module TFBS \cite{lenhard_tfbs:_2002},
 we extended the class definitions and enhanced implementations in an interactive environment.
-So far this package contains a set of integrated R S4 style classes,
+So far this package contains a set of integrated \R{} \Rcode{S4} style classes,
 tools , JASPAR database interface functions.
 Most approaches can be described in three sequential phases.
 First, a pattern is generated for a set of target sequences 
@@ -40,14 +57,13 @@ regions are constructed based on  mutiple occurrences of the detected
 patterns. 
 
 \Biocpkg{TFBSTools} aims to support all these functionalities
-in the environment \R{R}, except the external motif finding software,
-such as \software{MEME} \citep{bailey_fitting_1994}. 
+in the environment \R{}, except the external motif finding software,
+such as \software{MEME} \cite{bailey_fitting_1994}. 
 
-\section{S4 classes in TFBSTools}
-The package is built around a number of S4 class of which the \Rclass{XMatrix}, 
+\section{\Rcode{S4} classes in TFBSTools}
+The package is built around a number of \Rcode{S4} class of which the \Rclass{XMatrix}, 
 \Rclass{SiteSet} classes are the most important.
 The section will briefly explain most of them defined in \Biocpkg{TFBSTools}.
-%These classes were designed to store necessary information relevant to 
 
 \subsection{XMatrix and its subclasses}
 \Rclass{XMatrix} is a virtual class, 
@@ -55,15 +71,16 @@ which means no concrete objects can be created directly from it.
 The subclass \Rclass{PFMatrix} is designed to store all the relevant information
 for one raw position frequency matrix (PFM).
 This object is compatible with one record from JASPAR database.
-
 \Rclass{PWMatrix} is used to store a position weight matrix (PWM). 
 Compared with \Rclass{PFMatrix}, it has one extra slot \Rcode{pseudocounts}.
-
 \Rclass{ICMatrix} is used to store a information content matrix (ICM).
 Compared with \Rclass{PWMatrix}, it has one extra slot \Rcode{schneider}.
 
-<<rtl-PFMatrix, eval=TRUE, results = verbatim>>=
-library(TFBSTools)
+The following examples demonstrate the creation of \Rclass{PFMatrix}, 
+the conversions between these matrices and some assocated methods defined for these classes.
+
+<<PFMatrix, eval=TRUE, cache=TRUE, results = "markup">>=
+## PFMatrix construction; Not all of the slots need to be initialised.
 pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+",
         bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
         tags=list(family="Helix-Loop-Helix", species="10090", 
@@ -78,25 +95,27 @@ pfm = PFMatrix(ID="MA0004.1", name="Arnt", matrixClass="Zipper-Type", strand="+"
                              dimnames=list(c("A", "C", "G", "T")))
         )
 
+pfm 
+
 ## coerced to matrix
 as.matrix(pfm)
-
 
 ## access the slots of pfm
 ID(pfm)
 name(pfm)
 Matrix(pfm)
+ncol(pfm)
+length(pfm)
 
+## convert a FPM to PWM, ICM
+pwm = toPWM(pfm, type="log2probratio", pseudocounts=0.8,
+            bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
 
-## conversion to pwm, icm
-pwm = toPWM(pfm)
-pwm 
-
-icm = toICM(pfm)
-icm
+icm = toICM(pfm, pseudocounts=sqrt(rowSums(pfm)[1]), schneider=FALSE,
+            bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
 
 ## get the reverse complment matrix with all the same information except the strand.
-reverseComplement(pwm)
+pwmRevComp <- reverseComplement(pwm)
 @
 
 \subsection{XMatrixList and its subclasses}
@@ -105,7 +124,7 @@ Basically it is a SimpleList for easy manipulation the whole set of
 \Rclass{XMatrix}. 
 The concrete objects can be \Rclass{PFMatrix}, \Rclass{PWMatrix} and \Rclass{ICMatrix}.
 
-<<rtl-PFMatrixList, eval=TRUE, results =verbatim>>=
+<<PFMatrixList, eval=TRUE, results ="markup", cache=TRUE>>=
 pfm2 = pfm
 pfmList = PFMatrixList(pfm1=pfm, pfm2=pfm2, use.names=TRUE)
 pfmList
@@ -114,29 +133,34 @@ names(pfmList)
 
 \subsection{SiteSet, SiteSetList, SitePairSet and SitePairSetList}
 The \Rclass{SiteSet} class is a container for storing a set of putative
-  transcription factor binding sites on a nucleotide sequence
-  (start, end, strand, score, pattern as a \Rclass{PWMatrix}, etc.)
+transcription factor binding sites on a nucleotide sequence
+(start, end, strand, score, pattern as a \Rclass{PWMatrix}, etc.)
 from scaning a nucleotide sequence with the corresponding \Rclass{PWMatrix}.
-
 Similarly, \Rclass{SiteSetList} stores a set of \Rclass{SiteSet} objects.
-To store the results from scanning a pairwise alignment,
-\Rclass{SitePairSet} is created.
+
+For holding the results returned from a pairwise alignment scaaning,
+\Rclass{SitePairSet} and \Rclass{SitePairSetList} are provided.
+
+More detailed examples of using these classes will be given in Section \ref{sec:Scanning};
 
 \subsection{MotifSet}
 This \Rclass{MotifSet} class is used to store the generated motifs from 
-motifs discovery software, such as \software{MEME}.
+\textit{de novo} motif discovery software, such as \software{MEME} \cite{bailey_fitting_1994}.
 
 \section{Database interfaces for JASPAR2014 database}
 This section will demonstrate how to operate on the JASPAR 2014 database.
-JASPAR is a collection of transcription factor DNA-binding preferences, modeled as matrices. These can be converted into Position Weight Matrices (PWMs or PSSMs), used for scanning genomic sequences.
+JASPAR is a collection of transcription factor DNA-binding preferences, modeled as matrices. 
+These can be converted into PWMs, used for scanning genomic sequences.
 JASPAR is the only database with this scope where the data can be used with no restrictions (open-source).
+A \Bioconductor{} experiment data package \Biocexptpkg{JASPAR2014} is provided with the leatest release of JASPAR.
+
 \subsection{Search JASPAR2014 database}
 This search function fetches matrix data for all matrices in the database
 matching criteria defined by the named arguments
 and returns a PFMatrixList object.
-For more search criterias, please see the help page for \Rfunction(getMatrixSet).
+For more search criterias, please see the help page for \Rfunction{getMatrixSet}.
 
-<<rtl-searchDB, eval=TRUE, results = verbatim>>=
+<<searchDB, eval=TRUE, results = "markup", cache=TRUE>>=
 library(JASPAR2014)
 opts = list()
 opts[["species"]] = 9606
@@ -158,7 +182,9 @@ We also provide some functions to initialize an empty JASPAR2014
 style database, 
 store new \Rclass{PFMatrix} or \Rclass{PFMatrixList} into it,
 or delete some records based on ID.
-<<rtl-operateDb, eval=FALSE, results = hide>>=
+The backend of the database is \software{SQLite}.
+
+<<operateDb, eval=FALSE, results="hide">>=
 db = "myMatrixDb.sqlite"
 initializeJASPARDB(db)
 storeMatrix(db, pfm)
@@ -166,12 +192,14 @@ deleteMatrixHavingID(db, "MA0003")
 @
 
 \section{PFM, PWM and ICM methods}
-This section will give an introduction of matrix conversion from PFM.
+This section will give an introduction of matrix operations, 
+including conversion from PFM to PWM and ICM, profile matrices comparison,
+dynamic random profile generation.
 
 \subsection{PFM to PWM}
-The method \Rfunction{toPWM} can convert PFM to PWM \citep{Wasserman:2004ec}. 
+The method \Rfunction{toPWM} can convert PFM to PWM \cite{Wasserman:2004ec}. 
 Optional parameters include \Rcode{type}, \Rcode{pseudocounts}, \Rcode{bg}. 
-The implementation in this package is a bit different from \Biocpkg{Biostrings}.
+The implementation in this package is a bit different from that in \Biocpkg{Biostrings}.
 
 First of all, \Rfunction{toPWM} allows the input matrix to have different column sums,
 which means the count matrix can have an unequal number of sequences contributing
@@ -181,40 +209,54 @@ Second, we can specify customized \Rcode{pseudocounts}.
 \Rcode{pseudocounts} is necessary for correcting the small number of counts
 or eliminating the zero values before log transformation.
 In TFBS perl module, the square root of the number of sequences contributing to each column. 
-However, it has been shown to too harsh \citep{nishida_pseudocounts_2009}.
+However, it has been shown to too harsh \cite{nishida_pseudocounts_2009}.
 Hence, a default value of 0.8 is used. 
 Of course, it can be changed to other customized value or even different values for each column.
 
-<<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
+<<PWMmatrixMethods, eval=TRUE, results = "markup", cache=TRUE>>=
 pwm = toPWM(pfm, pseudocounts=0.8)
 pwm
 @
 
 \subsection{PFM to ICM}
-The method \Rcode{toICM} can convert PFM to ICM \citep{schneider_information_1986}.
+The method \Rcode{toICM} can convert PFM to ICM \cite{schneider_information_1986}.
 Besides the similar \Rcode{pseudocounts}, \Rcode{bg}, 
 you can also choose to do the \Rcode{schneider} correction.
 
-<<rtl-matrixMethods, eval=TRUE, results = verbatim>>=
+The information content matrix has a column sum between 0 (no base preference) 
+and 2 (only 1 base used). 
+Usually this information is used to plot sequence log.
+
+How a PFM is converted to ICM: we have the PFM matrix $x$, 
+base backrgound frequency $bg$, $pseudocounts$ for correction.
+
+\begin{align}
+  Z[j] &= \sum_{i=1}^{4} x[i,j] \\
+  p[i,j] &= {(x[i,j] + bg[i] \times pseudocounts[j]) \over (Z[j] + \sum_{i} bg[i] \times pseudocounts[j]} \\
+  D[j] &= \log_2{4} + \sum_{i=1}^{4} p[i,j]*\log{p[i,j]} \\ 
+  ICM[i,j] &= p[i,j] \times D[j]
+\end{align}
+
+<<ICMmatrixMethods, eval=TRUE, results = "markup", cache=TRUE>>=
 icm = toICM(pfm, pseudocounts=0.8, schneider=TRUE)
 icm
 @
 
 To plot the sequence logo, we use the package \Biocpkg{seqlogo}.
-
-%\begin{figure}
-%\centering
-%\caption{Sequence logo with column heights proportional to information content. \label{fig.logo1}}
-<<seqLogo1, fig=TRUE, results=hide, echo=TRUE, height=4, width=6>>=
+<<seqLogo1, fig.show="hold", fig.width=6, fig.height=4, dpi=300>>=
 seqLogo(icm)
 @
-%\end{figure}
 
 \subsection{Align PFM to a custom matrix or IUPAC string}
-In some cases, it is beneficial to assess similarity to input data 
+In some cases, it is beneficial to assess similarity of existing profile matrices, 
+such as JASPAR, to a newly discovered matrix
 (as with using BLAST for sequence data comparison when using Genbank).
 
-<<rtl-PFMSimi, eval=TRUE, results = verbatim>>=
+\Biocpkg{TFBSTools} provides tools for comparing pairs of PFMs, 
+or a PFM with IUPAC string, using a modified Needleman-Wunsch algorithm 
+\cite{sandelin_integrated_2003}.
+
+<<rtl-PFMSimi, eval=TRUE, results = "markup", cache=TRUE>>=
 ## one to one comparison
 data(MA0003.2)
 data(MA0004.1)
@@ -230,28 +272,10 @@ IUPACString = "ACGTMRWSYKVHDBN"
 PFMSimilarity(pfmList, IUPACString)
 @
 
-\subsection{PFM permutation}
-In this section, we will demonstrate the matrix permutation.
-This method simply shuffles the columns in matrices.
-This can either be done by just shuffling columns within each selected matrix,
-or by shuffling columns almong all selected matrices.
-
-<<permuteMatrix, eval=TRUE, results = verbatim>>=
-#library(JASPAR2014)
-#pfmSubject = getMatrixByID(JASPAR2014, ID="MA0043")
-#pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
-#opts = list()
-#opts[["class"]] = "Ig-fold"
-#pfmList = getMatrixSet(JASPAR2014, opts)
-permuteMatrix(pfmQuery)
-permuteMatrix(pfmList, type="intra")
-permuteMatrix(pfmList, type="inter")
-@
-
 \subsection{PWM similarity}
 To measure the similarity of two PWM matrix in three measurements:
-"normalised Euclidean distance", "Pearson correlation" 
-and "Kullback Leibler divergence" \citep{linhart_transcription_2008}.
+``normalised Euclidean distance'', ``Pearson correlation''
+and ``Kullback Leibler divergence'' \cite{linhart_transcription_2008}.
 Given two PWMs, $P^1$ and $P^2$, where l is the length. 
 $P_{i,b}$ is the values in column i with base b.
 The normalised Euclidean distance is computed in
@@ -272,7 +296,7 @@ The Kullback-Leibler divergence is computed in
   KL(P^1, P^2) = {1 \over {2l}} \cdot \sum_{i=1}^l \sum_{b \in \{A,C,G,T\}} (P_{i,b}^1\log{ P_{i,b}^1 \over P_{i,b}^2}+ P_{i,b}^2\log{P_{i,b}^2 \over {P_{i,b}^1}}).
 \end{equation}
 
-<<rtl-PWMSimilarity, eval=TRUE, results = verbatim>>=
+<<rtl-PWMSimilarity, eval=TRUE, results = "markup", cache=TRUE>>=
   data(MA0003.2)
   data(MA0004.1)
   pwm1 = toPWM(MA0003.2, type="prob")
@@ -282,13 +306,57 @@ The Kullback-Leibler divergence is computed in
   PWMSimilarity(pwm1, pwm2, method="KL")
 @
 
-\section{Scan sequence and alignments with PWM pattern}
-\subsection{searchSeq}
-\Rfunction{searchSeq} scans a nucleotide sequence with the pattern represented by the PWM.
-The strand argument controls which strand of the sequence will be searched.
-When it is "*", both strands will be scanned.
 
-<<rtl-search, eval=TRUE, results = verbatim>>=
+\subsection{Dynamic random profile generation}
+In this section, we will demonstrate the capability of random profile matrices generation with matrix permutation and probabilitis sampling.
+In many computational/simulation studies, 
+it is particularly desired to have a set of random matrices. 
+Some cases includes the estimation of distance between putative TFBS
+and transcription start site, the evaluation of comparison between matrices \cite{bryne_jaspar_2008}.
+These random matrices are expected to have same statistical properties with
+the selcted profiles, such as nucleotide content or information content.
+
+The permutation method is relatively easy. 
+It simply shuffles the columns either constrainted in each matrix, or columns almong all selected matrices.
+The probabilistic sampling is more complicated and can be done in two steps:
+\begin{enumerate}
+  \item A Dirichlet multinomial mixture model is trained on all available matrices in JASPAR.
+  \item Random columns are sampled from the posterior distribution of the trained Dirichlet model based on selected profiles.
+\end{enumerate}
+
+<<permuteMatrix, eval=TRUE, results = "markup", cache=TRUE>>=
+## Matrice permutation
+permuteMatrix(pfmQuery)
+permuteMatrix(pfmList, type="intra")
+permuteMatrix(pfmList, type="inter")
+@
+
+<<samplingMatrix, eval=FALSE, results = "markup", cache=TRUE>>=
+## Dirichlet model training
+data(MA0003.2)
+data(MA0004.1)
+pfmList <- PFMatrixList(pfm1=MA0003.2, pfm2=MA0004.1, use.names=TRUE)
+dmmParameters <- dmmEM(pfmList, K=6, alg="C")
+## Matrice sampling from trained Dirichlet model
+pwmSampled <- rPWMDmm(MA0003.2, dmmParameters$alpha0, dmmParameters$pmix, 
+                      N=1, W=6)
+@
+
+
+
+\section{Scan sequence and alignments with PWM pattern}
+\label{sec:Scanning}
+\subsection{searchSeq}
+\Rfunction{searchSeq} scans a nucleotide sequence with the pattern represented in the PWM.
+The strand argument controls which strand of the sequence will be searched.
+When it is ``*'', both strands will be scanned.
+
+A \Rclass{siteset} object will be returned which can be exported into
+GFF3 or GFF2 format.
+Empirical p-values for the match scores can be calculated by an exact method 
+from \CRANpkg{TFMPvalue} or the distribution of sampled scores.
+
+<<searchSeq, eval=TRUE, results = "markup", cache=TRUE>>=
 library(Biostrings)
 data(MA0003.2)
 data(MA0004.1)
@@ -301,14 +369,18 @@ sitesetList = searchSeq(pwmList, subject, seqname="seq1",
                         min.score="60%", strand="*")
 
 
-## generate gff style output
+## generate gff2 or gff3 style output
 head(writeGFF3(siteset))
 head(writeGFF3(sitesetList))
 head(writeGFF2(siteset))
 
-## get the relative score
+## get the relative scores
 relScore(siteset)
 relScore(sitesetList)
+
+## calculate the empirical p-values of the scores
+pvalues(siteset, type="TFMPvalue")
+pvalues(siteset, type="sampling")
 @
 
 \subsection{searchAln}
@@ -318,15 +390,15 @@ It reports only those hits that are present in equivalent positions of both sequ
 and exceed a specified threshold score in both, 
 AND are found in regions of the alignment above the specified.
 
-<<rtl-searchAln, eval=TRUE, results = verbatim>>=
+<<searchAln, eval=TRUE, results = "markup", cache=TRUE>>=
 library(Biostrings)
 data(MA0003.2)
-pwm = toPWM(MA0003.2)
-aln1 = DNAString("ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG")
-aln2 = DNAString("GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC")
-sitePairSet = searchAln(pwm, aln1, aln2, seqname1="seq1", seqname2="seq2",
-                        min.score="50%", cutoff=0.5, 
-                        strand="*", type="any")
+pwm <- toPWM(MA0003.2)
+aln1 <- DNAString("ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG")
+aln2 <- DNAString("GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC")
+sitePairSet <- searchAln(pwm, aln1, aln2, seqname1="seq1", seqname2="seq2",
+                         min.score="50%", cutoff=0.5, 
+                         strand="*", type="any")
 ## generate gff style output
 head(writeGFF3(sitePairSet))
 head(writeGFF2(sitePairSet))
@@ -349,39 +421,41 @@ GRangesTFBS$queryTFBS
 Given two \Rclass{BSgenome}, a chain file for liftover from one genome to another,
 \Rfunction{searchPairBSgenome} identifies the putative transcription factor binding sites
 which are conserved in both genomes.
-<<searchBSgenome, eval=FALSE, results = hide>>=
+<<searchBSgenome, eval=FALSE, results = "hide">>=
 library(rtracklayer)
 library(JASPAR2014)
 library(BSgenome.Hsapiens.UCSC.hg19)
 library(BSgenome.Mmusculus.UCSC.mm10)
-pfm = getMatrixByID(JASPAR2014, ID="MA0004.1")
-pwm=toPWM(pfm)
-chain = import.chain("Downloads/hg19ToMm10.over.chain")
-sitePairSet = searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
+pfm <- getMatrixByID(JASPAR2014, ID="MA0004.1")
+pwm <- toPWM(pfm)
+chain <- import.chain("Downloads/hg19ToMm10.over.chain")
+sitePairSet <- searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
                                  BSgenome.Mmusculus.UCSC.mm10,
                                  chr1="chr1", chr2="chr1",
                                  min.score="90%", strand="+", chain=chain)
 @
 
-\section{Use external pattern generators}
+\section{Use \textit{de novo} motif discovery software}
 In this section, we will introduce wrapper functions for external motif discovery programs. 
-So far, MEME is supported.
-\subsection{MEME}
+So far, \software{MEME} is supported.
+\subsection{\software{MEME}}
 \Rfunction{runMEME} takes a \Rclass{DNAStringSet} or a set of \Rclass{characters} as input,
 and returns a \Rclass{MotifSet} object.
 
-<<MEME-wrapper, eval=FALSE, results = hide>>=
-motifSet = runMEME(file.path(system.file("extdata", 
-                                         package="TFBSTools"), "crp0.s"),
-                   binary="meme",
-                   arguments=list("-nmotifs"=3)
-                  )
+<<MEME-wrapper, eval=FALSE, results = "hide">>=
+motifSet <- runMEME(file.path(system.file("extdata", 
+                                          package="TFBSTools"), "crp0.s"),
+                    binary="meme",
+                    arguments=list("-nmotifs"=3)
+                   )
+## Get the sites sequences and surrounding sequences
 sitesSeq(motifSet, type="all")
+## Get the sites sequences only
 sitesSeq(motifSet, type="none")
 consensusMatrix(motifSet)
 @
 
-\section{Conclusion}
+\section{Session info}
 The following is the session info that generated this vignette:
 <<session-info>>=
   sessionInfo()
@@ -389,7 +463,7 @@ The following is the session info that generated this vignette:
 
 
 \newpage
-\bibliographystyle{plainnat}
+
 \bibliography{TFBSTools}
 
 \end{document}

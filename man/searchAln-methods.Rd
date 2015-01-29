@@ -26,7 +26,7 @@
   searchAln(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
             min.score="80\%", windowSize=51L, 
             cutoff=0.7, strand="*", type="any", conservation=NULL,
-            mc.cores=1)
+            mc.cores=1L)
 }
 
 \arguments{
@@ -35,10 +35,9 @@
   }
   \item{aln1}{
     A \code{DNAString}, \code{character}, \code{DNAStringSet} or \code{Axt}
-    %\link{PairwiseAlignmentTFBS} 
     object can be used to represent the pairwise alignment.
-    When the last two objects are used and have a length of 2, the argument \code{aln2}
-    can be missing.
+    When the last two objects are used and have a length of 2, 
+    the argument \code{aln2} can be missing.
   }
   \item{aln2}{
     A \code{DNAString}, \code{character}.
@@ -51,28 +50,41 @@
     seqname is taken from \code{Axt}.
   }
   \item{min.score}{
-    The minimum score for the hit. Can be given an character string in th format
-        of "80\%" or as a single absolute value.
+    The minimum score for the hit. Can be given an character string 
+    in the format of "80\%" or as a single absolute value.
+    When it is percentage value, it means the percentage of the 
+    maximal possible from the PWM.
   }
   \item{windowSize}{
-    The size of the sliding window (in nucleotides) for calculating local conservation in the alignment. This should be an odd value.
+    The size of the sliding window (in nucleotides) for calculating 
+    local conservation in the alignment. 
+    This should be an odd value.
   }
   \item{cutoff}{
-    The conservation cutoff (between 0 and 1) for including the region in the results of the pattern search.
+    The conservation cutoff can be from 0 (0\% identity) to 1 (100\% identity).
+    The regions which have lower conservation than the cutoff 
+    will be discarded from the results of the pattern searching.
+    The conservation is calculated by comparing the alignments 
+    within the \code{windowSize}:
+    1 for match and 0 for mismatch and gap.
   }
   \item{strand}{
-    When searching the alignment, we can search the positive strand or negative strand. 
+    When searching the alignment, we can search the positive strand or 
+    negative strand. 
     While strand is "*", it will search both strands and 
     return the results based on the positvie strand coordinate.
   }
   \item{type}{
     This argument can be "any" or "all". 
-    When it is "any", one motif will be kept if the maximal conservation value of  the motif is larger than the cutoff.
-    When it is "all", one motif will be kept if the minimal conservation value of the motif is larger than the cutoff.
+    When it is "any", one motif will be kept 
+    if the maximal conservation value of  the motif is larger than the cutoff.
+    When it is "all", one motif will be kept 
+    if the minimal conservation value of the motif is larger than the cutoff.
   }
   \item{conservation}{
     A vector of conservation profile. 
-    If not supplied, the conservation profile will be computed internally on the fly.
+    If not supplied, the conservation profile will be computed internally 
+    on the fly.
   }
   \item{mc.cores}{
     The number of cpu threads to use when searching \code{Axt}. 
@@ -110,7 +122,7 @@
   sitePairSet <-  searchAln(pwm, axtHg19DanRer7, min.score="80\%", 
                             windowSize=51L, cutoff=0.7, strand="*", 
                             type="any", conservation=NULL, mc.cores=2)
-
+  GRangesTFBS <- toGRangesList(sitePairSet, axtHg19DanRer7)
 }
 
 \keyword{methods}

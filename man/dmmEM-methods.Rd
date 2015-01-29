@@ -7,7 +7,8 @@
 \alias{dmmEM,PFMatrixList-method}
 \title{dmmEM method}
 \description{
-  Training Dirichlet mixture models parameters for matrix.
+  This function trains the Dirichlet multinomial mixture models parameters for
+  a set of profile matrices.
 }
 
 \usage{
@@ -22,6 +23,9 @@
   \item{K}{
     The maximal number of components to test in the mixture model when 
     alg is "C". 
+    Then an optimal number of components between 1 and K will be chosen 
+    based on the fitness of the model.
+    
     The fixed number of components to use when alg is "R".
     The default is 6.
   }
@@ -29,7 +33,7 @@
     The algorithm to use.
     "C" uses the implementation from \code{DirichletMultinomial} package
     which has more advanced feature and performance.
-    "R" uses our initial implemention in R.
+    "R" uses our own implemention in R.
   }
 }
 

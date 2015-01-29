@@ -7,7 +7,8 @@
 \alias{rPWMDmm,PFMatrixList-method}
 \title{rPWMDmm method}
 \description{
-  This function sample matrice from trainned Dirichlet mixture model based on selected matrices.
+  This function samples matrices from trainned Dirichlet mixture model 
+  based on selected matrices.
 }
 
 \usage{
@@ -22,10 +23,10 @@
     The trained Dirichlet mixture parameters.
   }
   \item{pmix}{
-    The trained mixing proportions.
+    The trained mixing proportions of the components.
   }
   \item{N}{
-    The number of matrice to sample.
+    The number of matrices to sample.
   }
   \item{W}{
     The desired width of matrice from the sampling.

@@ -7,8 +7,10 @@
 \title{Class \code{"SitePairSetList"}}
 \description{
 %%  ~~ A concise (1-5 lines) description of what the class is. ~~
-  The SitePairSetList class is a container for storing a collection of SitePairSet objects.
-  Basically it is a SimpleList and is designed for manipulating the set of SitePairSet objects as a whole.
+  The SitePairSetList class is a container for storing a collection of 
+  SitePairSet objects.
+  Basically it is a SimpleList and is designed for manipulating 
+  the set of SitePairSet objects as a whole.
 }
 
 \usage{

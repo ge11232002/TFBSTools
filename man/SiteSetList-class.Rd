@@ -10,7 +10,8 @@
 \description{
 %%  ~~ A concise (1-5 lines) description of what the class is. ~~
   The SiteSetList class is a container for storing a collection of SiteSet objects.
-  Basically it is a SimpleList and is designed for manipulating the set of SiteSet objects as a whole.
+  Basically it is a SimpleList and is designed for manipulating 
+  the set of SiteSet objects as a whole.
 }
 
 \usage{
@@ -30,7 +31,8 @@
 
 \section{Methods}{
   \describe{
-    \item{pvalues}{\code{signature(x = "SiteSetList")}(x, type=c("TFMPvalue", "sampling")):
+    \item{pvalues}{\code{signature(x = "SiteSetList")}
+    (x, type=c("TFMPvalue", "sampling")):
       Calculates the empirical p-values for the scores.
 	 }
   }

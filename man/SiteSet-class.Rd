@@ -78,7 +78,9 @@ SiteSet(views, score, strand="*", seqname="Unknown", sitesource="TFBS",
     \item{end}{\code{signature(x = "SiteSet")}: Returns the end coordinates.}
    \item{pvalues}{\code{signature(x = "SiteSet")}
      (x, type=c("TFMPvalue", "sampling")):
-     Calculates the empirical p-values for the scores.
+     Calculates the empirical p-values for the scores with two methods:
+     the exact method from TFMPaluve package or 
+     implementation of sampling in this package.
      The background probability for sampling is based on 
      the PWM matrix in the \code{SiteSet} object.
    }
@@ -100,9 +102,9 @@ Ge Tan
 
 \examples{
     data(MA0003.2)
-    pwm = toPWM(MA0003.2)
-    siteset = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
-                        min.score="60\%")
+    pwm <- toPWM(MA0003.2)
+    siteset <- searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
+                         min.score="60\%")
     writeGFF3(siteset, scoreType="absolute")
     relScore(siteset)
     pvalues(siteset, type="TFMPvalue")

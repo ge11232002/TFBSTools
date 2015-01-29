@@ -345,7 +345,7 @@ PairwiseAlignmentTFBS = function(pattern, subject, type="global",
 ### Motif and MotifSet class
 ###
 setClass("Motif",
-         slot=c(
+         slots=c(
                 motif="GRanges",
                 motifEvalue="numeric",
                 subjectSeqs="DNAStringSet"
