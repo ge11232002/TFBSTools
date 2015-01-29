@@ -19,7 +19,8 @@
     x can be a \link{PWMatrix} object or a \link{PWMatrixList} object.
   }
   \item{subject}{
-    A \code{DNAString}, \code{XStringViews} or \code{MaskedDNAString} object which will be scanned.
+    A \code{DNAString}, \code{XStringViews} or \code{MaskedDNAString} object 
+    which will be scanned.
   }
   \item{seqname}{
     This is sequence name of the target sequence.
@@ -31,8 +32,10 @@
     return the results based on the positvie strand coordinate.
   }
   \item{min.score}{
-    The minimum score for the hit. Can be given an character string in th format
-    of "80%" or as a single absolute value.
+    The minimum score for the hit. Can be given an character string 
+    in the format of "80\%" or as a single absolute value.
+    When it is percentage value, it means the percentage of 
+    the maximal possible from the PWM.
   }
 }
 
@@ -52,12 +55,12 @@
 
 \examples{
   data(MA0003.2)
-  pwm = toPWM(MA0003.2)
-  pwmList = PWMatrixList(pwm1=pwm, pwm2=pwm)
-  siteset = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
-                      min.score="60\%")
-  sitesetList = searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
-                          min.score="60\%", strand="*")
+  pwm <- toPWM(MA0003.2)
+  pwmList <- PWMatrixList(pwm1=pwm, pwm2=pwm)
+  siteset <- searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
+                       min.score="60\%")
+  sitesetList <- searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
+                           min.score="60\%", strand="*")
 }
 
 \keyword{methods}

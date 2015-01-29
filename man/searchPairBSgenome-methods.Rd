@@ -64,7 +64,6 @@
     library(JASPAR2014)
     library(BSgenome.Hsapiens.UCSC.hg19)
     library(BSgenome.Mmusculus.UCSC.mm10)
-    #pfm = getMatrixByID(JASPAR2014, ID="MA0004.1")
     data("MA0004.1")
     pfm <- MA0004.1
     pwm <- toPWM(pfm)
