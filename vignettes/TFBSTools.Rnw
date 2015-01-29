@@ -351,6 +351,11 @@ pwmSampled <- rPWMDmm(MA0003.2, dmmParameters$alpha0, dmmParameters$pmix,
 The strand argument controls which strand of the sequence will be searched.
 When it is ``*'', both strands will be scanned.
 
+A \Rclass{siteset} object will be returned which can be exported into
+GFF3 or GFF2 format.
+Empirical p-values for the match scores can be calculated by an exact method 
+from \CRANpkg{TFMPvalue} or the distribution of sampled scores.
+
 <<searchSeq, eval=TRUE, results = "markup", cache=TRUE>>=
 library(Biostrings)
 data(MA0003.2)
@@ -369,9 +374,13 @@ head(writeGFF3(siteset))
 head(writeGFF3(sitesetList))
 head(writeGFF2(siteset))
 
-## get the relative score
+## get the relative scores
 relScore(siteset)
 relScore(sitesetList)
+
+## calculate the empirical p-values of the scores
+pvalues(siteset, type="TFMPvalue")
+pvalues(siteset, type="sampling")
 @
 
 \subsection{searchAln}
