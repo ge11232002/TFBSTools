@@ -224,7 +224,9 @@ PWMrandomizeBayes <- function(PCM, alpha0, pmix, N=1, W=6){
       }
     }
   }
-  stopifnot(all(colSums(PWM) == 1))
+  ## Make sure colSums is almost 1.
+  stopifnot(all(sapply(PWM, function(x){all(sapply(colSums(x), 
+                                                   all.equal, 1))})))
   return(PWM)
 }
 
