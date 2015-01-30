@@ -23,7 +23,7 @@ importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-", findOverlaps,
 importMethodsFrom(rtracklayer, import.chain, liftOver)
 importMethodsFrom(BSgenome, getSeq)
 importMethodsFrom(methods, initialize, show)
-importMethodsFrom(S4Vectors, isConstant, queryHits, subjectHits)
+importMethodsFrom(S4Vectors, isConstant, queryHits, subjectHits, elementLengths)
 importMethodsFrom(IRanges, score, subject, ranges, "ranges<-",
                   Views, start, end, findOverlaps, width)
 importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)

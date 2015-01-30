@@ -1,6 +1,6 @@
 Package: TFBSTools
-Version: 1.5.3
-Date: 2015-01-29
+Version: 1.5.4
+Date: 2015-01-30
 Title: Software package for transcription factor binding site (TFBS) analysis
 Description: TFBSTools is a package for the analysis and manipulation of transcription factor binding sites and transcription factor profile matrices.
 Author: Ge Tan <ge.tan09@imperial.ac.uk> 

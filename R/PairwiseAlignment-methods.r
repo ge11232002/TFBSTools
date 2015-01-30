@@ -257,7 +257,7 @@ do_PairBSgenomeSearchPositive = function(pwm, BSgenome1, BSgenome2,
   site2GRanges = liftOver(site1GRanges, chain)
   # reduce the ranges. can apply on a GRangesList!! Cool!
   site2GRanges = reduce(site2GRanges)
-  lengths = sapply(site2GRanges, length)
+  lengths <- elementLengths(site2GRanges)
   site2GRanges = site2GRanges[lengths == 1L] 
   # so far, we drop the region with more ranges. 
   # Discuss with Boris for more details.
@@ -372,6 +372,59 @@ do_PairBSgenomeSearchNegative = function(pwm, BSgenome1, BSgenome2,
   return(list(site1=site1, site2=ans_site2))
 }
 
+do_PairBSgenomeSearchNew <- function(pwm, BSgenome1, BSgenome2, 
+                                     chr1, chr2, 
+                                     min.score, chain,
+                                     strand){
+  ## I know this is really stupid, 
+  ## but I am almost confused by the strand. So split ito positive and negative.
+  ## search with Positive pwm
+  ## BSgenome1, BSgenome2 are BSgenome object
+  ## chr1, chr2 character
+  seq1 <- getSeq(BSgenome1, chr1)
+  seq2 <- getSeq(BSgenome2, chr2)
+  site1 <- suppressWarnings(searchSeq(pwm, seq1, 
+                                      seqname=chr1, strand=strand, 
+                                      min.score=min.score))
+  rm(seq1)
+  site2 <- suppressWarnings(searchSeq(pwm, seq2,
+                                      seqname=chr2, strand=strand,
+                                      min.score=min.score))
+  rm(seq2)
+  site1GRanges <- GRanges(seqnames=chr1, ranges(site1@views), strand="+")
+  site2GRanges <- GRanges(seqnames=chr2, ranges(site2@views), strand="+")
+  # we only care about the coordinate based on positive strand, 
+  # only this coordinate is return by searchSeq.
+  site2GRangesLift <- liftOver(site1GRanges, chain)
+  # reduce the ranges. can apply on a GRangesList!! Cool!
+  site2GRangesLift <- reduce(site2GRangesLift)
+  lengths <- elementLengths(site2GRangesLift)
+  site2GRangesLift <- site2GRangesLift[lengths == 1L]
+  # so far, we drop the region with more ranges. 
+  # Discuss with Boris for more details.
+  # only keep the ranges on chr2
+  site2GRangesLift <- 
+    site2GRangesLift[as.character(seqnames(site2GRangesLift)) == chr2]
+  # site1 <- site1[as.integer(names(site2GRanges))]
+  indexToKeepSite1 <- as.integer(names(site2GRangesLift))
+  # extend the ranges a bit. Let's use ncol of matrix
+  site2GRangesLiftMerged <- 
+    GRanges(seqnames=as.character(seqnames(site2GRangesLift)), 
+            ranges=IRanges(as.integer(start(site2GRangesLift)) - 
+                           ncol(pwm@profileMatrix), 
+                           as.integer(end(site2GRangesLift)) + 
+                           ncol(pwm@profileMatrix)
+                           ),
+            strand=as.character(strand(site2GRangesLift))
+            )
+  # Let's see how site2GRangesLiftMerged overlaps with site2GRanges
+  hits <- findOverlaps(site2GRangesLiftMerged, site2GRanges, ignore.strand=TRUE)
+  indexToKeepSite1 <- indexToKeepSite1[queryHits(hits)]
+  indexToKeepSite2 <- subjectHits(hits)
+  return(list(site1=site1[indexToKeepSite1], site2=site2[indexToKeepSite2]))
+}
+
+
 do_PairBSgenomeSearch = function(pwm, BSgenome1, BSgenome2, chr1, chr2,
                                           strand, min.score, chain){
   strand = match.arg(strand, c("+", "-", "*"))
@@ -379,13 +432,15 @@ do_PairBSgenomeSearch = function(pwm, BSgenome1, BSgenome2, chr1, chr2,
   sitesetNeg = NULL
   if(strand %in% c("+", "*")){
     sitesetPos = 
-      do_PairBSgenomeSearchPositive(pwm, BSgenome1, BSgenome2, 
-                                    chr1, chr2, min.score, chain)
+      do_PairBSgenomeSearchNew(pwm, BSgenome1, BSgenome2, 
+                               chr1, chr2, min.score, chain,
+                               strand="+")
   }
   if(strand %in% c("-", "*")){
     sitesetNeg = 
-      do_PairBSgenomeSearchNegative(pwm, BSgenome1, BSgenome2, 
-                                    chr1, chr2, min.score, chain)
+      do_PairBSgenomeSearchNew(pwm, BSgenome1, BSgenome2, 
+                               chr1, chr2, min.score, chain,
+                               strand="-")
   }
   ans_siteset1 = do.call(c, list(sitesetPos$site1, sitesetNeg$site1))
   ans_siteset2 = do.call(c, list(sitesetPos$site2, sitesetNeg$site2))
