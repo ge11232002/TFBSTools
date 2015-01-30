@@ -372,9 +372,10 @@ do_PairBSgenomeSearchNegative = function(pwm, BSgenome1, BSgenome2,
   return(list(site1=site1, site2=ans_site2))
 }
 
-do_PairBSgenomeSearchPositiveNew <- function(pwm, BSgenome1, BSgenome2, 
-                                             chr1, chr2, 
-                                             min.score, chain){
+do_PairBSgenomeSearchNew <- function(pwm, BSgenome1, BSgenome2, 
+                                     chr1, chr2, 
+                                     min.score, chain,
+                                     strand){
   ## I know this is really stupid, 
   ## but I am almost confused by the strand. So split ito positive and negative.
   ## search with Positive pwm
@@ -383,11 +384,11 @@ do_PairBSgenomeSearchPositiveNew <- function(pwm, BSgenome1, BSgenome2,
   seq1 <- getSeq(BSgenome1, chr1)
   seq2 <- getSeq(BSgenome2, chr2)
   site1 <- suppressWarnings(searchSeq(pwm, seq1, 
-                                      seqname=chr1, strand="+", 
+                                      seqname=chr1, strand=strand, 
                                       min.score=min.score))
   rm(seq1)
   site2 <- suppressWarnings(searchSeq(pwm, seq2,
-                                      seqname=chr2, strand="+",
+                                      seqname=chr2, strand=strand,
                                       min.score=min.score))
   rm(seq2)
   site1GRanges <- GRanges(seqnames=chr1, ranges(site1@views), strand="+")
@@ -402,7 +403,8 @@ do_PairBSgenomeSearchPositiveNew <- function(pwm, BSgenome1, BSgenome2,
   # so far, we drop the region with more ranges. 
   # Discuss with Boris for more details.
   # only keep the ranges on chr2
-  site2GRangesLift <- site2GRangesLift[as.character(seqnames(site2GRangesLift)) == chr2]
+  site2GRangesLift <- 
+    site2GRangesLift[as.character(seqnames(site2GRangesLift)) == chr2]
   # site1 <- site1[as.integer(names(site2GRanges))]
   indexToKeepSite1 <- as.integer(names(site2GRangesLift))
   # extend the ranges a bit. Let's use ncol of matrix
@@ -430,13 +432,15 @@ do_PairBSgenomeSearch = function(pwm, BSgenome1, BSgenome2, chr1, chr2,
   sitesetNeg = NULL
   if(strand %in% c("+", "*")){
     sitesetPos = 
-      do_PairBSgenomeSearchPositive(pwm, BSgenome1, BSgenome2, 
-                                    chr1, chr2, min.score, chain)
+      do_PairBSgenomeSearchNew(pwm, BSgenome1, BSgenome2, 
+                               chr1, chr2, min.score, chain,
+                               strand="+")
   }
   if(strand %in% c("-", "*")){
     sitesetNeg = 
-      do_PairBSgenomeSearchNegative(pwm, BSgenome1, BSgenome2, 
-                                    chr1, chr2, min.score, chain)
+      do_PairBSgenomeSearchNew(pwm, BSgenome1, BSgenome2, 
+                               chr1, chr2, min.score, chain,
+                               strand="-")
   }
   ans_siteset1 = do.call(c, list(sitesetPos$site1, sitesetNeg$site1))
   ans_siteset2 = do.call(c, list(sitesetPos$site2, sitesetNeg$site2))
