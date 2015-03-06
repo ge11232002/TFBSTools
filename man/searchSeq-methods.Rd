@@ -44,6 +44,10 @@
   a SiteList object is returned when x is a \code{PWMatrixList}.
 }
 
+\references{
+Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identification of regulatory elements. Nature Publishing Group, 5(4), 276-287. doi:10.1038/nrg1315
+}
+
 \author{
   Ge Tan
 }

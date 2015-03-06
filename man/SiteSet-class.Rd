@@ -43,7 +43,7 @@ SiteSet(views, score, strand="*", seqname="Unknown", sitesource="TFBS",
       It holds the start, end and the nucleotide sequence information 
       of the transcription factor binding sites.}
     \item{score}{Object of class \code{"numeric"}: 
-      A vector of PWM score for each putative binding site.}
+      A vector of PWM score for each putative binding site based on the PWM matrix..}
     \item{strand}{Object of class \code{"character"}: 
       The binding site is from the positive ("+"), negative ("-") or 
       unknown("*") strand.}
@@ -85,6 +85,15 @@ SiteSet(views, score, strand="*", seqname="Unknown", sitesource="TFBS",
      the PWM matrix in the \code{SiteSet} object.
    }
   }
+}
+
+\details{
+  The score retuned in SiteSet is the absolute score of each putative TFBS scanned by the corresponding PWM.
+  The way of calculating the score is shown on the refernce, Page 281.
+}
+
+\references{
+Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identification of regulatory elements. Nature Publishing Group, 5(4), 276-287. doi:10.1038/nrg1315
 }
 
 \author{
