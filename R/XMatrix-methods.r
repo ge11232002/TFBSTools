@@ -111,11 +111,11 @@ setMethod("ncol", "XMatrix",
           }
           )
 
-setMethod("reverseComplement", "PWMatrix",
+setMethod("reverseComplement", "XMatrix",
           function(x){
             ans = x
             Matrix(ans) = reverseComplement(Matrix(x))
-            if(length(strand(x)) != 0)
+            if(length(strand(x)) != 0L)
               strand(ans) = ifelse(strand(x) == "+", "-", "+")
             return(ans)
           }

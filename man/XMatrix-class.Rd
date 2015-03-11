@@ -30,7 +30,7 @@
 \alias{name}
 \alias{name,XMatrix-method}
 \alias{name<-,XMatrix-method}
-\alias{reverseComplement,PWMatrix-method}
+\alias{reverseComplement,XMatrix-method}
 \alias{strand,XMatrix-method}
 \alias{strand<-,XMatrix-method}
 \alias{tags}
@@ -143,7 +143,6 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
     \item{matrixClass<-}{\code{signature(x = "XMatrix")}: Sets the matrix type of a \code{XMatrix} object.}
     \item{name}{\code{signature(x = "XMatrix")}: Gets the name information.}
     \item{name<-}{\code{signature(x = "XMatrix")}: Sets the name information.}
-    \item{reverseComplement}{\code{signature(x = "PWMatrix")}: Reverts the column order in matrix of \code{PWMatrix} object and assigns each row to its complemntaory base.}
     \item{strand}{\code{signature(x = "XMatrix")}: Gets the strand information of a \code{XMatrix} object.}
     \item{tags}{\code{signature(x = "XMatrix")}: Gets a \code{list} object of tags information. }
 	 }
