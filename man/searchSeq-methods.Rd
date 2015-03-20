@@ -69,6 +69,7 @@ Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identifi
   seq2 <- "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
   siteset <- searchSeq(pwm, seq1, min.score="60\%")
   as(siteset, "data.frame")
+  as(siteset, "DataFrame")
   writeGFF3(siteset)
   sitesetList <- searchSeq(pwmList, seq1, min.score="60\%", strand="*")
   writeGFF2(sitesetList)

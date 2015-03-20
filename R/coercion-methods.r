@@ -16,28 +16,35 @@ setAs("XMatrixList", "data.frame", function(from){})
 ### -----------------------------------------------------------------
 ### SiteSet coercion
 setAs("SiteSet", "data.frame", function(from){
-      if(length(from) == 0L)
-        return(data.frame())
-
-      seqs <- DNAStringSet(views(from))
-      seqs[strand(from) == "-"] <- reverseComplement(seqs[strand(from) == "-"])
-      absScore <- score(from)
-      relScore <- relScore(from)
-      ans <- data.frame(seqnames=from@seqname,
-                        source=from@sitesource,
-                        feature=from@sitesource,
-                        start=start(views(from)),
-                        end=end(views(from)),
-                        absScore=absScore,
-                        relScore=relScore,
-                        strand=strand(from),
-                        TF=from@pattern@name,
-                        class=from@pattern@matrixClass,
-                        sequence=as.character(seqs)
-                        )
-      return(ans)
+      as.data.frame(as(from, "DataFrame"))
           }
 )
 
+setMethod("as.data.frame", "SiteSet",
+          function(x){
+            as(x, "data.frame")
+          })
+
+setAs("SiteSet", "DataFrame", function(from){
+      if(length(from) == 0L)
+        return(DataFrame())
+
+      seqs <- DNAStringSet(views(from))
+      seqs[strand(from) == "-"] <- reverseComplement(seqs[strand(from) == "-"])
+      absScore <- score(from) 
+      relScore <- relScore(from)
+      ans <- DataFrame(seqnames=Rle(from@seqname),
+                       source=Rle(from@sitesource),
+                       feature=Rle(from@sitesource),
+                       start=start(views(from)),
+                       end=end(views(from)),
+                       absScore=absScore,
+                       relScore=relScore,
+                       strand=Rle(strand(from)),
+                       TF=Rle(from@pattern@name),
+                       class=Rle(from@pattern@matrixClass),
+                       sequence=seqs
+                       )
+          })
 
 
