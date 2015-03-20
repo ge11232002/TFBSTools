@@ -34,7 +34,7 @@ setMethod("length", "SitePairSet", function(x) length(siteset1(x)))
 ###
 setMethod("writeGFF3", "SitePairSet",
           function(x, scoreType=c("absolute", "relative")){
-            if(length(x) == 0)
+            if(length(x) == 0L)
               return(data.frame())
             gff1 = writeGFF3(siteset1(x), scoreType=scoreType)
             gff2 = writeGFF3(siteset2(x), scoreType=scoreType)
@@ -45,7 +45,7 @@ setMethod("writeGFF3", "SitePairSet",
 
 setMethod("writeGFF2", "SitePairSet",
           function(x, scoreType=c("absolute", "relative")){
-            if(length(x) == 0)
+            if(length(x) == 0L)
               return(data.frame())
             gff1 = writeGFF2(siteset1(x), scoreType=scoreType)
             gff2 = writeGFF2(siteset2(x), scoreType=scoreType)
@@ -179,7 +179,7 @@ setMethod("c", "SiteSet",
 ###
 setMethod("writeGFF3", "SiteSet",
           function(x, scoreType=c("absolute", "relative")){
-            if(length(x) == 0)
+            if(length(x) == 0L)
               return(data.frame())
             scoreType = match.arg(scoreType, c("absolute", "relative"))
             seqs = DNAStringSet(views(x))
@@ -211,7 +211,7 @@ setMethod("writeGFF3", "SiteSet",
 
 setMethod("writeGFF2", "SiteSet",
           function(x, scoreType=c("absolute", "relative")){
-            if(length(x) == 0)
+            if(length(x) == 0L)
               return(data.frame())
             scoreType = match.arg(scoreType, c("absolute", "relative"))
             seqs = DNAStringSet(views(x))
