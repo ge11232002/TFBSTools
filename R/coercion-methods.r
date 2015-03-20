@@ -43,8 +43,40 @@ setAs("SiteSet", "DataFrame", function(from){
                        strand=Rle(strand(from)),
                        TF=Rle(from@pattern@name),
                        class=Rle(from@pattern@matrixClass),
-                       sequence=seqs
+                       sequences=seqs
                        )
+      return(ans)
           })
+
+setAs("SiteSet", "GRanges", function(from){
+      from.DataFrame <- as(from, "DataFrame")
+      ans <- GRanges(seqnames=from.DataFrame[["seqnames"]],
+                     ranges=IRanges(start=from.DataFrame[["start"]],
+                                    end=from.DataFrame[["end"]]),
+                     strand=from.DataFrame[["strand"]],
+                     from.DataFrame[!colnames(from.DataFrame) %in% 
+                                    c("seqnames", "start",
+                                      "end", "strand")])
+      return(ans)
+          })
+
+### -----------------------------------------------------------------
+### SiteSetList coercion
+setAs("SiteSetList", "DataFrame", function(from){
+      ans <- do.call(rbind, lapply(from, as, "DataFrame"))
+      return(ans)
+          })
+
+setAs("SiteSetList", "data.frame", function(from){
+      ans <- as.data.frame(as(from, "DataFrame"))
+      return(ans)
+          })
+
+setMethod("as.data.frame", "SiteSetList",
+          function(x){
+            ans <- as(x, "data.frame")
+            return(ans)
+          })
+
 
 
