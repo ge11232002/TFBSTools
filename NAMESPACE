@@ -87,7 +87,7 @@ exportMethods(
   start, end,
 
   ## coercion-methods.r
-  as.matrix,
+  as.matrix, as.data.frame,
 
   ## Motif-methods.r
   consensusMatrix

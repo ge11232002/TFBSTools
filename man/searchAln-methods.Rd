@@ -113,7 +113,10 @@
   aln2 <- "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
   sitePairSet <- searchAln(pwm, aln1, aln2, min.score="50\%",
                            cutoff=0.5, strand="*", type="any")
-
+  as(sitePairSet, "DataFrame")
+  as(sitePairSet, "data.frame")
+  as.data.frame(sitePairSet)
+  
   ## scan axt object
   library(CNEr)
   axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="CNEr"), 

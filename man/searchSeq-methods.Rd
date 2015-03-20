@@ -74,6 +74,9 @@ Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identifi
   writeGFF3(siteset)
   sitesetList <- searchSeq(pwmList, seq1, min.score="60\%", strand="*")
   writeGFF2(sitesetList)
+  as(sitesetList, "data.frame")
+  as(sitesetList, "DataFrame")
+  as(sitesetList, "GRanges")
 
   library(Biostrings)
   seqs <- DNAStringSet(c(seq1, seq2))

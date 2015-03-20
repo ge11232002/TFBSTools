@@ -41,9 +41,10 @@ setAs("SiteSet", "DataFrame", function(from){
                        absScore=absScore,
                        relScore=relScore,
                        strand=Rle(strand(from)),
+                       ID=Rle(from@pattern@ID),
                        TF=Rle(from@pattern@name),
                        class=Rle(from@pattern@matrixClass),
-                       sequences=seqs
+                       siteSeqs=seqs
                        )
       return(ans)
           })
@@ -73,6 +74,38 @@ setAs("SiteSetList", "data.frame", function(from){
           })
 
 setMethod("as.data.frame", "SiteSetList",
+          function(x){
+            ans <- as(x, "data.frame")
+            return(ans)
+          })
+
+setAs(SiteSetList, "GRanges", function(from){
+      from.DataFrame <- as(from, "DataFrame")
+      ans <- GRanges(seqnames=from.DataFrame[["seqnames"]],
+                     ranges=IRanges(start=from.DataFrame[["start"]],
+                                    end=from.DataFrame[["end"]]),
+                     strand=from.DataFrame[["strand"]],
+                     from.DataFrame[!colnames(from.DataFrame) %in%
+                                    c("seqnames", "start",
+                                      "end", "strand")])
+      return(ans)
+          })
+
+
+
+### ----------------------------------------------------------------
+### SitePairSet coercion
+setAs("SitePairSet", "DataFrame", function(from){
+      ans <- cbind(as(from@siteset1, "DataFrame"),
+                   as(from@siteset2, "DataFrame"))
+      return(ans)
+          })
+
+setAs("SitePairSet", "data.frame", function(from){
+      as.data.frame(as(from, "DataFrame"))
+          })
+
+setMethod("as.data.frame", "SitePairSet",
           function(x){
             ans <- as(x, "data.frame")
             return(ans)
