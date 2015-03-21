@@ -79,7 +79,7 @@ setMethod("as.data.frame", "SiteSetList",
             return(ans)
           })
 
-setAs(SiteSetList, "GRanges", function(from){
+setAs("SiteSetList", "GRanges", function(from){
       from.DataFrame <- as(from, "DataFrame")
       ans <- GRanges(seqnames=from.DataFrame[["seqnames"]],
                      ranges=IRanges(start=from.DataFrame[["start"]],

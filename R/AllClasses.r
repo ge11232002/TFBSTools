@@ -83,7 +83,7 @@ setValidity("XMatrix",
 ### The XMatrix constructor
 ### Exported!!
 PFMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
-                    strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
+                    strand="+", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
                     tags=list(), profileMatrix=matrix()){
   new("PFMatrix", ID=ID, name=name, matrixClass=matrixClass, 
       strand=strand, bg=bg,
@@ -92,7 +92,7 @@ PFMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
 }
 
 ICMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
-                    strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
+                    strand="+", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
                     tags=list(), profileMatrix=matrix(),
                     pseudocounts=numeric(), schneider=logical()){
   new("ICMatrix", ID=ID, name=name, matrixClass=matrixClass, 
@@ -103,7 +103,7 @@ ICMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
 }
 
 PWMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
-                    strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
+                    strand="+", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
                     tags=list(), profileMatrix=matrix(),
                     pseudocounts=numeric()){
   new("PWMatrix", ID=ID, name=name, matrixClass=matrixClass, 
@@ -161,24 +161,18 @@ setMethod("XMatrixList", "list",
 
 PFMatrixList = function(..., use.names=TRUE){
   listData = list(...)
-  #if(is(listData[[1]], "list"))
-  #  listData = listData[[1]]
   XMatrixList(listData, use.names=use.names, type="PFMatrixList", 
               matrixClass="PFMatrix")
 }
 
 PWMatrixList = function(..., use.names=TRUE){
   listData = list(...)
-  #if(is(listData[[1]], "list"))
-  #  listData = listData[[1]]
   XMatrixList(listData, use.names=use.names, type="PWMatrixList",
               matrixClass="PWMatrix")
 }
 
 ICMatrixList = function(..., use.names=TRUE){
   listData = list(...)
-  #if(is(listData[[1]], "list"))
-  #  listData = listData[[1]]
   XMatrixList(listData, use.names=use.names, type="ICMatrixList",
               matrixClass="ICMatrix")
 }
@@ -233,8 +227,6 @@ setClass("SiteSetList",
 ###
 SiteSetList = function(..., use.names=TRUE){
   listData = list(...)
-  #if(is(listData[[1]], "list"))
-  #  listData = listData[[1]]
   ok = sapply(listData, is, "SiteSet")
   if(!all(ok))
     stop("SiteSetList() only accepts SiteSet objects!")

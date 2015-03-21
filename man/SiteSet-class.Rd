@@ -12,6 +12,7 @@
 \alias{primary,SiteSet-method}
 \alias{relScore}
 \alias{relScore,SiteSet-method}
+\alias{as.data.frame,SiteSet-method}
 \alias{score,SiteSet-method}
 \alias{seqname,SiteSet-method}
 \alias{show,SiteSet-method}

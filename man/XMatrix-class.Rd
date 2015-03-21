@@ -61,13 +61,13 @@ ICMatrix is a class whose instances are objects representing information content
 \usage{
 ## Constructors:
 PFMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown", 
-         strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
+         strand="+", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
          tags=list(), profileMatrix=matrix())
 PWMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
-         strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+         strand="+", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
          tags=list(), profileMatrix=matrix(), pseudocounts=numeric())
 ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
-         strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+         strand="+", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
          tags=list(), profileMatrix=matrix(), pseudocounts=numeric(),
          schneider=logical())
 ## Accessor-like methods:

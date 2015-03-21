@@ -3,6 +3,7 @@
 \docType{class}
 \alias{SiteSetList}
 \alias{SiteSetList-class}
+\alias{as.data.frame,SiteSetList-method}
 \alias{relScore,SiteSetList-method}
 \alias{pvalues,SiteSetList-method}
 
