@@ -19,11 +19,14 @@
     x can be a \link{PWMatrix} object or a \link{PWMatrixList} object.
   }
   \item{subject}{
-    A \code{DNAString}, \code{XStringViews} or \code{MaskedDNAString} object 
+    A \code{DNAStringSet}, \code{DNAString}, \code{XStringViews} or 
+    \code{MaskedDNAString} object 
     which will be scanned.
   }
   \item{seqname}{
     This is sequence name of the target sequence.
+    If subject is a \code{DNAStringSet}, the names of the \code{DNAStringSet}
+    object will be used.
   }
   \item{strand}{
     When searching the sequence, 
@@ -40,8 +43,9 @@
 }
 
 \value{
-  A Site object is returned when x is a \code{PWMatrix} object, while 
-  a SiteList object is returned when x is a \code{PWMatrixList}.
+  A Site object is returned when x is a \code{PWMatrix} object.
+  A SiteList object is returned when x is a \code{PWMatrixList} or
+  subject is a \code{DNAStringSet}.
 }
 
 \references{
@@ -61,10 +65,23 @@ Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identifi
   data(MA0003.2)
   pwm <- toPWM(MA0003.2)
   pwmList <- PWMatrixList(pwm1=pwm, pwm2=pwm)
-  siteset <- searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
-                       min.score="60\%")
-  sitesetList <- searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
-                           min.score="60\%", strand="*")
+  seq1 <- "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG"
+  seq2 <- "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
+  siteset <- searchSeq(pwm, seq1, min.score="60\%")
+  as(siteset, "data.frame")
+  as(siteset, "DataFrame")
+  as(siteset, "GRanges")
+  writeGFF3(siteset)
+  sitesetList <- searchSeq(pwmList, seq1, min.score="60\%", strand="*")
+  writeGFF2(sitesetList)
+  as(sitesetList, "data.frame")
+  as(sitesetList, "DataFrame")
+  as(sitesetList, "GRanges")
+
+  library(Biostrings)
+  seqs <- DNAStringSet(c(seq1, seq2))
+  sitesetList <- searchSeq(pwm, seqs, min.score="60\%")
+
 }
 
 \keyword{methods}

@@ -4,7 +4,7 @@ useDynLib(TFBSTools, .registration = TRUE)
 ### -----------------------------------------------------------------
 ### Import S4 classes defined in other packages
 ###
-importClassesFrom(S4Vectors, Annotated, Vector, SimpleList, List)
+importClassesFrom(S4Vectors, Annotated, Vector, SimpleList, List, DataFrame)
 #importClassesFrom(JASPAR2014, JASPAR2014)
 importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments, XStringViews)
 importClassesFrom(GenomicRanges, GRanges, GRangesList)
@@ -23,7 +23,8 @@ importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-", findOverlaps,
 importMethodsFrom(rtracklayer, import.chain, liftOver)
 importMethodsFrom(BSgenome, getSeq)
 importMethodsFrom(methods, initialize, show)
-importMethodsFrom(S4Vectors, isConstant, queryHits, subjectHits, elementLengths)
+importMethodsFrom(S4Vectors, isConstant, queryHits, subjectHits, 
+    elementLengths, Rle)
 importMethodsFrom(IRanges, score, subject, ranges, "ranges<-",
                   Views, start, end, findOverlaps, width)
 importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
@@ -45,6 +46,7 @@ importFrom(gtools, rdirichlet)
 importFrom(BiocParallel, MulticoreParam, bpmapply)
 importFrom(DirichletMultinomial, dmn, laplace, mixturewt)
 importFrom(TFMPvalue, TFMsc2pv)
+importFrom(S4Vectors, DataFrame)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
@@ -85,7 +87,7 @@ exportMethods(
   start, end,
 
   ## coercion-methods.r
-  as.matrix,
+  as.matrix, as.data.frame,
 
   ## Motif-methods.r
   consensusMatrix

@@ -12,6 +12,7 @@
 \alias{primary,SiteSet-method}
 \alias{relScore}
 \alias{relScore,SiteSet-method}
+\alias{as.data.frame,SiteSet-method}
 \alias{score,SiteSet-method}
 \alias{seqname,SiteSet-method}
 \alias{show,SiteSet-method}
@@ -115,6 +116,10 @@ Ge Tan
     siteset <- searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
                          min.score="60\%")
     writeGFF3(siteset, scoreType="absolute")
+    as(siteset, "data.frame")
+    as(siteset, "DataFrame")
+    as(siteset, "GRanges")
+    
     relScore(siteset)
     pvalues(siteset, type="TFMPvalue")
     pvalues(siteset, type="sampling")

@@ -106,7 +106,7 @@ setGeneric("seqLogo", signature="x",
 setGeneric("totalIC", signature="x",
            function(x) standardGeneric("totalIC"))
 
-setGeneric("searchSeq", signature="x",
+setGeneric("searchSeq", #signature="x",
            function(x, subject, seqname="Unknown", strand="*", min.score="80%")
              standardGeneric("searchSeq"))
 

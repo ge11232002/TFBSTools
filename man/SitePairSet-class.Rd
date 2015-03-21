@@ -4,6 +4,7 @@
 \alias{SitePairSet}
 \alias{SitePairSet-class}
 \alias{length,SitePairSet-method}
+\alias{as.data.frame,SitePairSet-method}
 \alias{site1,SitePairSet-method}
 \alias{site2,SitePairSet-method}
 
