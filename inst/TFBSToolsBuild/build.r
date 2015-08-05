@@ -3,7 +3,7 @@ rm *.pdf
 R CMD Rd2pdf .
 
 remove.packages("TFBSTools")
-rm TFBSTools_0.99.3.tar.gz
+
 R CMD check TFBSTools_1.1.3.tar.gz
 R CMD build TFBSTools
 R CMD INSTALL TFBSTools_1.1.3.tar.gz
