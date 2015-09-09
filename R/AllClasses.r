@@ -388,4 +388,29 @@ MEME = function(version=character(), alphabet=c("A", "C", "G", "T"),
 }
 
 
+### -----------------------------------------------------------------
+### The transcription factor flexible model (TFFM) class
+###
+setClass("TFFMFirst", contains="PFMatrix",
+         slots=c(type="character",
+                 emission="list",
+                 transition="numeric")
+         )
+
+### ----------------------------------------------------------------------
+### The TFFMFirst constructor
+### Exported!!
+TFFMFirst <- function(ID="Unknown", name="Unknown", matrixClass="Unknown",
+                 strand="+", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+                 tags=list(), profileMatrix=matrix(), 
+                 type=character(), emission=list(),
+                 transition=numeric()){
+  new("TFFMFirst", ID=ID, name=name, matrixClass=matrixClass,
+      strand=strand, bg=bg,
+      tags=tags,
+      profileMatrix=profileMatrix,
+      type=type,
+      emission=emission, transition=transition)
+}
+
 

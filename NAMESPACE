@@ -48,6 +48,8 @@ importFrom(BiocParallel, MulticoreParam, bpmapply)
 importFrom(DirichletMultinomial, dmn, laplace, mixturewt)
 importFrom(TFMPvalue, TFMsc2pv)
 importFrom(S4Vectors, DataFrame)
+importFrom(XML, xmlParse, xmlToList)
+
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools

@@ -152,7 +152,7 @@ setGeneric("pvalues", signature="x",
 setGeneric("clone", signature="x", function(x, ...) 
            standardGeneric("clone"))
 
-### PWM methods
+## PWM methods
 setGeneric("PWMSimilarity", 
            function(pwmSubject, pwmQuery, 
                     method=c("Euclidean", "Pearson", "KL")) 
@@ -183,4 +183,21 @@ setGeneric("runMEME", signature="x",
 setGeneric("sitesSeq", signature="x", 
            function(x, n=10, type="none") 
              standardGeneric("sitesSeq"))
+
+## TFFM methods
+setGeneric("bgEmissionProb", signature="tffm",
+           function(tffm)
+             standardGeneric("bgEmissionProb"))
+setGeneric("getPosStart", signature="tffm",
+           function(tffm)
+             standardGeneric("getPosStart"))
+setGeneric("getPosProb", signature="tffm",
+           function(tffm)
+             standardGeneric("getPosProb"))
+setGeneric("getEmissionProb", signature="tffm",
+           function(tffm)
+             standardGeneric("getEmissionProb"))
+
+
+
 
