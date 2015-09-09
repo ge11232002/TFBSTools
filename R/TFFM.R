@@ -56,10 +56,12 @@ setMethod("getPosProb", "TFFMFirst",
             for(position in start:length(tffm@emission)){
               ans[[i]] <- matrix(tffm@emission[[position]], ncol=4) %*% 
                 previous_position_proba
+              previous_position_proba <- as.numeric(ans[[i]])
               i <- i + 1L
             }
             ans <- do.call(cbind, ans)
             rownames(ans) <- DNA_BASES
+            colnames(ans) <- 1:ncol(ans)
             return(ans)
           })
 

@@ -21,6 +21,7 @@ letterA <- function(x.pos,y.pos,ht,wt,alpha=1,id=NULL){
   }
 
   fill <- c("green","white")
+  alpha <- c(alpha, 1)
   list(x=x,y=y,id=id,fill=fill,alpha=alpha)
 }
 
@@ -147,7 +148,7 @@ letterG <- function(x.pos,y.pos,ht,wt,alpha=1,id=NULL){
 
 
   fill <- c("orange","orange")
-
+  alpha <- c(alpha, alpha)
   list(x=x,y=y,id=id,fill=fill,alpha=alpha)
 
 }
@@ -175,5 +176,86 @@ addLetter <- function(letters,which,x.pos,y.pos,ht,wt,alpha=1){
   letters$alpha <- c(letters$alpha, letter$alpha)
   letters
 }
+
+seqLogoTFFM <- function(x, xfontsize=10){
+  emissions <- getEmissionProb(x)
+  posProb <- getPosProb(x)
+ 
+  letters <- list(x=NULL,y=NULL,id=NULL,fill=NULL,alpha=NULL)
+
+  npos <- ncol(posProb)
+  wt <- 1
+  facs <- 2
+  x.pos <- 2
+  
+  for(j in 1:npos){
+    y.pos <- 8
+    for(k in 1:4){
+      column <- emissions[((k-1)*4+1):((k-1)*4+4),j]
+      hts <- 0.95*column*facs
+      letterOrder <- order(hts)
+      y.posNew <- y.pos - 2
+
+      for (i in 1:4){
+        letter <- chars[letterOrder[i]]
+        ht <- hts[letterOrder[i]]
+        if (ht>0) letters <- addLetter(letters,letter,x.pos,y.pos,ht,wt,
+                                       posProb[k,j])
+        y.pos <- y.pos + ht + 0.01
+      }
+      y.pos <- y.posNew
+    }
+    x.pos <- x.pos + wt
+  }
+
+  ## Add the left letters
+  letters <- addLetter(letters, "A", 0, 8, ht=1.9, wt=1.7)
+  letters <- addLetter(letters, "C", 0, 6, ht=1.9, wt=1.7)
+  letters <- addLetter(letters, "G", 0, 4, ht=1.9, wt=1.7)
+  letters <- addLetter(letters, "T", 0, 2, ht=1.9, wt=1.7)
+
+  ## Add the information content logos
+  x.pos <- 2
+  pwm <- posProb
+  ylab <- "Information content"
+  facs <- seqLogo:::pwm2ic(pwm)
+  for(j in 1:npos){
+    column <- pwm[,j]
+    hts <- 0.95*column*facs[j]
+    letterOrder <- order(hts)
+    y.pos <- 0 
+    for(i in 1:4){
+      letter <- chars[letterOrder[i]]
+      ht <- hts[letterOrder[i]]
+      if (ht>0) letters <- addLetter(letters,letter,x.pos,y.pos,ht,wt)
+      y.pos <- y.pos + ht + 0.01
+    }
+    x.pos <- x.pos + wt
+  }
+
+  grid.newpage()
+  bottomMargin = ifelse(xaxis, 2 + xfontsize/3.5, 2)
+  leftMargin = ifelse(yaxis, 2 + yfontsize/3.5, 2)
+  pushViewport(plotViewport(c(bottomMargin,2,5,3)))
+  pushViewport(dataViewport(0:ncol(posProb),0:ylim*4,name="vp1"))
+  grid.polygon(x=unit(letters$x,"native"), y=unit(letters$y,"native"),
+               id=letters$id,
+               gp=gpar(fill=letters$fill,col="transparent", 
+                       alpha=letters$alpha))
+  grid.xaxis(at=seq(2.5,ncol(pwm)+2-0.5),label=1:ncol(pwm), 
+             gp=gpar(fontsize=xfontsize))
+  grid.text("Position",y=unit(-3,"lines"), gp=gpar(fontsize=xfontsize))
+  #grid.yaxis(gp=gpar(fontsize=yfontsize))
+  #grid.text(ylab,x=unit(-3,"lines"),rot=90, gp=gpar(fontsize=yfontsize))
+
+  popViewport()
+  popViewport()
+  par(ask=FALSE)
+}
+
+setMethod("seqLogo", "TFFMFirst",
+          function(x){
+            seqLogoTFFM(x)
+          })
 
 
