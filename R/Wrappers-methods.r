@@ -63,7 +63,8 @@ run_MEME = function(inputFastaFn, binary="meme", seqtype="DNA",
                                                         ifelse(revcomp, 3, 2))), 
                                       width=motifWidths[i]),
                        strand=ifelse(revcomp, 
-                                     sapply(splittedLines, "[", 2), "+"),
+                                     list(sapply(splittedLines, "[", 2)), 
+                                     list("+"))[[1]],
                        score=as.numeric(sapply(splittedLines, 
                                                "[", ifelse(revcomp, 4, 3)))
                        )

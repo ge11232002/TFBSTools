@@ -177,17 +177,19 @@ addLetter <- function(letters,which,x.pos,y.pos,ht,wt,alpha=1){
   letters
 }
 
-seqLogoTFFM <- function(x, xfontsize=10){
+seqLogoTFFM <- function(x, xfontsize=10, yfontsize=10, xaxis=TRUE, yaxis=TRUE){
   emissions <- getEmissionProb(x)
   posProb <- getPosProb(x)
- 
+  bgProb <- bgEmissionProb(x)
+
+  posProb <- cbind(bgProb, posProb[ ,-ncol(posProb)])
   letters <- list(x=NULL,y=NULL,id=NULL,fill=NULL,alpha=NULL)
 
   npos <- ncol(posProb)
   wt <- 1
   facs <- 2
   x.pos <- 2
-  
+  chars <- DNA_BASES 
   for(j in 1:npos){
     y.pos <- 8
     for(k in 1:4){
@@ -216,7 +218,8 @@ seqLogoTFFM <- function(x, xfontsize=10){
 
   ## Add the information content logos
   x.pos <- 2
-  pwm <- posProb
+  ylim <- 2
+  pwm <- getPosProb(x)
   ylab <- "Information content"
   facs <- seqLogo:::pwm2ic(pwm)
   for(j in 1:npos){
@@ -237,7 +240,7 @@ seqLogoTFFM <- function(x, xfontsize=10){
   bottomMargin = ifelse(xaxis, 2 + xfontsize/3.5, 2)
   leftMargin = ifelse(yaxis, 2 + yfontsize/3.5, 2)
   pushViewport(plotViewport(c(bottomMargin,2,5,3)))
-  pushViewport(dataViewport(0:ncol(posProb),0:ylim*4,name="vp1"))
+  pushViewport(dataViewport(0:ncol(pwm),0:ylim*4,name="vp1"))
   grid.polygon(x=unit(letters$x,"native"), y=unit(letters$y,"native"),
                id=letters$id,
                gp=gpar(fill=letters$fill,col="transparent", 
