@@ -394,17 +394,22 @@ MEME = function(version=character(), alphabet=c("A", "C", "G", "T"),
 setClass("TFFMFirst", contains="PFMatrix",
          slots=c(type="character",
                  emission="list",
-                 transition="numeric")
+                 transition="matrix")
          )
 
+setClass("TFFMDetail", contains="PFMatrix",
+         slots=c(type="character",
+                 emission="list",
+                 transition="matrix"))
+
 ### ----------------------------------------------------------------------
-### The TFFMFirst constructor
+### The TFFM constructor
 ### Exported!!
 TFFMFirst <- function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                  strand="+", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
                  tags=list(), profileMatrix=matrix(), 
                  type=character(), emission=list(),
-                 transition=numeric()){
+                 transition=matrix()){
   new("TFFMFirst", ID=ID, name=name, matrixClass=matrixClass,
       strand=strand, bg=bg,
       tags=tags,
@@ -412,5 +417,19 @@ TFFMFirst <- function(ID="Unknown", name="Unknown", matrixClass="Unknown",
       type=type,
       emission=emission, transition=transition)
 }
+
+TFFMDetail <- function(ID="Unknown", name="Unknown", matrixClass="Unknown",
+                       strand="+", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+                       tags=list(), profileMatrix=matrix(),
+                       type=character(), emission=list(),
+                       transition=matrix()){
+  new("TFFMDetail", ID=ID, name=name, matrixClass=matrixClass,
+      strand=strand, bg=bg,
+      tags=tags,
+      profileMatrix=profileMatrix,
+      type=type,
+      emission=emission, transition=transition)
+}
+
 
 

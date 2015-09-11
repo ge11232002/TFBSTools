@@ -51,6 +51,7 @@ importFrom(S4Vectors, DataFrame)
 importFrom(XML, xmlParse, xmlToList)
 importFrom(grid, grid.newpage, plotViewport, dataViewport, 
            grid.xaxis, grid.polygon, pushViewport, grid.text, popViewport)
+importFrom(Biobase, rowMax, rowMin)
 
 
 ### -----------------------------------------------------------------
