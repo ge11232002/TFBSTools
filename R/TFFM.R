@@ -12,6 +12,19 @@ setMethod("getTransition", "TFFMDetail",
           })
 
 ### -----------------------------------------------------------------
+### ncol: get the length of TFFM, the number of nucleotides in the
+### model excluding the background.
+### Exported!
+setMethod("ncol", "TFFMDetail",
+          function(tffm){
+            length(tffm@emission)/4L - 1L
+          })
+setMethod("ncol", "TFFMFirst",
+          function(tffm){
+            length(tffm@emission) - 2L
+          })
+
+### -----------------------------------------------------------------
 ### Get the background emission probability: bgEmissionProb
 ### Exported!
 setMethod("bgEmissionProb", "TFFMFirst",
@@ -49,11 +62,16 @@ setMethod("getPosStart", "TFFMFirst",
             # Returns: The position of the first matching state of the TFFM.
             return(3L)
           })
+setMethod("getPosStart", "TFFMDetail",
+          function(tffm){
+            return(1L)
+          })
 
 ### -----------------------------------------------------------------
 ### Get the position probablity: getPosProb
 ###
 setMethod("getPosProb", "TFFMFirst",
+          ## verified!
           function(tffm){
             previous_position_proba <- bgEmissionProb(tffm)
             start <- getPosStart(tffm)
@@ -71,6 +89,26 @@ setMethod("getPosProb", "TFFMFirst",
             return(ans)
           })
 
+setMethod("getPosProb", "TFFMDetail",
+          ## verified!
+          function(tffm){
+            previous_position_proba <- bgEmissionProb(tffm)
+            start <- getPosStart(tffm)
+            ans <- list()
+            for(position in start:(start+ncol(tffm)-1L)){
+              start_state <- 1:4 + (position - 1L) * 4L
+              end_state <- 1:4 + position * 4L
+              ans[[position]] <- t(tffm@transition[start_state, end_state]) %*%
+                previous_position_proba
+              previous_position_proba <- as.numeric(ans[[position]])
+            }
+            ans <- do.call(cbind, ans)
+            rownames(ans) <- DNA_BASES
+            colnames(ans) <- 1:ncol(ans)
+            ans <- sweep(ans, MARGIN=2, colSums(ans), FUN="/")
+            return(ans)
+          })
+
 ### -----------------------------------------------------------------
 ### Get the emission probability at each position: getEmissionProb
 ###
@@ -81,6 +119,22 @@ setMethod("getEmissionProb", "TFFMFirst",
             ans <- do.call(cbind, ans)
             rownames(ans) <- rep(DNA_BASES, 4)
             colnames(ans) <- 1:ncol(ans)
+            return(ans)
+          })
+
+setMethod("getEmissionProb", "TFFMDetail",
+          function(tffm){
+            start <- getPosStart(tffm)
+            ans <- list()
+            for(position in start:(start+ncol(tffm)-1L)){
+              start_state <- 1:4 + (position - 1L) * 4L
+              end_state <- 1:4 + position * 4L
+              emissions <- tffm@transition[start_state, end_state]
+              emissions <- sweep(emissions, MARGIN=1, rowSums(emissions), 
+                                 FUN="/")
+              ans[[position]] <- as.numeric(t(emissions))
+            }
+            ans <- do.call(cbind, ans)
             return(ans)
           })
 

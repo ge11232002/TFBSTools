@@ -170,7 +170,7 @@ export(
   sitesSeq,
  
   ## TFFM.R
-  bgEmissionProb
+  bgEmissionProb, getEmissionProb
 )
 
 

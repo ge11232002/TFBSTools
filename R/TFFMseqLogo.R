@@ -256,9 +256,11 @@ seqLogoTFFM <- function(x, xfontsize=10, yfontsize=10, xaxis=TRUE, yaxis=TRUE){
   par(ask=FALSE)
 }
 
-setMethod("seqLogo", "TFFMFirst",
-          function(x){
-            seqLogoTFFM(x)
+setMethod("seqLogo", "TFFM",
+          function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
+                   xfontsize = 10, yfontsize = 10){
+            seqLogoTFFM(x, xfontsize=xfontsize, yfontsize=yfontsize,
+                        xaxis=xaxis, yaxis=yaxis)
           })
 
 
