@@ -32,7 +32,7 @@ setMethod("show", "XMatrix",
 ### -----------------------------------------------------------------
 ### The "show" method.
 ###
-setMethod("show", "TFFMFirst",
+setMethod("show", "TFFM",
           function(object){
             cat("An object of class ", class(object), "\n", sep="")
             cat("ID: ", object@ID, "\n", sep="")

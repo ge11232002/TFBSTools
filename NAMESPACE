@@ -167,8 +167,10 @@ export(
 
   ## Wrappers-methods.r
   runMEME,
-  sitesSeq
-  
+  sitesSeq,
+ 
+  ## TFFM.R
+  bgEmissionProb
 )
 
 

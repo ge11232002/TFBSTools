@@ -1,6 +1,19 @@
 ### -----------------------------------------------------------------
+### getTransition: get the transition probability from i to j. 
+### i,j are characters.
+### 
+setMethod("getTransition", "TFFMFirst",
+          function(tffm, i, j){
+            tffm@transition[as.character(i),as.character(j)]
+          })
+setMethod("getTransition", "TFFMDetail",
+          function(tffm, i, j){
+            tffm@transition[as.character(i),as.character(j)]
+          })
+
+### -----------------------------------------------------------------
 ### Get the background emission probability: bgEmissionProb
-###
+### Exported!
 setMethod("bgEmissionProb", "TFFMFirst",
           function(tffm){
             # Retrieve emission proba for the first state which is not
@@ -18,7 +31,13 @@ setMethod("bgEmissionProb", "TFFMFirst",
 setMethod("bgEmissionProb", "TFFMDetail",
           function(tffm){
             # Compute emission proba for the background
-
+            emissions <- t(tffm@transition[as.character(0:3), 
+                                           as.character(0:3)]) %*% 
+              c(0.25, 0.25, 0.25, 0.25)
+            emissions <- drop(emissions)
+            names(emissions) <- DNA_BASES
+            emissions <- emissions / sum(emissions)
+            return(emissions)
           })
 
 ### -----------------------------------------------------------------

@@ -402,6 +402,8 @@ setClass("TFFMDetail", contains="PFMatrix",
                  emission="list",
                  transition="matrix"))
 
+setClassUnion("TFFM", c("TFFMDetail", "TFFMFirst"))
+
 ### ----------------------------------------------------------------------
 ### The TFFM constructor
 ### Exported!!
