@@ -1,8 +1,9 @@
 
 #R CMD build --no-build-vignettes --no-manual TFBSTools
 #R_dev CMD build TFBSTools
-#R_dev CMD check TFBSTools_1.7.1.tar.gz
-#R_dev CMD INSTALL TFBSTools_1.7.1.tar.gz
+#R_dev CMD check TFBSTools_1.7.2.tar.gz
+#R_dev CMD BiocCheck TFBSTools_1.7.2.tar.gz
+#R_dev CMD INSTALL TFBSTools_1.7.2.tar.gz
 
 ###########################debug ##########################
 pfm = PFMatrix(ID="M0001", name="MyProfile", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), matrix=matrix(as.integer(c(12, 3, 0, 0, 4, 0, 0, 0, 0, 11, 7, 0, 0, 9, 12, 0, 0, 0, 0, 0, 0, 1, 1, 12)), byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T"))))

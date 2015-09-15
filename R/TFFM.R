@@ -16,17 +16,17 @@ setMethod("getTransition", "TFFMDetail",
 ### model excluding the background.
 ### Exported!
 setMethod("ncol", "TFFMDetail",
-          function(tffm){
-            length(tffm@emission)/4L - 1L
+          function(x){
+            length(x@emission)/4L - 1L
           })
 setMethod("ncol", "TFFMFirst",
-          function(tffm){
-            length(tffm@emission) - 2L
+          function(x){
+            length(x@emission) - 2L
           })
 
 ### -----------------------------------------------------------------
 ### Get the background emission probability: bgEmissionProb
-### Exported!
+###
 setMethod("bgEmissionProb", "TFFMFirst",
           function(tffm){
             # Retrieve emission proba for the first state which is not
@@ -69,7 +69,7 @@ setMethod("getPosStart", "TFFMDetail",
 
 ### -----------------------------------------------------------------
 ### Get the position probablity: getPosProb
-###
+### Exported!
 setMethod("getPosProb", "TFFMFirst",
           ## verified!
           function(tffm){
@@ -110,8 +110,8 @@ setMethod("getPosProb", "TFFMDetail",
           })
 
 ### -----------------------------------------------------------------
-### Get the emission probability at each position: getEmissionProb
-###
+### Get the emission distribution parameters at each position: getEmissionProb
+### Exported!
 setMethod("getEmissionProb", "TFFMFirst",
           function(tffm){
             start <- getPosStart(tffm)
@@ -135,6 +135,8 @@ setMethod("getEmissionProb", "TFFMDetail",
               ans[[position]] <- as.numeric(t(emissions))
             }
             ans <- do.call(cbind, ans)
+            rownames(ans) <- rep(DNA_BASES, 4)
+            colnames(ans) <- 1:ncol(ans)
             return(ans)
           })
 

@@ -82,7 +82,6 @@ export(
   shannon.entropy,
 
   ## TFFMseqLogo.R
-  seqLogoTFFM,
 
   ## IO.R
   readXMLTFFM
@@ -170,7 +169,7 @@ export(
   sitesSeq,
  
   ## TFFM.R
-  bgEmissionProb, getEmissionProb
+  getEmissionProb, getPosProb
 )
 
 
