@@ -55,4 +55,42 @@ readMEME <- function(fn){
 }
 
 
+### -----------------------------------------------------------------
+### Read XML file generated from TFFM python module
+### Exported!
+readXMLTFFM <- function(fn, type=c("First", "Detail")){
+  type <- match.arg(type)
+  ghmm <- xmlParse(fn)
+  ghmm <- xmlToList(ghmm)
+  tffmType <- unname(ghmm$HMM$.attrs["type"])
+  emission <- ghmm$HMM[names(ghmm$HMM) == "state"]
+  emission <- lapply(lapply(emission, "[[", "discrete"), "[[", "text")
+  emission <- lapply(lapply(emission, strsplit, ","), "[[", 1)
+  emission <- lapply(emission, as.numeric)
+
+  transition <- ghmm$HMM[names(ghmm$HMM) == "transition"]
+  ## Make sure the name oder is same.
+  stopifnot(identical(names(transition[[1]]$.attrs), c("source", "target")))
+  dims <- sapply(transition, "[[", ".attrs")
+  mode(dims) <- "integer"
+  dimsMatrix <- rowMax(dims) - rowMin(dims) + 1L
+
+  transition1 <- matrix(0, ncol=dimsMatrix[2], nrow=dimsMatrix[1])
+  colnames(transition1) <- rowMin(dims)[2]:rowMax(dims)[2]
+  rownames(transition1) <- rowMin(dims)[1]:rowMax(dims)[1]
+  for(eachTransition in transition){
+    transition1[eachTransition$.attrs["source"],
+                eachTransition$.attrs["target"]] <- 
+                  as.numeric(eachTransition$probability)
+  }
+
+  if(type == "First"){
+    ans <- TFFMFirst(type=tffmType, emission=emission, transition=transition1)
+  }else if(type == "Detail"){
+    ans <- TFFMDetail(type=tffmType, emission=emission, transition=transition1)
+  }else{
+    stop("Unsupported type of xml file!")
+  }
+  return(ans)
+}
 

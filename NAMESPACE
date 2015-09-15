@@ -50,7 +50,8 @@ importFrom(TFMPvalue, TFMsc2pv)
 importFrom(S4Vectors, DataFrame)
 importFrom(XML, xmlParse, xmlToList)
 importFrom(grid, grid.newpage, plotViewport, dataViewport, 
-           grid.xaxis, grid.polygon, pushViewport, grid.text, popViewport)
+           grid.xaxis, grid.polygon, pushViewport, grid.text, popViewport,
+           unit, gpar)
 importFrom(Biobase, rowMax, rowMin)
 
 
@@ -75,8 +76,16 @@ export(
   MotifSet,
   SitePairSetList, SitePairSet,
   SiteSet, SiteSetList,
+  TFFMFirst, TFFMDetail, 
+
   ## util-methods.r
-  shannon.entropy
+  shannon.entropy,
+
+  ## TFFMseqLogo.R
+  seqLogoTFFM,
+
+  ## IO.R
+  readXMLTFFM
 )
 
 ### -----------------------------------------------------------------

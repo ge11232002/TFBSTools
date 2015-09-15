@@ -1,34 +1,4 @@
 ### -----------------------------------------------------------------
-### Read XML file generated from TFFM python module
-### 
-readXMLTFFM <- function(fn, type=c("First", "Detail")){
-  type <- match.arg(type)
-  ghmm <- xmlParse(fn)
-  ghmm <- xmlToList(ghmm)
-  tffmType <- unname(ghmm$HMM$.attrs["type"])
-  emission <- ghmm$HMM[names(ghmm$HMM) == "state"]
-  emission <- lapply(lapply(emission, "[[", "discrete"), "[[", "text")
-  emission <- lapply(lapply(emission, strsplit, ","), "[[", 1)
-  emission <- lapply(emission, as.numeric)
-
-  transition <- ghmm$HMM[names(ghmm$HMM) == "transition"]
-  dims <- sapply(transition, "[[", ".attrs")
-  mode(dims) <- "integer"
-  dims <- rowMax(dims) - rowMin(dims) + 1L
-
-  transition1 <- matrix(0, ncol=dims[2], nrow=dims[1])
-  transition <- as.numeric(sapply(transition, "[[", "probability"))
-
-  if(type == "First"){
-    ans <- TFFMFirst(type=tffmType, emission=emission, transition=transition)
-  }else if(type == "Detail"){
-    ans <- TFFMDetail(type=tffmType, emission=emission, transition=transition)
-  }
-  return(ans)
-}
-
-
-### -----------------------------------------------------------------
 ### Get the background emission probability: bgEmissionProb
 ###
 setMethod("bgEmissionProb", "TFFMFirst",
