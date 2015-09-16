@@ -461,7 +461,7 @@ setMethod("deleteMatrixHavingID", "SQLiteConnection",
                 stop("You have supplied a non-versioned matrix ID 
                      to delete. Skipping: ", ID)
               # get relevant internal ID
-              int_id = .get_internal_id(baseID, version)
+              int_id = .get_internal_id(x, baseID, version)
               for(dbTable in c("MATRIX_DATA", "MATRIX", 
                                "MATRIX_SPECIES", "MATRIX_PROTEIN", 
                                "MATRIX_ANNOTATION")){
@@ -598,7 +598,7 @@ setMethod("deleteMatrixHavingID", "JASPAR2014",
 
 ### ----------------------------------------------------------------
 ### Stores the contents of a PFMatrixList object in the database
-###
+### Exported!
 # Returns : 0 on success; $@ contents on failure
 # Args    : (PFMatrixList)
 
