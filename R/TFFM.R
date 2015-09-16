@@ -140,6 +140,15 @@ setMethod("getEmissionProb", "TFFMDetail",
             return(ans)
           })
 
-
+### ----------------------------------------------------------------------
+### Information content calculation at each position: totalIC 
+### Exported!
+setMethod("totalIC", "TFFM",
+          function(x){
+            pwm <- getPosProb(x)
+            ans <- seqLogo:::pwm2ic(pwm)
+            return(ans)
+          }
+          )
 
 

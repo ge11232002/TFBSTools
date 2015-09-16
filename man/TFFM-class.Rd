@@ -2,12 +2,14 @@
 \alias{TFFM}
 \alias{TFFMFirst}
 \alias{TFFMDetail}
-\alias{ncol,TFFMDetail-method}
 \alias{ncol,TFFMFirst-method}
+\alias{ncol,TFFMDetail-method}
+\alias{totalIC,TFFM-method}
 
 \title{
   The TFFM class
 }
+
 \description{
   The TFFM is a virtual class. 
   Two classes are derived from this class: TFFMFirst and TFFMDetail.
@@ -28,10 +30,17 @@
              tags=list(), profileMatrix=matrix(),
              type=character(), emission=list(),
              transition=matrix())
+}
 
-## Accessor-like mothods:
-  \S4method{ncol}{TFFMFirst}(x)
-  \S4method{ncol}{TFFMDetail}(x)
+\section{Methods}{
+  \describe{
+    \item{ncol}{\code{signature(x = "TFFMFirst")}:
+      Get the length of First-order TFFM.}
+    \item{ncol}{\code{signature(x = "TFFMDetail")}:
+      Get the length of detail TFFM.}
+    \item{totalIC}{\code{signature(x = "TFFM")}:
+      Get the information content at each position.}
+  }
 }
 
 \arguments{
@@ -46,9 +55,6 @@
   }
   \item{transition}{
     The transition probability matrix.
-  }
-  \item{x}{
-    A \code{\link{TFFMFirst}} object or a \code{\link{TFFMDetail}} object.
   }
 }
 
