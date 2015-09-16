@@ -81,6 +81,11 @@
   Ge Tan
 }
 
+\note{
+  This function is based on the function \code{seqLogo} from the Bioconductor
+  package \code{seqLogo}, especially for the plotting code of TFFM.
+}
+
 \seealso{
   \code{\link{toICM}},
   \code{\linkS4class{ICMatrix}},
