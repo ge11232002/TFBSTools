@@ -321,6 +321,12 @@ setMethod("getMatrixByID", "JASPAR2014",
           }
           )
 
+setMethod("getMatrixByID", "JASPAR2016",
+          function(x, ID){
+            getMatrixByID(x@db, ID)
+          }
+          )
+
 ### get_Matrix_by_name fetches matrix data under 
 ### the given name from the database and returns a XMatrix object.
 # Returns : a XMatrix object; 
@@ -365,6 +371,12 @@ setMethod("getMatrixByName", "character",
           )
 
 setMethod("getMatrixByName", "JASPAR2014",
+          function(x, name){
+            getMatrixByName(x@db, name)
+          }
+          )
+
+setMethod("getMatrixByName", "JASPAR2016",
           function(x, name){
             getMatrixByName(x@db, name)
           }
@@ -448,6 +460,12 @@ setMethod("getMatrixSet", "JASPAR2014",
           }
           )
 
+setMethod("getMatrixSet", "JASPAR2016",
+          function(x, opts){
+            getMatrixSet(x@db, opts)
+          }
+          )
+
 setMethod("deleteMatrixHavingID", "SQLiteConnection",
 # Deletes the matrix having the given ID from the database
 # Args    : (ID)
@@ -482,6 +500,12 @@ setMethod("deleteMatrixHavingID", "character",
           )
 
 setMethod("deleteMatrixHavingID", "JASPAR2014",
+          function(x, IDs){
+            deleteMatrixHavingID(x@db, IDs)
+          }
+          )
+
+setMethod("deleteMatrixHavingID", "JASPAR2016",
           function(x, IDs){
             deleteMatrixHavingID(x@db, IDs)
           }
@@ -640,7 +664,18 @@ setMethod("storeMatrix", signature(x="JASPAR2014", pfmList="PFMatrix"),
             storeMatrix(x@db, pfmList)
           }
           )
+setMethod("storeMatrix", signature(x="JASPAR2016", pfmList="PFMatrix"),
+          function(x, pfmList){
+            storeMatrix(x@db, pfmList)
+          }
+          )
 setMethod("storeMatrix", signature(x="JASPAR2014", 
+                                   pfmList="PFMatrixList"),
+          function(x, pfmList){
+            storeMatrix(x@db, pfmList)
+          }
+          )
+setMethod("storeMatrix", signature(x="JASPAR2016",
                                    pfmList="PFMatrixList"),
           function(x, pfmList){
             storeMatrix(x@db, pfmList)
@@ -706,25 +741,32 @@ setMethod("storeMatrix", signature(x="JASPAR2014",
 ### -----------------------------------------------------------------
 ### initializeJASPARDB interface
 ### Exported!
-
+### Until now, the table definitions for JASPAR2014 and JASPAR2016 are same.
 setMethod("initializeJASPARDB", "SQLiteConnection",
-          function(x){
+          function(x, version=c("2014", "2016")){
+            version <- match.arg(version)
             .create_tables(x)
             return("Success")
           }
           )
 
 setMethod("initializeJASPARDB", "character",
-          function(x){
+          function(x, version=c("2014", "2016")){
             con = dbConnect(SQLite(), x)
             on.exit(dbDisconnect(con))
-            initializeJASPARDB(con)
-          }
-          )
-setMethod("initializeJASPARDB", "JASPAR2014",
-          function(x){
-            initializeJASPARDB(x@db)
+            initializeJASPARDB(con, version=version)
           }
           )
 
+setMethod("initializeJASPARDB", "JASPAR2014",
+          function(x, version=c("2014", "2016")){
+            initializeJASPARDB(x@db, version="2014")
+          }
+          )
+
+setMethod("initializeJASPARDB", "JASPAR2016",
+          function(x, version=c("2014", "2016")){
+            initializeJASPARDB(x@db, version="2016")
+          }
+          )
 

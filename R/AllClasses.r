@@ -1,10 +1,21 @@
-## To define it again, then do not need to import JASPAR2014, 
-## as JASPAR2014 is not in Bioconductor yet.
-## clean it later.
+### -----------------------------------------------------------------
+### JASPAR classes for each release
+### Not exported!
+### This is ugly hack. 
+### These classes have been defined in each release of JASPAR data package.
+### However, import of class from the data package will require 
+### all the data packages.
+
 setClass("JASPAR2014",
          slots=c(
-                db="character"
+                 db="character"
                 )
+         )
+
+setClass("JASPAR2016",
+         slots=c(
+                 db="character"
+                 )
          )
 
 ### -----------------------------------------------------------------
