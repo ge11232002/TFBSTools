@@ -55,7 +55,8 @@
   
   For a \code{\link{TFFM}} object, a novel graphical representation is used for 
   capturing the dinucleotide dependencies on the TFFM.
-  For the upper part of the sequence logo, we represent the nucleotide probabilities 
+  For the upper part of the sequence logo, 
+  we represent the nucleotide probabilities 
   at position p for each possible nucleotide at position p-1.
   Hence, each column represents a position within a TFBS and 
   each row the nucleotide probabilities found at that position. 
@@ -64,7 +65,8 @@
   The intersection between a column corresponding to position p and 
   row corresponding to nucleotide n gives the probabilities of 
   getting each nucleotide at position p if n has been seen at position p-1.
-  The opacity to represent the sequence logo is proportional to the probablity of 
+  The opacity to represent the sequence logo is proportional to 
+  the probablity of 
   possible row to be used by the TFFM.
 }
 
