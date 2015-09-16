@@ -3,7 +3,7 @@
 #R CMD build TFBSTools
 #R CMD check TFBSTools_1.7.5.tar.gz
 #R CMD BiocCheck TFBSTools_1.7.5.tar.gz
-#R CMD INSTALL TFBSTools
+#R CMD INSTALL TFBSTools_1.7.5.tar.gz
 
 
 ## DB

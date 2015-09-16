@@ -50,6 +50,11 @@
 }
 
 \examples{
+  initializeJASPARDB("jaspar.sqlite")
+  data("MA0043")
+  storeMatrix("jaspar.sqlite", MA0043)
+  file.remove("jaspar.sqlite")
+  
   \dontrun{
     library(JASPAR2014)
     deleteMatrixHavingID(JASPAR2014, "MA0003")

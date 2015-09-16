@@ -524,7 +524,7 @@ setMethod("deleteMatrixHavingID", "JASPAR2014",
   ## insert data
   #  Here the ID is the primary integer id.
   sqlCMD = paste0("INSERT INTO MATRIX VALUES (NULL,'", collection, "','",
-                  ID(pfm), "',", version, ",'", name(pfm), "')")
+                  baseID, "',", version, ",'", name(pfm), "')")
   sqlRun = dbGetQuery(con, sqlCMD)
   sqlCMD = paste0("SELECT last_insert_rowid()")
   int_id = dbGetQuery(con, sqlCMD)[["last_insert_rowid()"]]
@@ -605,7 +605,8 @@ setMethod("deleteMatrixHavingID", "JASPAR2014",
 setMethod("storeMatrix", signature(x="SQLiteConnection",
                                    pfmList="PFMatrixList"),
           function(x, pfmList){
-            for(pfm in pfmList){
+            for(i in 1:length(pfmList)){
+              pfm <- pfmList[[i]]
               int_id =  .store_matrix(x, pfm)
               .store_matrix_data(x, pfm, int_id)
               .store_matrix_annotation(x, pfm, int_id)
@@ -647,41 +648,64 @@ setMethod("storeMatrix", signature(x="JASPAR2014",
           )
 
 ### -----------------------------------------------------------------
-### initialize the jaspar 2014 stype db. create empty tables.
+### initialize the jaspar 2014, 2016 stype db. create empty tables.
 ###
 .create_tables = function(con){
   # utility function
   # If you want to change the databse schema,
   # this is the right place to do it
-  sqlCMD = c("CREATE TABLE MATRIX(
+  sqlCMD = c("DROP TABLE IF EXISTS MATRIX",
+             "CREATE TABLE MATRIX(
              ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-             COLLECTION VARCHAR(16) DEFAULT '',
-             BASE_ID VARCHAR(16) DEFAULT '' NOT NULL,
-             VERSION TINYINT DEFAULT 1  NOT NULL,
-             NAME VARCHAR(255) DEFAULT '' NOT NULL
+             COLLECTION TEXT DEFAULT '',
+             BASE_ID TEXT DEFAULT '' NOT NULL,
+             VERSION INTEGER DEFAULT 1  NOT NULL,
+             NAME TEXT DEFAULT '' NOT NULL
              )",
+              
+             "DROP TABLE IF EXISTS MATRIX_DATA",
              "CREATE TABLE MATRIX_DATA(
              ID INTEGER NOT NULL,
-             row VARCHAR(1) NOT NULL,
-             col UNSIGNED TINYINT(3)  NOT NULL,
-             val float(10,3),
-             unique (ID, row, col))",
+             row TEXT NOT NULL,
+             col INTEGER  NOT NULL,
+             val REAL DEFAULT NULL,
+             UNIQUE (ID, row, col))",
+
+             "DROP TABLE IF EXISTS MATRIX_ANNOTATION",
              "CREATE TABLE MATRIX_ANNOTATION(
              ID INTEGER NOT NULL,
-             TAG VARCHAR(255) DEFAULT '' NOT NULL,
-             VAL VARCHAR(255) DEFAULT '',
-             unique (ID, TAG))",
+             TAG TEXT DEFAULT '' NOT NULL,
+             VAL TEXT DEFAULT '',
+             UNIQUE (ID, TAG))",
+
+             "DROP TABLE IF EXISTS MATRIX_SPECIES",
              "CREATE TABLE MATRIX_SPECIES(
-             ID INTEGER NOT NULL,
-             TAX_ID VARCHAR(255) DEFAULT '' NOT NULL)",
+             ID INTEGER PRIMARY KEY NOT NULL,
+             TAX_ID TEXT DEFAULT '' NOT NULL)",
+
+             "DROP TABLE IF EXISTS MATRIX_PROTEIN",
              "CREATE TABLE MATRIX_PROTEIN(
-             ID INTEGER NOT NULL,
-             ACC VARCHAR(255) DEFAULT '' NOT NULL)"
+             ID INTEGER PRIMARY KEY NOT NULL,
+             ACC TEXT DEFAULT '' NOT NULL)",
+
+             "DROP TABLE IF EXISTS TAX",
+             "CREATE TABLE TAX(
+             TAX_ID INTEGER PRIMARY KEY NOT NULL,
+             SPECIES TEXT DEFAULT NULL)",
+             
+             "DROP TABLE IF EXISTS TAX_EXT",
+             "CREATE TABLE TAX_EXT(
+             TAX_ID INTEGER PRIMARY KEY NOT NULL,
+             NAME TEXT DEFAULT NULL)"
              )
   for(cmd in sqlCMD){
     dbGetQuery(con, cmd)
   }
 }
+
+### -----------------------------------------------------------------
+### initializeJASPARDB interface
+### Exported!
 
 setMethod("initializeJASPARDB", "SQLiteConnection",
           function(x){
