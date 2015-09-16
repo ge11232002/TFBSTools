@@ -48,8 +48,8 @@
 
       \code{n} is the number of bases to include from flanking region. 
 
-      \code{type} controls "all", "left", "right" or "none" flanking sequences are included.}
-	 }
+      \code{type} controls "all", "left", "right" or "none" flanking sequences are included.
+    }
 }
 \author{
   Ge Tan

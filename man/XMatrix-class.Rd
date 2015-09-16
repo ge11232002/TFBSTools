@@ -145,7 +145,7 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
     \item{name<-}{\code{signature(x = "XMatrix")}: Sets the name information.}
     \item{strand}{\code{signature(x = "XMatrix")}: Gets the strand information of a \code{XMatrix} object.}
     \item{tags}{\code{signature(x = "XMatrix")}: Gets a \code{list} object of tags information. }
-	 }
+  }
 }
 
 \author{

@@ -30,7 +30,7 @@
 %    \item{length}{\code{signature(x = "SitePair")}: ... }
     \item{siteset1}{\code{signature(x = "SitePairSet")}: Gets the first SiteSet object.}
     \item{siteset2}{\code{signature(x = "SitePairSet")}: Gets the second SiteSet object.}
-	 }
+  }
 }
 
 \author{

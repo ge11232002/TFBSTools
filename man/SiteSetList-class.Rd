@@ -35,7 +35,7 @@
     \item{pvalues}{\code{signature(x = "SiteSetList")}
     (x, type=c("TFMPvalue", "sampling")):
       Calculates the empirical p-values for the scores.
-	 }
+    }
   }
 }
 \author{
