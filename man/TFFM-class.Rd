@@ -48,18 +48,25 @@
     The transition probability matrix.
   }
   \item{x}{
-    a \code{\link{TFFMFirst}} object or a \code{\link{TFFMDetail}} object.
+    A \code{\link{TFFMFirst}} object or a \code{\link{TFFMDetail}} object.
   }
 }
 
 \references{
   Mathelier, A., and Wasserman, W.W. (2013). The next generation of transcription factor binding site prediction. PLoS Comput. Biol. 9, e1003214.
 
-\url{http://cisreg.cmmt.ubc.ca/TFFM/doc/#}
+  \url{http://cisreg.cmmt.ubc.ca/TFFM/doc/#}
 }
 
 \author{
   Ge Tan
+}
+
+\examples{
+  xmlFirst <- file.path(system.file("extdata", package="TFBSTools"),
+                        "tffm_first_order.xml")
+  tffmFirst <- readXMLTFFM(xmlFirst, type="First")
+  tffm <- getPosProb(tffmFirst)
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -14,7 +14,7 @@
 
 \arguments{
   \item{tffm}{
-    a \code{\link{TFFMFirst}} object or a \code{\link{TFFMDetail}} object.
+    A \code{\link{TFFMFirst}} object or a \code{\link{TFFMDetail}} object.
   }
 }
 \details{
