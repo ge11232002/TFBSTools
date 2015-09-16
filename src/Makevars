@@ -3,4 +3,4 @@ OBJECTS = $(PKG_OBJECTS)
 all: $(SHLIB)
 
 clean:$
-  rm -f $(OBJECTS)
+	rm -f $(OBJECTS)

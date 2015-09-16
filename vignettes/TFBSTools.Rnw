@@ -27,7 +27,7 @@ library("TFBSTools")
 
 \bioctitle{The \Biocpkg{TFBSTools} package overview}
 \author{Ge Tan \footnote{ge.tan09@imperial.ac.uk}}
-\date{Edited: Jan 2015; Compiled: \today}
+\date{Edited: Sep 2015; Compiled: \today}
 
 \begin{document}
 \maketitle
@@ -46,7 +46,7 @@ for TFBSs analysis.
 Based on the famous perl module TFBS \cite{lenhard_tfbs:_2002},
 we extended the class definitions and enhanced implementations in an interactive environment.
 So far this package contains a set of integrated \R{} \Rcode{S4} style classes,
-tools , JASPAR database interface functions.
+tools, JASPAR database interface functions.
 Most approaches can be described in three sequential phases.
 First, a pattern is generated for a set of target sequences 
 known to be bound by a specific transcription factor.
@@ -55,6 +55,9 @@ the locations of sequences consistent with the described binding pattern.
 Finally, in advanced cases, predictive statistical models of regulatory
 regions are constructed based on  mutiple occurrences of the detected
 patterns. 
+
+Now \Biocpkg{TFBSTools} also supports the next generation of 
+transcription factor binding site 
 
 \Biocpkg{TFBSTools} aims to support all these functionalities
 in the environment \R{}, except the external motif finding software,

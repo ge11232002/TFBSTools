@@ -3,7 +3,7 @@ OBJECTS = $(PKG_OBJECTS)
 all: $(SHLIB)
 
 clean:
-  rm -f $(OBJECTS)
+	rm -f $(OBJECTS)
 
 %.o: %.c
-  $(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) -c $< -o $@
+	$(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) -c $< -o $@

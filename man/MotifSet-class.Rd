@@ -25,13 +25,15 @@
 
 \arguments{
   \item{motifList}{
-    A GRangesList. Each GRanges store the starts, ends, strand, seqnames and scores information of one motif sites sequences.
+    A GRangesList. Each GRanges store the starts, ends, strand, seqnames 
+    and scores information of one motif sites sequences.
   }
   \item{motifEvalues}{
     A numeric vector of the E values generated from MEME for each motif.
   }
   \item{subjectSeqs}{
-    A DNAStringSet object. It stores the original sequences which are scanned by the software.
+    A DNAStringSet object. It stores the original sequences 
+    which are scanned by the software.
   }
 }
 
@@ -39,17 +41,23 @@
   \describe{
     \item{[}{\code{signature(x = "MotifSet")}: Getter}
 
-    \item{consensusMatrix}{\code{signature(x = "MotifSet")}(x, as.prob = FALSE, shift = 0L, width = NULL, ...): Calculate the consensus matrix. Other arguments, please check the \code{consensusMatrix} in \code{Biostrings} package.}
+    \item{consensusMatrix}{\code{signature(x = "MotifSet")}(x, as.prob = FALSE, 
+      shift = 0L, width = NULL, ...): 
+      Calculate the consensus matrix. Other arguments, 
+      please check the \code{consensusMatrix} in \code{Biostrings} package.}
 
-    \item{length}{\code{signature(x = "MotifSet")}: Returns the number of motifs.}
+    \item{length}{\code{signature(x = "MotifSet")}: 
+      Returns the number of motifs.}
 
     \item{sitesSeq}{\code{signature(x = "MotifSet")}(x, n=10L, type="none"): 
       Gets the sites sequences. 
 
       \code{n} is the number of bases to include from flanking region. 
 
-      \code{type} controls "all", "left", "right" or "none" flanking sequences are included.
+      \code{type} controls "all", "left", "right" or "none" 
+        flanking sequences are included.
     }
+  }
 }
 \author{
   Ge Tan
