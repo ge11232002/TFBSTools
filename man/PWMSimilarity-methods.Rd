@@ -51,6 +51,10 @@
   %KL(P^1, P^2) = {1 \over {2l}} \cdot \sum_{i=1}^l \sum_{b \in \{A,C,G,T\}} (P_{i,b}^1\log{ P_{i,b}^1 \over P_{i,b}^2}+ P_{i,b}^2\log{P_{i,b}^2 \over {P_{i,b}^1}}).
 }
 
+\value{
+  A \code{numeric} value is returned.
+}
+
 \references{
   Linhart, C., Halperin, Y., & Shamir, R. (2008). Transcription factor and microRNA motif discovery: The Amadeus platform and a compendium of metazoan target sets. Genome Research, 18(7), 1180-1189. doi:10.1101/gr.076117.108
 }

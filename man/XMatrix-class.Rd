@@ -186,6 +186,10 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
   }
 }
 
+\value{
+  A \code{XMatrix} object.
+}
+
 \author{
   Ge Tan
 }

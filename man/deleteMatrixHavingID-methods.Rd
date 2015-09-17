@@ -58,6 +58,10 @@
   }
 }
 
+\value{
+  If the operation works, a "success" will be returned.
+}
+
 \examples{
   initializeJASPARDB("jaspar.sqlite", version="2014")
   data("MA0043")

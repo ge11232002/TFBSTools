@@ -12,7 +12,6 @@
 
 \title{Class \code{"MotifSet"}}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the class is. ~~
   This MotifSet object is a container for storing the generated 
   motifs from Motif identification softwares, such as MEME.
 }
@@ -59,6 +58,11 @@
     }
   }
 }
+
+\value{
+  A \code{MotifSet} object is returned.
+}
+
 \author{
   Ge Tan
 }

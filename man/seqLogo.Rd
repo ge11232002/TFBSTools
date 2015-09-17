@@ -70,6 +70,10 @@
   possible row to be used by the TFFM.
 }
 
+\value{
+  No return value.
+}
+
 
 \references{
   T D Schneider, R. M. S. (1990). Sequence logos: a new way to display consensus sequences. Nucleic acids research, 18(20), 6097.

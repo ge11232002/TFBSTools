@@ -99,6 +99,10 @@
   while multiple elements under one options have the logical operator OR.
 }
 
+\value{
+  A \code{\link{PFMatrixList}} object.
+}
+
 \author{
   Ge Tan
 }

@@ -34,6 +34,10 @@
   }
 }
 
+\value{
+  It returns nothing.
+}
+
 \author{
   Ge Tan
 }

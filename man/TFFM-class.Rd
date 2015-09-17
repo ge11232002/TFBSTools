@@ -58,6 +58,10 @@
   }
 }
 
+\value{
+  A \code{TFFM} object.
+}
+
 \references{
   Mathelier, A., and Wasserman, W.W. (2013). The next generation of transcription factor binding site prediction. PLoS Comput. Biol. 9, e1003214.
 

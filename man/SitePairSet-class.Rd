@@ -33,6 +33,10 @@
   }
 }
 
+\value{
+  A \code{\link{SitePairSet}} object.
+}
+
 \author{
   Ge Tan
 }
