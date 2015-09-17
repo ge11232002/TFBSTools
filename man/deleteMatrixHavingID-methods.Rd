@@ -3,6 +3,7 @@
 \alias{deleteMatrixHavingID}
 \alias{deleteMatrixHavingID,character-method}
 \alias{deleteMatrixHavingID,JASPAR2014-method}
+\alias{deleteMatrixHavingID,JASPAR2016-method}
 \alias{deleteMatrixHavingID,SQLiteConnection-method}
 \alias{storeMatrix}
 \alias{storeMatrix-methods}
@@ -37,8 +38,8 @@
   \S4method{storeMatrix}{JASPAR2014,PFMatrix}(x, pfmList)
   \S4method{initializeJASPARDB}{SQLiteConnection}(x, version=c("2014", "2016"))
   \S4method{initializeJASPARDB}{character}(x, version=c("2014", "2016"))
-  \S4method{initializeJASPARDB}{JASPAR2014}(x)
-  \S4method{initializeJASPARDB}{JASPAR2016}(x)
+  \S4method{initializeJASPARDB}{JASPAR2014}(x, version)
+  \S4method{initializeJASPARDB}{JASPAR2016}(x, version)
 }
 
 \arguments{
@@ -51,6 +52,9 @@
   }
   \item{pfmList}{
     The PFMatrixList object, or pfm object.
+  }
+  \item{version}{
+    Which version of JASPAR to create. So far, it supports 2014 and 2016.
   }
 }
 

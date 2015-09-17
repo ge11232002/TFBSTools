@@ -230,11 +230,13 @@ store new \Rclass{PFMatrix} or \Rclass{PFMatrixList} into it,
 or delete some records based on ID.
 The backend of the database is \software{SQLite}.
 
-<<operateDb, eval=FALSE, results="hide">>=
+<<operateDb, eval=TRUE, results="markup">>=
 db = "myMatrixDb.sqlite"
-initializeJASPARDB(db)
-storeMatrix(db, pfm)
-deleteMatrixHavingID(db, "MA0003")
+initializeJASPARDB(db, version="2014")
+data("MA0043")
+storeMatrix(db, MA0043)
+deleteMatrixHavingID(db,"MA0043.1")
+file.remove(db)
 @
 
 \section{PFM, PWM and ICM methods}
