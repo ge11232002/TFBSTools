@@ -40,7 +40,7 @@
 }
 
 \value{
-  
+  A \code{SiteSetList} object.
 }
 
 \author{
