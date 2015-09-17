@@ -27,7 +27,7 @@ library("TFBSTools")
 
 \bioctitle{The \Biocpkg{TFBSTools} package overview}
 \author{Ge Tan \footnote{ge.tan09@imperial.ac.uk}}
-\date{Edited: Jan 2015; Compiled: \today}
+\date{Edited: Sep 2015; Compiled: \today}
 
 \begin{document}
 \maketitle
@@ -44,9 +44,10 @@ with various degree of degeneracy.
 This \Biocpkg{TFBSTools} package is designed to be a compuational framework
 for TFBSs analysis. 
 Based on the famous perl module TFBS \cite{lenhard_tfbs:_2002},
-we extended the class definitions and enhanced implementations in an interactive environment.
+we extended the class definitions and enhanced implementations 
+in an interactive environment.
 So far this package contains a set of integrated \R{} \Rcode{S4} style classes,
-tools , JASPAR database interface functions.
+tools, JASPAR database interface functions.
 Most approaches can be described in three sequential phases.
 First, a pattern is generated for a set of target sequences 
 known to be bound by a specific transcription factor.
@@ -56,12 +57,25 @@ Finally, in advanced cases, predictive statistical models of regulatory
 regions are constructed based on  mutiple occurrences of the detected
 patterns. 
 
+Since JASPAR2016, the next generation of 
+transcription factor binding site, TFFM \cite{mathelier_next_2013},
+was introduced into JASPAR for the first time.
+Now \Biocpkg{TFBSTools} also supports the manipulation of TFFM.
+TFFM is based on hidden Markov Model (HMM).
+The biggest advantage of TFFM over basic PWM is that 
+it can model position interdependence within TFBSs and variable motif length.
+A novel graphical representation of the TFFM motifs that captures 
+the position interdependence is also introduced.
+For more details regarding TFFM, 
+please refer to \url{http://cisreg.cmmt.ubc.ca/TFFM/doc/}.
+
 \Biocpkg{TFBSTools} aims to support all these functionalities
 in the environment \R{}, except the external motif finding software,
 such as \software{MEME} \cite{bailey_fitting_1994}. 
 
 \section{\Rcode{S4} classes in TFBSTools}
-The package is built around a number of \Rcode{S4} class of which the \Rclass{XMatrix}, 
+The package is built around a number of \Rcode{S4} class of 
+which the \Rclass{XMatrix}, 
 \Rclass{SiteSet} classes are the most important.
 The section will briefly explain most of them defined in \Biocpkg{TFBSTools}.
 
@@ -122,7 +136,8 @@ pwmRevComp <- reverseComplement(pwm)
 \Rclass{XMatrixList} is used to store a set of \Rclass{XMatrix} objects.
 Basically it is a SimpleList for easy manipulation the whole set of
 \Rclass{XMatrix}. 
-The concrete objects can be \Rclass{PFMatrix}, \Rclass{PWMatrix} and \Rclass{ICMatrix}.
+The concrete objects can be \Rclass{PFMatrix}, \Rclass{PWMatrix} and 
+\Rclass{ICMatrix}.
 
 <<PFMatrixList, eval=TRUE, results ="markup", cache=TRUE>>=
 pfm2 = pfm
@@ -141,27 +156,58 @@ Similarly, \Rclass{SiteSetList} stores a set of \Rclass{SiteSet} objects.
 For holding the results returned from a pairwise alignment scaaning,
 \Rclass{SitePairSet} and \Rclass{SitePairSetList} are provided.
 
-More detailed examples of using these classes will be given in Section \ref{sec:Scanning};
+More detailed examples of using these classes will be given in 
+Section \ref{sec:Scanning};
 
 \subsection{MotifSet}
 This \Rclass{MotifSet} class is used to store the generated motifs from 
-\textit{de novo} motif discovery software, such as \software{MEME} \cite{bailey_fitting_1994}.
+\textit{de novo} motif discovery software, such as 
+\software{MEME} \cite{bailey_fitting_1994}.
+
+\subsection{TFFM and its subclasses}
+\Rclass{TFMM} is a virtual class and two classes 
+\Rclass{TFFMFirst} and \Rclass{TFFMDetail} are derived from this virtual class.
+Compared with \Rclass{PFMatrix} class, \Rclass{TFFM} has two extra slots
+that store the emission distribution parameters and transition probabilities.
+\Rclass{TFFMFirst} class stands for the first-order TFFMs, while
+\Rclass{TFFMDetail} stands for the more detailed and descriptive TFFMs.
+
+Although we provide the constructor functions for \Rclass{TFFM} class,
+the \Rclass{TFFM} object is usually generated from reading a XML file from
+the Python module \software{TFFM}.
+
+<<TFFMRead, eval=TRUE, cache=TRUE, results = "markup">>=
+  xmlFirst <- file.path(system.file("extdata", package="TFBSTools"),
+                        "tffm_first_order.xml")
+  tffmFirst <- readXMLTFFM(xmlFirst, type="First")
+  tffm <- getPosProb(tffmFirst)
+  
+  xmlDetail <- file.path(system.file("extdata", package="TFBSTools"),
+                         "tffm_detailed.xml")
+  tffmDetail <- readXMLTFFM(xmlDetail, type="Detail")
+  getPosProb(tffmDetail)
+@
+
 
 \section{Database interfaces for JASPAR2014 database}
 This section will demonstrate how to operate on the JASPAR 2014 database.
-JASPAR is a collection of transcription factor DNA-binding preferences, modeled as matrices. 
+JASPAR is a collection of transcription factor DNA-binding preferences, 
+modeled as matrices. 
 These can be converted into PWMs, used for scanning genomic sequences.
-JASPAR is the only database with this scope where the data can be used with no restrictions (open-source).
-A \Bioconductor{} experiment data package \Biocexptpkg{JASPAR2014} is provided with the leatest release of JASPAR.
+JASPAR is the only database with this scope where the data can be used 
+with no restrictions (open-source).
+A \Bioconductor{} experiment data package \Biocexptpkg{JASPAR2014} 
+is provided with each release of JASPAR.
 
 \subsection{Search JASPAR2014 database}
 This search function fetches matrix data for all matrices in the database
 matching criteria defined by the named arguments
 and returns a PFMatrixList object.
-For more search criterias, please see the help page for \Rfunction{getMatrixSet}.
+For more search criterias, 
+please see the help page for \Rfunction{getMatrixSet}.
 
 <<searchDB, eval=TRUE, results = "markup", cache=TRUE>>=
-library(JASPAR2014)
+suppressMessages(library(JASPAR2014))
 opts = list()
 opts[["species"]] = 9606
 opts[["name"]] = "RUNX1"
@@ -184,11 +230,13 @@ store new \Rclass{PFMatrix} or \Rclass{PFMatrixList} into it,
 or delete some records based on ID.
 The backend of the database is \software{SQLite}.
 
-<<operateDb, eval=FALSE, results="hide">>=
+<<operateDb, eval=TRUE, results="markup">>=
 db = "myMatrixDb.sqlite"
-initializeJASPARDB(db)
-storeMatrix(db, pfm)
-deleteMatrixHavingID(db, "MA0003")
+initializeJASPARDB(db, version="2014")
+data("MA0043")
+storeMatrix(db, MA0043)
+deleteMatrixHavingID(db,"MA0043.1")
+file.remove(db)
 @
 
 \section{PFM, PWM and ICM methods}
@@ -243,6 +291,11 @@ icm
 @
 
 To plot the sequence logo, we use the package \Biocpkg{seqlogo}.
+In sequence logo, each position gives the information content obtained 
+for each nucleotide.
+The higher of the letter corresponding to a nucleotide, 
+the larger information content and higher probability of getting that nucleotide
+at that position.
 <<seqLogo1, fig.show="hold", fig.width=6, fig.height=4, dpi=300>>=
 seqLogo(icm)
 @
@@ -342,7 +395,35 @@ pwmSampled <- rPWMDmm(MA0003.2, dmmParameters$alpha0, dmmParameters$pmix,
                       N=1, W=6)
 @
 
+\section{TFFM methods}
+\label{sec:TFFMMethods}
+\subsection{The graphical representation of TFFM}
+Basic PWMs can be graphically represented by the sequence logos shown above.
+A novel graphical representation of TFFM is requied for 
+taking the dinucleotide dependence into account.
 
+For the upper part of the sequence logo,
+we represent the nucleotide probabilities
+at position $p$ for each possible nucleotide at position $p-1$.
+Hence, each column represents a position within a TFBS and
+each row the nucleotide probabilities found at that position.
+Each row assumes a specific nucleotide has been emitted
+by the previous hidden state.
+The intersection between a column corresponding to position $p$ and
+row corresponding to nucleotide $n$ gives the probabilities of
+getting each nucleotide at position $p$ if $n$ has been seen at position $p-1$.
+The opacity to represent the sequence logo is proportional to
+the probablity of possible row to be used by the TFFM.
+
+
+<<TFFMFirstseqLogo, eval=TRUE, cache=TRUE, results = "markup">>=
+  ## sequence logo for First-order TFFM
+  seqLogo(tffmFirst)
+@
+<<TFFMDetailseqLogo, eval=TRUE, cache=TRUE, results = "markup">>=
+  ## sequence logo for detailed TFFM
+  seqLogo(tffmDetail)
+@
 
 \section{Scan sequence and alignments with PWM pattern}
 \label{sec:Scanning}

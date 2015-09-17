@@ -1,3 +1,16 @@
+CHANGES IN VERSION 1.7.2
+------------------------
+
+NEW FEATURES
+
+    o New class TFFMFirst and TFFMDetail for next generation TFBSs.
+    o Novel TFFM sequence logo.
+
+BUG FIXES
+
+    o Fix the bug in runMEME, which always return positive strand for 
+      site sequence.
+
 CHANGES IN VERSION 1.5.0
 ------------------------
 

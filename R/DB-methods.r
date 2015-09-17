@@ -321,6 +321,12 @@ setMethod("getMatrixByID", "JASPAR2014",
           }
           )
 
+setMethod("getMatrixByID", "JASPAR2016",
+          function(x, ID){
+            getMatrixByID(x@db, ID)
+          }
+          )
+
 ### get_Matrix_by_name fetches matrix data under 
 ### the given name from the database and returns a XMatrix object.
 # Returns : a XMatrix object; 
@@ -365,6 +371,12 @@ setMethod("getMatrixByName", "character",
           )
 
 setMethod("getMatrixByName", "JASPAR2014",
+          function(x, name){
+            getMatrixByName(x@db, name)
+          }
+          )
+
+setMethod("getMatrixByName", "JASPAR2016",
           function(x, name){
             getMatrixByName(x@db, name)
           }
@@ -448,6 +460,12 @@ setMethod("getMatrixSet", "JASPAR2014",
           }
           )
 
+setMethod("getMatrixSet", "JASPAR2016",
+          function(x, opts){
+            getMatrixSet(x@db, opts)
+          }
+          )
+
 setMethod("deleteMatrixHavingID", "SQLiteConnection",
 # Deletes the matrix having the given ID from the database
 # Args    : (ID)
@@ -461,7 +479,7 @@ setMethod("deleteMatrixHavingID", "SQLiteConnection",
                 stop("You have supplied a non-versioned matrix ID 
                      to delete. Skipping: ", ID)
               # get relevant internal ID
-              int_id = .get_internal_id(baseID, version)
+              int_id = .get_internal_id(x, baseID, version)
               for(dbTable in c("MATRIX_DATA", "MATRIX", 
                                "MATRIX_SPECIES", "MATRIX_PROTEIN", 
                                "MATRIX_ANNOTATION")){
@@ -482,6 +500,12 @@ setMethod("deleteMatrixHavingID", "character",
           )
 
 setMethod("deleteMatrixHavingID", "JASPAR2014",
+          function(x, IDs){
+            deleteMatrixHavingID(x@db, IDs)
+          }
+          )
+
+setMethod("deleteMatrixHavingID", "JASPAR2016",
           function(x, IDs){
             deleteMatrixHavingID(x@db, IDs)
           }
@@ -524,7 +548,7 @@ setMethod("deleteMatrixHavingID", "JASPAR2014",
   ## insert data
   #  Here the ID is the primary integer id.
   sqlCMD = paste0("INSERT INTO MATRIX VALUES (NULL,'", collection, "','",
-                  ID(pfm), "',", version, ",'", name(pfm), "')")
+                  baseID, "',", version, ",'", name(pfm), "')")
   sqlRun = dbGetQuery(con, sqlCMD)
   sqlCMD = paste0("SELECT last_insert_rowid()")
   int_id = dbGetQuery(con, sqlCMD)[["last_insert_rowid()"]]
@@ -598,14 +622,15 @@ setMethod("deleteMatrixHavingID", "JASPAR2014",
 
 ### ----------------------------------------------------------------
 ### Stores the contents of a PFMatrixList object in the database
-###
+### Exported!
 # Returns : 0 on success; $@ contents on failure
 # Args    : (PFMatrixList)
 
 setMethod("storeMatrix", signature(x="SQLiteConnection",
                                    pfmList="PFMatrixList"),
           function(x, pfmList){
-            for(pfm in pfmList){
+            for(i in 1:length(pfmList)){
+              pfm <- pfmList[[i]]
               int_id =  .store_matrix(x, pfm)
               .store_matrix_data(x, pfm, int_id)
               .store_matrix_annotation(x, pfm, int_id)
@@ -639,7 +664,18 @@ setMethod("storeMatrix", signature(x="JASPAR2014", pfmList="PFMatrix"),
             storeMatrix(x@db, pfmList)
           }
           )
+setMethod("storeMatrix", signature(x="JASPAR2016", pfmList="PFMatrix"),
+          function(x, pfmList){
+            storeMatrix(x@db, pfmList)
+          }
+          )
 setMethod("storeMatrix", signature(x="JASPAR2014", 
+                                   pfmList="PFMatrixList"),
+          function(x, pfmList){
+            storeMatrix(x@db, pfmList)
+          }
+          )
+setMethod("storeMatrix", signature(x="JASPAR2016",
                                    pfmList="PFMatrixList"),
           function(x, pfmList){
             storeMatrix(x@db, pfmList)
@@ -647,60 +683,90 @@ setMethod("storeMatrix", signature(x="JASPAR2014",
           )
 
 ### -----------------------------------------------------------------
-### initialize the jaspar 2014 stype db. create empty tables.
+### initialize the jaspar 2014, 2016 stype db. create empty tables.
 ###
 .create_tables = function(con){
   # utility function
   # If you want to change the databse schema,
   # this is the right place to do it
-  sqlCMD = c("CREATE TABLE MATRIX(
+  sqlCMD = c("DROP TABLE IF EXISTS MATRIX",
+             "CREATE TABLE MATRIX(
              ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-             COLLECTION VARCHAR(16) DEFAULT '',
-             BASE_ID VARCHAR(16) DEFAULT '' NOT NULL,
-             VERSION TINYINT DEFAULT 1  NOT NULL,
-             NAME VARCHAR(255) DEFAULT '' NOT NULL
+             COLLECTION TEXT DEFAULT '',
+             BASE_ID TEXT DEFAULT '' NOT NULL,
+             VERSION INTEGER DEFAULT 1  NOT NULL,
+             NAME TEXT DEFAULT '' NOT NULL
              )",
+              
+             "DROP TABLE IF EXISTS MATRIX_DATA",
              "CREATE TABLE MATRIX_DATA(
              ID INTEGER NOT NULL,
-             row VARCHAR(1) NOT NULL,
-             col UNSIGNED TINYINT(3)  NOT NULL,
-             val float(10,3),
-             unique (ID, row, col))",
+             row TEXT NOT NULL,
+             col INTEGER  NOT NULL,
+             val REAL DEFAULT NULL,
+             UNIQUE (ID, row, col))",
+
+             "DROP TABLE IF EXISTS MATRIX_ANNOTATION",
              "CREATE TABLE MATRIX_ANNOTATION(
              ID INTEGER NOT NULL,
-             TAG VARCHAR(255) DEFAULT '' NOT NULL,
-             VAL VARCHAR(255) DEFAULT '',
-             unique (ID, TAG))",
+             TAG TEXT DEFAULT '' NOT NULL,
+             VAL TEXT DEFAULT '',
+             UNIQUE (ID, TAG))",
+
+             "DROP TABLE IF EXISTS MATRIX_SPECIES",
              "CREATE TABLE MATRIX_SPECIES(
-             ID INTEGER NOT NULL,
-             TAX_ID VARCHAR(255) DEFAULT '' NOT NULL)",
+             ID INTEGER PRIMARY KEY NOT NULL,
+             TAX_ID TEXT DEFAULT '' NOT NULL)",
+
+             "DROP TABLE IF EXISTS MATRIX_PROTEIN",
              "CREATE TABLE MATRIX_PROTEIN(
-             ID INTEGER NOT NULL,
-             ACC VARCHAR(255) DEFAULT '' NOT NULL)"
+             ID INTEGER PRIMARY KEY NOT NULL,
+             ACC TEXT DEFAULT '' NOT NULL)",
+
+             "DROP TABLE IF EXISTS TAX",
+             "CREATE TABLE TAX(
+             TAX_ID INTEGER PRIMARY KEY NOT NULL,
+             SPECIES TEXT DEFAULT NULL)",
+             
+             "DROP TABLE IF EXISTS TAX_EXT",
+             "CREATE TABLE TAX_EXT(
+             TAX_ID INTEGER PRIMARY KEY NOT NULL,
+             NAME TEXT DEFAULT NULL)"
              )
   for(cmd in sqlCMD){
     dbGetQuery(con, cmd)
   }
 }
 
+### -----------------------------------------------------------------
+### initializeJASPARDB interface
+### Exported!
+### Until now, the table definitions for JASPAR2014 and JASPAR2016 are same.
 setMethod("initializeJASPARDB", "SQLiteConnection",
-          function(x){
+          function(x, version=c("2014", "2016")){
+            version <- match.arg(version)
             .create_tables(x)
             return("Success")
           }
           )
 
 setMethod("initializeJASPARDB", "character",
-          function(x){
+          function(x, version=c("2014", "2016")){
             con = dbConnect(SQLite(), x)
             on.exit(dbDisconnect(con))
-            initializeJASPARDB(con)
-          }
-          )
-setMethod("initializeJASPARDB", "JASPAR2014",
-          function(x){
-            initializeJASPARDB(x@db)
+            initializeJASPARDB(con, version=version)
           }
           )
 
+setMethod("initializeJASPARDB", "JASPAR2014",
+          function(x, version=c("2014", "2016")){
+            initializeJASPARDB(x@db, version="2014")
+          }
+          )
+
+setMethod("initializeJASPARDB", "JASPAR2016",
+          function(x, version=c("2014", "2016")){
+            initializeJASPARDB(x@db, version="2016")
+          }
+          )
 

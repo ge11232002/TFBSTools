@@ -3,6 +3,7 @@
 \alias{getMatrixSet}
 \alias{getMatrixSet,character-method}
 \alias{getMatrixSet,JASPAR2014-method}
+\alias{getMatrixSet,JASPAR2016-method}
 \alias{getMatrixSet,SQLiteConnection-method}
 
 \title{Advanced JASPAR database search functions \code{get_MatrixSet}}
@@ -96,6 +97,10 @@
   and will ignore all the followiing options.
   The rest options are combined in search with AND, 
   while multiple elements under one options have the logical operator OR.
+}
+
+\value{
+  A \code{\link{PFMatrixList}} object.
 }
 
 \author{

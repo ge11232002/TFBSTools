@@ -1,53 +1,9 @@
 
 #R CMD build --no-build-vignettes --no-manual TFBSTools
-#R_dev CMD build TFBSTools
-#R_dev CMD check TFBSTools_1.7.1.tar.gz
-#R_dev CMD INSTALL TFBSTools_1.7.1.tar.gz
-
-###########################debug ##########################
-pfm = PFMatrix(ID="M0001", name="MyProfile", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), matrix=matrix(as.integer(c(12, 3, 0, 0, 4, 0, 0, 0, 0, 11, 7, 0, 0, 9, 12, 0, 0, 0, 0, 0, 0, 1, 1, 12)), byrow=TRUE, nrow=4, dimnames=list(c("A", "C", "G", "T"))))
-
-## to ICM, PWM
-pwm = toPWM(pfm, pseudocounts=sqrt(12))
-icm = toICM(pfm)
-plotLogo(icm)
-
-## searchSeq
-searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60%")
-
-## searchAln
-s1 <- 
-    DNAString("ACTTCACCAGCTCCCTGGCGGTAAGTTGATCAAAGGAAACGCAAAGTTTTCAAG")
-s2 <-
-    DNAString("GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC")
-mat <- nucleotideSubstitutionMatrix(match = 1, mismatch = -3, baseOnly = TRUE)
-globalAlign <-
-    pairwiseAlignment(s1, s2, substitutionMatrix = mat, gapOpening = -5, gapExtension = -2)
-x = DNAStringSet(c(as.character(pattern(globalAlign)), as.character(subject(globalAlign))))
-min.score = "50%"
-searchAln(pwm, x, min.score="50%", windowSize=11L, cutoff=0.5)
-
-## MatrixList
-pfmList = PFMatrixList(a=pfm, b=pfm)
-icmList = ICMatrixList(a=icm, b=icm)
-pwmList = PWMatrixList(a=pwm, b=pwm)
-searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60%")
-searchAln(pwmList, x, min.score="50%", windowSize=11L, cutoff=0.5)
-
-## Site
-site = searchSeq(pwm, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60%")
-
-## SiteList
-siteList = SiteList(site, site)
-searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", min.score="60%")
-
-## Alignments
-foo = PairwiseAlignments(as.character(pattern(globalAlign)), as.character(subject(globalAlign)))
-
-foo = PairwiseAlignmentTFBS(pattern="ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG", subject="GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC", windowSize=13L)
-doSiteSearch(pwm, aln1=foo, min.score="50%")
-searchAln(pwm, aln1=foo,min.score="50%", windowSize=13L, cutoff=0.7)
-searchAln(pwmList, aln1=foo,min.score="50%", windowSize=13L, cutoff=0.7)
+#R CMD build TFBSTools
+#R CMD check TFBSTools_1.7.5.tar.gz
+#R CMD BiocCheck TFBSTools_1.7.5.tar.gz
+#R CMD INSTALL TFBSTools_1.7.5.tar.gz
 
 
 ## DB
@@ -70,7 +26,8 @@ foo = get_MatrixSet(con, opts)
 
 
 ## MEME wrappers
-/usr/local/Cellar/meme/4.9.0-p4/bin/meme crp0.s -text -dna -mod oops -pal 2>/dev/null
-foo=runMEME("/Users/gtan/src/meme_4.9.1/tests/crp0.s", binary="/usr/local/Cellar/meme/4.9.0-p4/bin/meme")
+# /usr/local/Cellar/meme/4.9.0-p4/bin/meme crp0.s -text -dna -mod oops -pal 2>/dev/null
+foo=runMEME("/Users/gtan/src/meme_4.9.1/tests/crp0.s", 
+            binary="/usr/local/Cellar/meme/4.9.0-p4/bin/meme")
 
 

@@ -193,7 +193,7 @@ setMethod("seqLogo", "ICMatrix",
 
 ### ----------------------------------------------------------------------
 ### Utilities methods
-###
+### Exported!
 setMethod("totalIC", "ICMatrix",
           function(x) colSums(Matrix(x))
           )

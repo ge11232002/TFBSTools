@@ -27,7 +27,6 @@
 
 \title{Class \code{"SiteSet"}}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the class is. ~~
   The SiteSet object is a container for storing a set of putative 
   transcription factor binding sites on a nucleotide sequence
   (start, end, strand, score, pattern as a PWMatrix, etc.)
@@ -44,7 +43,8 @@ SiteSet(views, score, strand="*", seqname="Unknown", sitesource="TFBS",
       It holds the start, end and the nucleotide sequence information 
       of the transcription factor binding sites.}
     \item{score}{Object of class \code{"numeric"}: 
-      A vector of PWM score for each putative binding site based on the PWM matrix..}
+      A vector of PWM score for each putative binding site based on 
+      the PWM matrix..}
     \item{strand}{Object of class \code{"character"}: 
       The binding site is from the positive ("+"), negative ("-") or 
       unknown("*") strand.}
@@ -89,7 +89,8 @@ SiteSet(views, score, strand="*", seqname="Unknown", sitesource="TFBS",
 }
 
 \details{
-  The score retuned in SiteSet is the absolute score of each putative TFBS scanned by the corresponding PWM.
+  The score retuned in SiteSet is the absolute score of each putative TFBS 
+  scanned by the corresponding PWM.
   The way of calculating the score is shown on the refernce, Page 281.
 }
 

@@ -1,10 +1,21 @@
-## To define it again, then do not need to import JASPAR2014, 
-## as JASPAR2014 is not in Bioconductor yet.
-## clean it later.
+### -----------------------------------------------------------------
+### JASPAR classes for each release
+### Not exported!
+### This is ugly hack. 
+### These classes have been defined in each release of JASPAR data package.
+### However, import of class from the data package will require 
+### all the data packages.
+
 setClass("JASPAR2014",
          slots=c(
-                db="character"
+                 db="character"
                 )
+         )
+
+setClass("JASPAR2016",
+         slots=c(
+                 db="character"
+                 )
          )
 
 ### -----------------------------------------------------------------
@@ -385,6 +396,52 @@ setClass("MEME",
 MEME = function(version=character(), alphabet=c("A", "C", "G", "T"),
                 command=character(), motifs){
   new("MEME", version=version, alphabet=alphabet, command=command, motifs=motifs)
+}
+
+
+### -----------------------------------------------------------------
+### The transcription factor flexible model (TFFM) class
+###
+setClass("TFFMFirst", contains="PFMatrix",
+         slots=c(type="character",
+                 emission="list",
+                 transition="matrix")
+         )
+
+setClass("TFFMDetail", contains="PFMatrix",
+         slots=c(type="character",
+                 emission="list",
+                 transition="matrix"))
+
+setClassUnion("TFFM", c("TFFMDetail", "TFFMFirst"))
+
+### ----------------------------------------------------------------------
+### The TFFM constructor
+### Exported!!
+TFFMFirst <- function(ID="Unknown", name="Unknown", matrixClass="Unknown",
+                 strand="+", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+                 tags=list(), profileMatrix=matrix(), 
+                 type=character(), emission=list(),
+                 transition=matrix()){
+  new("TFFMFirst", ID=ID, name=name, matrixClass=matrixClass,
+      strand=strand, bg=bg,
+      tags=tags,
+      profileMatrix=profileMatrix,
+      type=type,
+      emission=emission, transition=transition)
+}
+
+TFFMDetail <- function(ID="Unknown", name="Unknown", matrixClass="Unknown",
+                       strand="+", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+                       tags=list(), profileMatrix=matrix(),
+                       type=character(), emission=list(),
+                       transition=matrix()){
+  new("TFFMDetail", ID=ID, name=name, matrixClass=matrixClass,
+      strand=strand, bg=bg,
+      tags=tags,
+      profileMatrix=profileMatrix,
+      type=type,
+      emission=emission, transition=transition)
 }
 
 

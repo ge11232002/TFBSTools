@@ -30,6 +30,30 @@ setMethod("show", "XMatrix",
           )
 
 ### -----------------------------------------------------------------
+### The "show" method.
+###
+setMethod("show", "TFFM",
+          function(object){
+            cat("An object of class ", class(object), "\n", sep="")
+            cat("ID: ", object@ID, "\n", sep="")
+            cat("Name: ", object@name, "\n", sep="")
+            cat("Matrix Class: ", object@matrixClass, "\n", sep="")
+            cat("strand: ", object@strand, "\n", sep="")
+            cat("Tags: \n")
+            print(object@tags)
+            cat("Background: ", "\n", sep="")
+            print(object@bg)
+            cat("Matrix: ", "\n", sep="")
+            print(object@profileMatrix)
+            cat("TFFM type: ", "\n", sep="")
+            print(object@type)
+            cat("Emission: ", "\n", sep="")
+            print(object@emission)
+            cat("Transition: ", "\n", sep="")
+            print(object@transition)
+          })
+
+### -----------------------------------------------------------------
 ### The "show" method
 ### Perhaps it is not a bad idea to show them in gff format.
 setMethod("show", "SiteSet",

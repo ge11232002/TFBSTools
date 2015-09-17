@@ -49,6 +49,10 @@ ICMatrixList(..., use.names=TRUE)
   }
 }
 
+\value{
+  A \code{XMatrixList} object.
+}
+
 \author{
 Ge Tan
 }
