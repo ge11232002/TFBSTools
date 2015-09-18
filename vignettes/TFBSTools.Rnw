@@ -1,4 +1,4 @@
-%\VignetteIndexEntry{transcription factor binding site (TFBS) analysis with the "TFBSTools" package}
+%\VignetteIndexEntry{Transcription factor binding site (TFBS) analysis with the "TFBSTools" package}
 %\VignettePackage{TFBSTools}
 %\VignetteEngine{knitr::knitr}
 
