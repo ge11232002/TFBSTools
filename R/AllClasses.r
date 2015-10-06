@@ -299,54 +299,44 @@ SitePairSetList = function(..., use.names=TRUE){
 ### Let's define our PairwiseAlignmentTFBS object, 
 ### based on the PairwiseAlignments object from Biostrings. 
 ### For simplicity, make it as a slot.
-setClass("PairwiseAlignmentTFBS",
-         slots=c(alignments="PairwiseAlignments",
-                 seqname1="character",
-                 seqname2="character",
-                 conservation1="numeric",
-                 #conservation2="numeric", 
-                 # because conservation2 is never used.
-                 windowSize="integer",
-                 cutoff="numeric",
-                 seq1length="integer",
-                 seq2length="integer"
-                 )
-         )
+#setClass("PairwiseAlignmentTFBS",
+#         slots=c(alignments="PairwiseAlignments",
+#                 seqname1="character",
+#                 seqname2="character",
+#                 conservation1="numeric",
+#                 #conservation2="numeric", 
+#                 # because conservation2 is never used.
+#                 windowSize="integer",
+#                 cutoff="numeric",
+#                 seq1length="integer",
+#                 seq2length="integer"
+#                 )
+#         )
 
 ### ----------------------------------------------------------------
 ### The constructor
-###
-PairwiseAlignmentTFBS = function(pattern, subject, type="global",
-                                 substitutionMatrix=NULL, gapOpening=0,
-                                 gapExtension=-1,
-                                 seqname1="Unknown", seqname2="Unknown",
-                                 windowSize=51L, cutoff=0.7){
-  alignments = PairwiseAlignments(pattern, subject, type=type,
-                                  substitutionMatrix=substitutionMatrix,
-                                  gapOpening=gapOpening, gapExtension=gapExtension)
-  conservation1 = calConservation(as.character(pattern(alignments)), 
-                                  as.character(subject(alignments)), 
-                                  windowSize=windowSize)
-  seq1length = nchar(gsub("(-|_|\\.)", "", as.character(pattern(alignments))))
-  seq2length = nchar(gsub("(-|_|\\.)", "", as.character(subject(alignments))))
-  new("PairwiseAlignmentTFBS", alignments=alignments, seqname1=seqname1,
-      seqname2=seqname2, conservation1=conservation1, windowSize=windowSize,
-      cutoff=cutoff, seq1length=seq1length, seq2length=seq2length)
-}
-
-##  Is there any way to update the conservation automatically 
-## when windowSize is changed???
-
-
-### ---------------------------------------------------------------
-### The "show" method
-### Add later... what is the pretty way?
-
-
+### Not exported!
+#PairwiseAlignmentTFBS = function(pattern, subject, type="global",
+#                                 substitutionMatrix=NULL, gapOpening=0,
+#                                 gapExtension=-1,
+#                                 seqname1="Unknown", seqname2="Unknown",
+#                                 windowSize=51L, cutoff=0.7){
+#  alignments = PairwiseAlignments(pattern, subject, type=type,
+#                                  substitutionMatrix=substitutionMatrix,
+#                                  gapOpening=gapOpening, gapExtension=gapExtension)
+#  conservation1 = calConservation(as.character(pattern(alignments)), 
+#                                  as.character(subject(alignments)), 
+#                                  windowSize=windowSize)
+#  seq1length = nchar(gsub("(-|_|\\.)", "", as.character(pattern(alignments))))
+#  seq2length = nchar(gsub("(-|_|\\.)", "", as.character(subject(alignments))))
+#  new("PairwiseAlignmentTFBS", alignments=alignments, seqname1=seqname1,
+#      seqname2=seqname2, conservation1=conservation1, windowSize=windowSize,
+#      cutoff=cutoff, seq1length=seq1length, seq2length=seq2length)
+#}
 
 ### ---------------------------------------------------------
 ### Motif and MotifSet class
-###
+### Exported!
 setClass("Motif",
          slots=c(
                 motif="GRanges",
@@ -365,7 +355,7 @@ setClass("MotifSet",
 
 ### ---------------------------------------------------------
 ### The constructor function
-###
+### Exported!
 Motif = function(motif=GRanges(), motifEvalue=numeric(), subjectSeqs=DNAStringSet()){
   new("Motif", motif=motif, motifEvalue=motifEvalue, subjectSeqs=subjectSeqs)
 }
@@ -375,7 +365,6 @@ MotifSet = function(motifList=GRangesList(), motifEvalues=numeric(), subjectSeqs
   new("MotifSet", motifList=motifList, motifEvalues=motifEvalues,
       subjectSeqs=subjectSeqs)
 }
-
 
 
 
@@ -401,7 +390,7 @@ MEME = function(version=character(), alphabet=c("A", "C", "G", "T"),
 
 ### -----------------------------------------------------------------
 ### The transcription factor flexible model (TFFM) class
-###
+### Exported!
 setClass("TFFMFirst", contains="PFMatrix",
          slots=c(type="character",
                  emission="list",

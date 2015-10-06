@@ -155,13 +155,13 @@ setMethod("searchSeq", "PWMatrixList",
 # all patterns represented stored in $matrixset;
           function(x, subject, seqname="Unknown", 
                    strand="*", min.score="80%"){
-            ans_list = lapply(x, searchSeq, 
-                              subject=subject, seqname=seqname, 
-                              strand=strand, min.score=min.score)
+            ans_list <- lapply(x, searchSeq, 
+                               subject=subject, seqname=seqname, 
+                               strand=strand, min.score=min.score)
             if(is(subject, "DNAStringSet")){
               ans <- do.call(SiteSetList, unlist(lapply(ans_list, as, "list")))
             }else{
-              ans = do.call(SiteSetList, ans_list)
+              ans <- do.call(SiteSetList, ans_list)
             }
             return(ans)
           }
@@ -170,13 +170,13 @@ setMethod("searchSeq", "PWMatrixList",
 my.searchSeq <- function(x, subject, seqname="Unknown",
                          strand="*", min.score="80%"){
 ## Base function for pwm and XString(XStringViews, MaskedString)
-  strand = match.arg(strand, c("+", "-", "*"))
-  ans_ranges = IRanges()
-  ans_score = c()
-  ans_strand = c()
-  ans_viewsPos = NULL
-  ans_viewsNeg = NULL
-  if(strand(x)=="+"){
+  strand <- match.arg(strand, c("+", "-", "*"))
+  ans_ranges <- IRanges()
+  ans_score <- c()
+  ans_strand <- c()
+  ans_viewsPos <- NULL
+  ans_viewsNeg <- NULL
+  if(strand(x) == "+"){
     xPos = x
     xNeg = reverseComplement(x)
   }else{
@@ -184,51 +184,51 @@ my.searchSeq <- function(x, subject, seqname="Unknown",
     xPos = reverseComplement(x)
   }
   if(strand %in% c("+", "*")){
-    ans_viewsPos = 
+    ans_viewsPos <- 
       matchPWM(unitScale(Matrix(xPos)), subject, min.score=min.score)
-    scorePos = 
+    scorePos <-
       PWMscoreStartingAt(unitScale(Matrix(xPos)), subject(ans_viewsPos),
                          start(ans_viewsPos))
     # The score here from PWMscoreStartingAt is the unitscaled score. 
     # Let's make it into original one, synced with TFBS module. 
     # This is validated!
-    scorePos = scorePos * (maxScore(Matrix(xPos)) - 
-                           minScore(Matrix(xPos))) + 
-               minScore(Matrix(xPos))
-    ans_ranges = c(ans_ranges, ranges(ans_viewsPos))
-    ans_score = c(ans_score, scorePos)
-    ans_strand = c(ans_strand, rep("+", length(ans_viewsPos)))
+    scorePos <- scorePos * (maxScore(Matrix(xPos)) - 
+                            minScore(Matrix(xPos))) + 
+                minScore(Matrix(xPos))
+    ans_ranges <- c(ans_ranges, ranges(ans_viewsPos))
+    ans_score <- c(ans_score, scorePos)
+    ans_strand <- c(ans_strand, rep("+", length(ans_viewsPos)))
   }
   if(strand %in% c("-", "*")){
-    ans_viewsNeg = 
+    ans_viewsNeg <-
       matchPWM(unitScale(Matrix(xNeg)), subject, min.score=min.score)
-    scoreNeg = 
+    scoreNeg <-
       PWMscoreStartingAt(unitScale(Matrix(xNeg)), subject(ans_viewsNeg),
                          start(ans_viewsNeg))
-      scoreNeg = scoreNeg * (maxScore(Matrix(xNeg)) - 
-                             minScore(Matrix(xNeg))) + 
-                 minScore(Matrix(xNeg))
-      ans_ranges = c(ans_ranges, ranges(ans_viewsNeg))
-      ans_score = c(ans_score, scoreNeg)
-      ans_strand = c(ans_strand, rep("-", length(ans_viewsNeg)))
+      scoreNeg <- scoreNeg * (maxScore(Matrix(xNeg)) - 
+                              minScore(Matrix(xNeg))) + 
+                  minScore(Matrix(xNeg))
+      ans_ranges <- c(ans_ranges, ranges(ans_viewsNeg))
+      ans_score <- c(ans_score, scoreNeg)
+      ans_strand <- c(ans_strand, rep("-", length(ans_viewsNeg)))
   }
   if(!is.null(ans_viewsPos)){
-    ans_views = Views(subject=subject(ans_viewsPos), 
-                      start=start(ans_ranges),
-                      end=end(ans_ranges)
+    ans_views <- Views(subject=subject(ans_viewsPos), 
+                       start=start(ans_ranges),
+                       end=end(ans_ranges)
                       )
   }else{
-    ans_views = Views(subject=subject(ans_viewsNeg),
-                      start=start(ans_ranges),
-                      end=end(ans_ranges)
+    ans_views <- Views(subject=subject(ans_viewsNeg),
+                       start=start(ans_ranges),
+                       end=end(ans_ranges)
                       )
   }
   stopifnot(isConstant(c(length(ans_strand), length(ans_score),
                          length(ans_views))))
-  ans_site = SiteSet(views=ans_views, seqname=seqname,
-                     score=ans_score, strand=ans_strand, 
-                     sitesource="TFBS", primary="TF binding site",
-                     pattern=xPos
+  ans_site <- SiteSet(views=ans_views, seqname=seqname,
+                      score=ans_score, strand=ans_strand, 
+                      sitesource="TFBS", primary="TF binding site",
+                      pattern=xPos
                      )
 }
  
