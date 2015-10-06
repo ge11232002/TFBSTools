@@ -88,7 +88,7 @@
   }
   \item{mc.cores}{
     The number of cpu threads to use when searching \code{Axt}. 
-    1 is assigned by default.
+    1L is assigned by default.
   }
 }
 
@@ -108,11 +108,24 @@
 \examples{
   data(MA0003.2)
   pwm <- toPWM(MA0003.2)
-  ## two character objects
-  aln1 <- "ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG"
-  aln2 <- "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
-  sitePairSet <- searchAln(pwm, aln1, aln2, min.score="50\%",
-                           cutoff=0.5, strand="*", type="any")
+  # Two character objects
+  aln1 <- "ACCACATTGCCTCAGGGCAGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG"
+  aln2 <- "GTTTCACTACATTGCTTCAGGGCAGTAAATATATAAATATATAAAAATATAATTTTCATC"
+  
+  # PWMatrix, character, character
+  sitePairSet <- searchAln(pwm, aln1, aln2, seqname1="aln1", seqname2="aln2",
+                           min.score="70\%", cutoff=0.5, 
+                           strand="*", type="any")
+  ## Convert to other R objects
+  as(sitePairSet, "data.frame")
+  as(sitePairSet, "DataFrame")
+  
+  # PWMatrix, DNAString, DNAString
+  sitePairSet <- searchAln(pwm, DNAString(aln1), DNAString(aln2), 
+                           seqname1="aln1", seqname2="aln2",
+                           min.score="70\%", cutoff=0.5, 
+                           strand="*", type="any")
+                           
   as(sitePairSet, "DataFrame")
   as(sitePairSet, "data.frame")
   as.data.frame(sitePairSet)

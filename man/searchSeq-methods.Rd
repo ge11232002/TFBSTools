@@ -69,7 +69,7 @@ Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identifi
   seq1 <- "GAATTCTCTCTTGTTGTAGCATTGCCTCAGGGCACACGTGCAAAATG"
   seq2 <- "GTTTCACCATTGCCTCAGGGCATAAATATATAAAAAAATATAATTTTCATC"
   
-  # Scan a single sequence with PWMatrix
+  # PWMatrix, character
   ## Only scan the positive strand of the input sequence
   siteset <- searchSeq(pwm1, seq1, seqname="seq1", strand="+", min.score="80\%")
   siteset <- searchSeq(pwm1, seq1, seqname="seq1", strand="+", min.score=0.8)
@@ -84,7 +84,7 @@ Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identifi
   writeGFF3(siteset)
   writeGFF2(siteset)
   
-  # Scan a single sequence with PWMatrixList
+  # PWMatrixList, character
   sitesetList <- searchSeq(pwmList, seq1, seqname="seq1", strand="*", 
                            min.score="80\%")
   ## Convert the SiteSteList object into other R objects
@@ -94,12 +94,12 @@ Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identifi
   writeGFF3(sitesetList)
   writeGFF2(sitesetList)
 
-  # Scan a DNAStringSet with PWMatrix
+  # PWMatrix, DNAStringSet
   library(Biostrings)
   seqs <- DNAStringSet(c(seq1=seq1, seq2=seq2))
   sitesetList <- searchSeq(pwm1, seqs, min.score="80\%")
 
-  # Scan a DNAStringSet with PWMatrixList
+  # PWMatrixList, DNAStringSet
   sitesetList <- searchSeq(pwmList, seqs, min.score="80\%")
 }
 

@@ -235,8 +235,12 @@ my.searchSeq <- function(x, subject, seqname="Unknown",
 
 
 ### ----------------------------------------------------------------------
-### searchAln: Scans a pairwise alignment of nucleotide sequences with the pattern represented by the PWM: it reports only those hits that are present in equivalent positions of both sequences and exceed a specified threshold score in both, AND are found in regions of the alignment above the specified
-## Should have a better way for this duplicated code..
+### searchAln: Scans a pairwise alignment of nucleotide sequences 
+### with the pattern represented by the PWM: 
+### it reports only those hits that are present in equivalent positions 
+### of both sequences and exceed a specified threshold score in both, 
+### AND are found in regions of the alignment above the specified
+### Should have a better way for this duplicated code..
 
 setMethod("searchAln", 
           signature(pwm="PWMatrixList", aln1="character", aln2="character"),
@@ -244,7 +248,8 @@ setMethod("searchAln",
                    seqname1="Unknown1", seqname2="Unknown2",
                    min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
-            #ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+            #ans = lapply(x, doSiteSearch, subject, min.score=min.score, 
+            #windowSize=windowSize, cutoff=cutoff, conservation=conservation)
             ans_list = lapply(pwm, searchAln, aln1, aln2, 
                               seqname1=seqname1, seqname2=seqname2,
                               min.score=min.score, 

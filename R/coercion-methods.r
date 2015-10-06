@@ -110,6 +110,22 @@ setMethod("as.data.frame", "SitePairSet",
             ans <- as(x, "data.frame")
             return(ans)
           })
-
+setAs("SitePairSet", "GRanges", function(from){
+      from.DataFrame <- as(from, "DataFrame")
+      columns <- ncol(from.DataFrame)
+      from.DataFrame <- rbind(from.DataFrame[ ,1L:(columns/2L)],
+                          setNames(from.DataFrame[ ,(columns/2L+1L):columns], 
+                                   names(from.DataFrame[ ,1L:(columns/2L)])))
+      ans <- GRanges(seqnames=from.DataFrame[["seqnames"]],
+                     ranges=IRanges(start=from.DataFrame[["start"]],
+                                    end=from.DataFrame[["end"]]),
+                     strand=from.DataFrame[["strand"]],
+                     rbind(from.DataFrame[!colnames(from.DataFrame) %in%
+                           c("seqnames", "start",
+                             "end", "strand")]
+                                            )
+                     )
+      return(ans)
+          })
 
 
