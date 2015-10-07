@@ -20,8 +20,7 @@
   }
   \item{subject}{
     A \code{DNAStringSet}, \code{DNAString}, \code{XStringViews} or 
-    \code{MaskedDNAString} object 
-    which will be scanned.
+    \code{MaskedDNAString} object that will be scanned.
   }
   \item{seqname}{
     This is sequence name of the target sequence.
@@ -36,9 +35,9 @@
   }
   \item{min.score}{
     The minimum score for the hit. Can be given an character string 
-    in the format of "80\%" or as a single absolute value.
-    When it is percentage value, it means the percentage of 
-    the maximal possible from the PWM.
+    in the format of "80\%" or as a single absolute value between 0 and 1.
+    When it is percentage value, it represents the quantile 
+    between the minimal and the maximal possible value from the PWM.
   }
 }
 
@@ -63,25 +62,45 @@ Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identifi
 
 \examples{
   data(MA0003.2)
-  pwm <- toPWM(MA0003.2)
-  pwmList <- PWMatrixList(pwm1=pwm, pwm2=pwm)
-  seq1 <- "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG"
-  seq2 <- "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
-  siteset <- searchSeq(pwm, seq1, min.score="60\%")
+  data(MA0004.1)
+  pwm1 <- toPWM(MA0003.2)
+  pwm2 <- toPWM(MA0004.1)
+  pwmList <- PWMatrixList(pwm1=pwm1, pwm2=pwm2)
+  seq1 <- "GAATTCTCTCTTGTTGTAGCATTGCCTCAGGGCACACGTGCAAAATG"
+  seq2 <- "GTTTCACCATTGCCTCAGGGCATAAATATATAAAAAAATATAATTTTCATC"
+  
+  # PWMatrix, character
+  ## Only scan the positive strand of the input sequence
+  siteset <- searchSeq(pwm1, seq1, seqname="seq1", strand="+", min.score="80\%")
+  siteset <- searchSeq(pwm1, seq1, seqname="seq1", strand="+", min.score=0.8)
+  ## Only scan the negative strand of the input sequence
+  siteset <- searchSeq(pwm1, seq1, seqname="seq1", strand="-", min.score="80\%")
+  ## Scan both strands of the input sequences
+  siteset <- searchSeq(pwm1, seq1, seqname="seq1", strand="*", min.score="80\%")
+  ## Convert the SiteSet object into other R objects
   as(siteset, "data.frame")
   as(siteset, "DataFrame")
   as(siteset, "GRanges")
   writeGFF3(siteset)
-  sitesetList <- searchSeq(pwmList, seq1, min.score="60\%", strand="*")
-  writeGFF2(sitesetList)
+  writeGFF2(siteset)
+  
+  # PWMatrixList, character
+  sitesetList <- searchSeq(pwmList, seq1, seqname="seq1", strand="*", 
+                           min.score="80\%")
+  ## Convert the SiteSteList object into other R objects
   as(sitesetList, "data.frame")
   as(sitesetList, "DataFrame")
   as(sitesetList, "GRanges")
+  writeGFF3(sitesetList)
+  writeGFF2(sitesetList)
 
+  # PWMatrix, DNAStringSet
   library(Biostrings)
-  seqs <- DNAStringSet(c(seq1, seq2))
-  sitesetList <- searchSeq(pwm, seqs, min.score="60\%")
+  seqs <- DNAStringSet(c(seq1=seq1, seq2=seq2))
+  sitesetList <- searchSeq(pwm1, seqs, min.score="80\%")
 
+  # PWMatrixList, DNAStringSet
+  sitesetList <- searchSeq(pwmList, seqs, min.score="80\%")
 }
 
 \keyword{methods}

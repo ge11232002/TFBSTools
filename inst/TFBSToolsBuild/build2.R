@@ -1,9 +1,9 @@
 
 #R CMD build --no-build-vignettes --no-manual TFBSTools
 #R CMD build TFBSTools
-#R CMD check TFBSTools_1.7.5.tar.gz
-#R CMD BiocCheck TFBSTools_1.7.5.tar.gz
-#R CMD INSTALL TFBSTools_1.7.5.tar.gz
+#R CMD check TFBSTools_1.7.7.tar.gz
+#R CMD BiocCheck TFBSTools_1.7.7.tar.gz
+#R CMD INSTALL TFBSTools_1.7.7.tar.gz
 
 
 ## DB

@@ -1,16 +1,16 @@
 ### ---------------------------------------------------------------
 ### The PairwiseAlignmentTFBS accessor-like methods
 ###
-setMethod("alignments", "PairwiseAlignmentTFBS",
-          function(x) x@alignments)
-setMethod("seqname", "PairwiseAlignmentTFBS",
-          function(x) c(x@seqname1, x@seqname2))
-setMethod("conservation1", "PairwiseAlignmentTFBS",
-          function(x) x@conservation1)
-setMethod("seqlength", "PairwiseAlignmentTFBS",
-          function(x) c(x@seq1length, x@seq2length))
-setMethod("alnlength", "PairwiseAlignmentTFBS",
-          function(x) nchar(alignments(x)))
+#setMethod("alignments", "PairwiseAlignmentTFBS",
+#          function(x) x@alignments)
+#setMethod("seqname", "PairwiseAlignmentTFBS",
+#          function(x) c(x@seqname1, x@seqname2))
+#setMethod("conservation1", "PairwiseAlignmentTFBS",
+#          function(x) x@conservation1)
+#setMethod("seqlength", "PairwiseAlignmentTFBS",
+#          function(x) c(x@seq1length, x@seq2length))
+#setMethod("alnlength", "PairwiseAlignmentTFBS",
+#          function(x) nchar(alignments(x)))
 
 
 calculate_conservation = function(aln1, aln2, windowSize, which="1"){
@@ -226,17 +226,17 @@ setMethod("doSiteSearch",
                              cutoff=cutoff, conservation=conservation)
           }
           )
-setMethod("doSiteSearch", 
-          signature(aln1="PairwiseAlignmentTFBS", aln2="missing"),
-          function(pwm, aln1, aln2, min.score="80%", 
-                   windowSize=51L, cutoff=0.7,
-                   conservation=NULL){
-            do_sitesearch(pwm, as.character(pattern(alignments(aln1))),
-                          as.character(subject(alignments(aln1))),
-                          min.score=min.score, windowSize=windowSize(aln1),
-                          cutoff=cutoff, conservation=conservation1(aln1))
-          }
-          )
+#setMethod("doSiteSearch", 
+#          signature(aln1="PairwiseAlignmentTFBS", aln2="missing"),
+#          function(pwm, aln1, aln2, min.score="80%", 
+#                   windowSize=51L, cutoff=0.7,
+#                   conservation=NULL){
+#            do_sitesearch(pwm, as.character(pattern(alignments(aln1))),
+#                          as.character(subject(alignments(aln1))),
+#                          min.score=min.score, windowSize=windowSize(aln1),
+#                          cutoff=cutoff, conservation=conservation1(aln1))
+#          }
+#          )
 
 do_PairBSgenomeSearchPositive = function(pwm, BSgenome1, BSgenome2, 
                                          chr1, chr2, 

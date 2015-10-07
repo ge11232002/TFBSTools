@@ -110,6 +110,88 @@ setMethod("as.data.frame", "SitePairSet",
             ans <- as(x, "data.frame")
             return(ans)
           })
+setAs("SitePairSet", "GRanges", function(from){
+      from.DataFrame <- as(from, "DataFrame")
+      columns <- ncol(from.DataFrame)
+      from.DataFrame.target <- from.DataFrame[ ,1L:(columns/2L)]
+      from.DataFrame.query <- setNames(
+                                from.DataFrame[ ,(columns/2L+1L):columns],
+                                names(from.DataFrame[ ,1L:(columns/2L)]))
+      ansTarget <- GRanges(seqnames=from.DataFrame.target[["seqnames"]],
+                           ranges=IRanges(start=
+                                          from.DataFrame.target[["start"]],
+                                          end=
+                                          from.DataFrame.target[["end"]]),
+                           strand=from.DataFrame.target[["strand"]],
+                           from.DataFrame.target[
+                                 !colnames(from.DataFrame.target) %in%
+                                 c("seqnames", "start",
+                                   "end", "strand")]
+                           )
+                           
+      ansQuery <- GRanges(seqnames=from.DataFrame.query[["seqnames"]],
+                          ranges=IRanges(start=
+                                         from.DataFrame.query[["start"]],
+                                         end=
+                                         from.DataFrame.query[["end"]]),
+                          strand=from.DataFrame.query[["strand"]],
+                          from.DataFrame.query[
+                                 !colnames(from.DataFrame.query) %in%
+                                 c("seqnames", "start", "end", 
+                                   "strand")]
+                          )
+      ans <- GRangesList(targetTFBS=ansTarget, queryTFBS=ansQuery)
+      return(ans)
+          })
 
+### -----------------------------------------------------------------
+### SitePairSetList coersion
+setAs("SitePairSetList", "DataFrame", function(from){
+      ans <- do.call(rbind, lapply(from, as, "DataFrame"))
+      return(ans)
+          })
 
+setAs("SitePairSetList", "data.frame", function(from){
+      as.data.frame(as(from, "DataFrame"))
+          })
+
+setMethod("as.data.frame", "SitePairSetList",
+          function(x){
+            ans <- as(x, "data.frame")
+            return(ans)
+          })
+
+setAs("SitePairSetList", "GRanges", function(from){
+      from.DataFrame <- as(from, "DataFrame")
+      columns <- ncol(from.DataFrame)
+      from.DataFrame.target <- from.DataFrame[ ,1L:(columns/2L)]
+      from.DataFrame.query <- setNames(
+                                from.DataFrame[ ,(columns/2L+1L):columns],
+                                names(from.DataFrame[ ,1L:(columns/2L)]))
+      ansTarget <- GRanges(seqnames=from.DataFrame.target[["seqnames"]],
+                           ranges=IRanges(start=
+                                          from.DataFrame.target[["start"]],
+                                          end=
+                                          from.DataFrame.target[["end"]]),
+                           strand=from.DataFrame.target[["strand"]],
+                           from.DataFrame.target[
+                                 !colnames(from.DataFrame.target) %in%
+                                 c("seqnames", "start",
+                                   "end", "strand")]
+                           )
+
+      ansQuery <- GRanges(seqnames=from.DataFrame.query[["seqnames"]],
+                          ranges=IRanges(start=
+                                         from.DataFrame.query[["start"]],
+                                         end=
+                                         from.DataFrame.query[["end"]]),
+                          strand=from.DataFrame.query[["strand"]],
+                          from.DataFrame.query[
+                                 !colnames(from.DataFrame.query) %in%
+                                 c("seqnames", "start", "end",
+                                   "strand")]
+                          )
+      ans <- GRangesList(targetTFBS=ansTarget, queryTFBS=ansQuery)
+      return(ans)
+          })
 

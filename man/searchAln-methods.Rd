@@ -16,8 +16,8 @@
 \description{
   Scans a pairwise alignment of nucleotide sequences 
   with the pattern represented by the PWMatrix. 
-  It reports only those hits that are present in equivalent positions 
-  of both sequences and exceed a specified threshold score in both, 
+  It reports only those hits that are overlapped in the alignment of 
+  of the two sequences and exceed a specified threshold score in both, 
   AND are found in regions of the alignment above the specified
   conservation cutoff value.
 }
@@ -46,8 +46,8 @@
   \item{seqname1,seqname2}{
     A \code{chracter} object for the name of sequence. 
     "Unknown1" and "Unknown2" are used by default.
-    These two arguments are ignored when aln1 is \code{Axt}. 
-    seqname is taken from \code{Axt}.
+    These two arguments are ignored when aln1 is \code{Axt}, 
+    or the seqnames are available from aln1.
   }
   \item{min.score}{
     The minimum score for the hit. Can be given an character string 
@@ -88,13 +88,29 @@
   }
   \item{mc.cores}{
     The number of cpu threads to use when searching \code{Axt}. 
-    1 is assigned by default.
+    1L is assigned by default.
   }
 }
 
 \value{
   A \code{SitePairSet} object is returned when pwm is a \code{PWMatrix}, 
   while a \code{SitePairSetList} is returned when pwm is a \code{PWMatrixList}.
+}
+
+\details{
+  In brief, given a pairwise alignment of two sequences, 
+  first of all, we remove the gaps ("-", "-", ".").
+  Then we scan both ungapped sequences with the pwm and 
+  return the hits that above \code{min.score}.
+  Since we only want to keep the conserved hits, 
+  we choose the pair of motifs that overlap most in the alignment.
+  Finally, the pair of motifs have to be conserved above 
+  the threshold \code{cutoff}.
+  
+  In the returned \code{SitePairSet}, the coordinates of start, end are based
+  on the ungapped sequences, instead of the original alignment.
+  This is due to we are more concerned about the actual location of motif
+  in the genome rather than in the alignment.
 }
 
 \author{
@@ -107,25 +123,76 @@
 
 \examples{
   data(MA0003.2)
-  pwm <- toPWM(MA0003.2)
-  ## two character objects
-  aln1 <- "ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG"
-  aln2 <- "GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC"
-  sitePairSet <- searchAln(pwm, aln1, aln2, min.score="50\%",
-                           cutoff=0.5, strand="*", type="any")
-  as(sitePairSet, "DataFrame")
+  data(MA0004.1)
+  pwm1 <- toPWM(MA0003.2)
+  pwm2 <- toPWM(MA0004.1)
+  pwmList <- PWMatrixList(pwm1=pwm1, pwm2=pwm2)
+  # Two character objects
+  aln1 <- "ACCACATTGCCTCAGGGCAGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG"
+  aln2 <- "GTTTCACTACATTGCTTCAGGGCAGTAAATATATAAATATATAAAAATATAATTTTCATC"
+  aln <- c(aln1=aln1, aln2=aln2)
+  library(Biostrings)
+  alnDNAStringSet <- DNAStringSet(c(aln1=aln1, aln2=aln2))
+  
+  # PWMatrix, character, character
+  ## Only scan the positive strand of the alignments
+  sitePairSet <- searchAln(pwm1, aln1, aln2, seqname1="aln1", seqname2="aln2",
+                           min.score="70\%", cutoff=0.5, 
+                           strand="+", type="any")
+  ## Only scan the negative strand of the alignments
+  sitePairSet <- searchAln(pwm1, aln1, aln2, seqname1="aln1", seqname2="aln2",
+                           min.score="70\%", cutoff=0.5, 
+                           strand="-", type="any")
+  ## Scan the both strands of the alignments                         
+  sitePairSet <- searchAln(pwm1, aln1, aln2, seqname1="aln1", seqname2="aln2",
+                           min.score="70\%", cutoff=0.5, 
+                           strand="*", type="any")
+  ## Convert the SitePairSet object into other R objects
   as(sitePairSet, "data.frame")
   as.data.frame(sitePairSet)
+  as(sitePairSet, "DataFrame")
+  as(sitePairSet, "GRanges")
+  writeGFF3(sitePairSet)
+  writeGFF2(sitePairSet)
   
-  ## scan axt object
+  # PWMatrix, character, missing
+  sitePairSet <- searchAln(pwm1, aln,
+                           min.score="70\%", cutoff=0.5, 
+                           strand="*", type="any")
+  
+  # PWMatrix, DNAString, DNAString
+  sitePairSet <- searchAln(pwm1, DNAString(aln1), DNAString(aln2), 
+                           seqname1="aln1", seqname2="aln2",
+                           min.score="70\%", cutoff=0.5, 
+                           strand="*", type="any")
+
+  # PWMatrix, DNAStringSet, missing
+  sitePairSet <- searchAln(pwm1, alnDNAStringSet,
+                           min.score="70\%", cutoff=0.5, 
+                           strand="*", type="any")
+                           
+  # PWMatrixList, character, character
+  sitePairSetList <- searchAln(pwmList, aln1, aln2, 
+                           seqname1="aln1", seqname2="aln2",
+                           min.score="70\%", cutoff=0.5, 
+                           strand="*", type="any")
+  writeGFF2(sitePairSetList)
+  writeGFF3(sitePairSetList)
+  as(sitePairSetList, "DataFrame")
+  as(sitePairSetList, "data.frame")
+  as.data.frame(sitePairSetList)
+  as(sitePairSetList, "GRanges")
+  
+  # PWMatrix, Axt, missing
   library(CNEr)
   axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="CNEr"), 
                                    "hg19.danRer7.net.axt")
   axtHg19DanRer7 <- readAxt(axtFilesHg19DanRer7)
-  sitePairSet <-  searchAln(pwm, axtHg19DanRer7, min.score="80\%", 
+  sitePairSetList <-  searchAln(pwm1, axtHg19DanRer7, min.score="80\%", 
                             windowSize=51L, cutoff=0.7, strand="*", 
                             type="any", conservation=NULL, mc.cores=2)
-  GRangesTFBS <- toGRangesList(sitePairSet, axtHg19DanRer7)
+  ## We may want to coordinates of motif in the genome
+  GRangesTFBS <- toGRangesList(sitePairSetList, axtHg19DanRer7)
 }
 
 \keyword{methods}
