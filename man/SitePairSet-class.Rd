@@ -10,7 +10,6 @@
 
 \title{Class \code{"SitePairSet"}}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the class is. ~~
   The SitePairSet object is a container for storing two SiteSet objects.
   Usually it is used to hold the results returned by \link{searchAln}.
 }
@@ -27,7 +26,6 @@
 
 \section{Methods}{
   \describe{
-%    \item{length}{\code{signature(x = "SitePair")}: ... }
     \item{siteset1}{\code{signature(x = "SitePairSet")}: Gets the first SiteSet object.}
     \item{siteset2}{\code{signature(x = "SitePairSet")}: Gets the second SiteSet object.}
   }
@@ -42,8 +40,6 @@
 }
 
 \seealso{
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
   \code{\link{SitePairSet}},
   \code{\link{searchAln}}
 }

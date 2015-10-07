@@ -3,6 +3,7 @@
 \docType{class}
 \alias{SitePairSetList}
 \alias{SitePairSetList-class}
+\alias{as.data.frame,SitePairSetList-method}
 
 \title{Class \code{"SitePairSetList"}}
 \description{
@@ -24,7 +25,8 @@
     A list of SitePairSet objects is also acceptable.
   }
   \item{use.names}{
-    A logical value. When TRUE, the names of the \code{SitePairSet} will be kept.
+    A logical value. When TRUE, 
+    the names of the \code{SitePairSet} will be kept.
   }
 }
 
@@ -33,12 +35,11 @@
 }
 
 \author{
-Ge Tan
+  Ge Tan
 }
 
 \seealso{
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
-\code{\linkS4class{SitePairSet}},
+  \code{\linkS4class{SitePairSet}},
 }
+
 \keyword{classes}

@@ -1,5 +1,6 @@
 test_searchSeq <- function(){
   library(IRanges)
+  library(Biostrings)
   data(MA0003.2)
   data(MA0004.1)
   pwm1 <- toPWM(MA0003.2)
@@ -21,6 +22,7 @@ test_searchSeq <- function(){
   checkIdentical(length(siteset), 2L)
 
   ## Test the searchSeq on DNAStringSet with PWMatrixList
+  seqs <- DNAStringSet(c(seq1=seq1, seq2=seq2))
   sitesetList <- searchSeq(pwmList, seqs, min.score="80%")
   checkIdentical(ranges(as(sitesetList, "GRanges")), 
                  IRanges(start=c(20L, 22L, 23L, 8L, 10L, 11L, 35L, 35L),
