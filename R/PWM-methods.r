@@ -488,7 +488,8 @@ setMethod("searchAln",
 setMethod("searchPairBSgenome", signature(pwm="PWMatrix"),
           function(pwm, BSgenome1, BSgenome2, chr1, chr2,
                    min.score="80%", strand="*", chain){
-            ans = do_PairBSgenomeSearch(pwm, BSgenome1, BSgenome2, chr1, chr2, strand, min.score, chain)
+            ans <- do_PairBSgenomeSearch(pwm, BSgenome1, BSgenome2, chr1, chr2, 
+                                                 strand, min.score, chain)
             return(ans)
           }
           )
@@ -496,10 +497,9 @@ setMethod("searchPairBSgenome", signature(pwm="PWMatrix"),
 setMethod("searchPairBSgenome", signature(pwm="PWMatrixList"),
           function(pwm, BSgenome1, BSgenome2, chr1, chr2,
                    min.score="80%", strand="*", chain){
-            ans_list = lapply(pwm, searchPairBSgenome, BSgenome1, BSgenome2,
+            ans_list <- lapply(pwm, searchPairBSgenome, BSgenome1, BSgenome2,
                               chr1, chr2, min.score, strand, chain)
-            #ans = SitePairSetList(ans_list)
-            ans = do.call(SitePairSetList, ans_list)
+            ans <- do.call(SitePairSetList, ans_list)
             return(ans)
           }
           )
@@ -601,7 +601,6 @@ setMethod("PWMSimilarity",
           signature(pwmSubject="PWMatrixList", pwmQuery="PWMatrix"),
           function(pwmSubject, pwmQuery, 
                    method=c("Euclidean", "Pearson", "KL")){
-            #ans = lapply(pwm1, PWMSimilarity, pwm2, method=method)
             PWMSimilarity(pwmSubject, pwmQuery@profileMatrix, 
                           method=method)
           }
