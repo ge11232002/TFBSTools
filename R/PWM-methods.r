@@ -352,8 +352,11 @@ setMethod("searchAln",
                    strand="*", type="any", conservation=NULL){
             if(length(aln1) != 2L)
               stop("'aln1' must be of length 2 when 'aln2' is missing")
+            if(is.null(names(aln1))){
+              names(aln1) <- c(seqname1, seqname2)
+            }
             do_sitesearch(pwm, aln1[1], aln1[2], 
-                          seqname1=seqname1, seqname2=seqname2,
+                          seqname1=names(aln1)[1], seqname2=names(aln1)[2],
                           min.score=min.score,
                           windowSize=windowSize, cutoff=cutoff,
                           strand=strand, type=type,
@@ -368,8 +371,11 @@ setMethod("searchAln",
                    strand="*", type="any", conservation=NULL){
             if(length(aln1) != 2L)
               stop("'aln1' must be of length 2 when 'aln2' is missing")
+            if(is.null(names(aln1))){
+              names(aln1) <- c(seqname1, seqname2)
+            }
             do_sitesearch(pwm, as.character(aln1[1]), as.character(aln1[2]),
-                          seqname1=seqname1, seqname2=seqname2,
+                          seqname1=names(aln1)[1], seqname2=names(aln1)[2],
                           min.score=min.score, windowSize=windowSize,
                           cutoff=cutoff, strand=strand,
                           type=type, conservation=conservation)
@@ -620,4 +626,19 @@ setMethod("PWMSimilarity",
             return(ans)
           }
           )
+
+### -----------------------------------------------------------------
+### PWMscore
+### Not exported!
+PWMscore <- function(pwm, subject, starting.at=1L){
+  score <- PWMscoreStartingAt(unitScale(Matrix(pwm)), subject,
+                            starting.at)
+  score <- score * (maxScore(Matrix(pwm)) -
+                    minScore(Matrix(pwm))) +
+                              minScore(Matrix(pwm))
+  return(score)                            
+}
+
+
+
 
