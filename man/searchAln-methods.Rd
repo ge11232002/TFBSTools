@@ -178,6 +178,10 @@
                            strand="*", type="any")
   writeGFF2(sitePairSetList)
   writeGFF3(sitePairSetList)
+  as(sitePairSetList, "DataFrame")
+  as(sitePairSetList, "data.frame")
+  as.data.frame(sitePairSetList)
+  as(sitePairSetList, "GRanges")
   
   # PWMatrix, Axt, missing
   library(CNEr)
