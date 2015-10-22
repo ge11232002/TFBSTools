@@ -72,9 +72,10 @@
 }
 \examples{
   \dontrun{
-    motifSet = runMEME(file.path(system.file("extdata", package="TFBSTools"), "crp0.s"),
-                    binary="/usr/local/Cellar/meme/4.9.0-p4/bin/meme",
-                    arguments="-nmotifs 3")
+    motifSet <- runMEME(file.path(system.file("extdata", package="TFBSTools"), 
+                        "crp0.s"),
+                        binary="/usr/local/Cellar/meme/4.9.0-p4/bin/meme",
+                        arguments="-nmotifs 3")
     sitesSeq(motifSet, type="all")
     sitesSeq(motifSet, type="none")
     consensusMatrix(motifSet)
