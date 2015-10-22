@@ -51,7 +51,9 @@
   \code{collection=c("CORE", "CNE", "PHYLOFACTS", "SPLICE", 
     "POLII", "FAM", "PBM", "PBM_HOMEO", "PBM_HLH"}
   
-  \code{all_versions=c(TRUE,FALSE)}
+  \code{all_versions=c(FALSE,TRUE)}: We constantly update the profiles in
+    JASPAR. Some profiles may have multiple versions. By default, only the latest
+    version will be returned.
   
   \code{species}: The species source for the sequences, in Latin (Homo sapiens)
     or NCBI tax IDs (9606).
@@ -119,10 +121,10 @@
                     "JASPAR2014.sqlite")
     opts <- list()
     opts[["species"]] <- 9606
-    opts[["name"]] <- "RUNX1"
+    #opts[["name"]] <- "RUNX1"
     #opts[["class"]] = "Ig-fold"
     opts[["type"]] <- "SELEX"
-    opts[["all_versions"]] <- TRUE
+    opts[["all_versions"]] <- FALSE
     siteList <- getMatrixSet(db, opts)
     siteList2 <- getMatrixSet(JASPAR2014, opts)
   }
