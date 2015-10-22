@@ -21,7 +21,8 @@
 
 \arguments{
   \item{x}{
-    a character vector of length 1 for the path of JASPAR SQLite file, a \code{SQLiteConnection} object, or a \code{JASPAR2014} object.
+    a character vector of length 1 for the path of JASPAR SQLite file, 
+    a \code{SQLiteConnection} object, or a \code{JASPAR2014} object.
   }
   \item{opts}{
     a search options list. See more details below.
@@ -52,8 +53,8 @@
     "POLII", "FAM", "PBM", "PBM_HOMEO", "PBM_HLH"}
   
   \code{all_versions=c(FALSE,TRUE)}: We constantly update the profiles in
-    JASPAR. Some profiles may have multiple versions. By default, only the latest
-    version will be returned.
+    JASPAR. Some profiles may have multiple versions. 
+    By default, only the latest version will be returned.
   
   \code{species}: The species source for the sequences, in Latin (Homo sapiens)
     or NCBI tax IDs (9606).
@@ -130,5 +131,3 @@
   }
 }
 
-\keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }
