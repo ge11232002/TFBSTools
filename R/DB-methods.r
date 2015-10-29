@@ -251,9 +251,10 @@
   sqlCMD = paste0("SELECT TAG,VAL FROM MATRIX_ANNOTATION WHERE ID='", 
                   int_id, "'")
   tempTable = dbGetQuery(con, sqlCMD)
-  tags = list()
-  tags = mapply(function(x,y){tags[[x]]=y}, tempTable[["TAG"]], 
-                tempTable[["VAL"]], SIMPLIFY=FALSE)
+  #tags = list()
+  #tags = mapply(function(x,y){tags[[x]]=y}, tempTable[["TAG"]], 
+  #              tempTable[["VAL"]], SIMPLIFY=FALSE)
+  tags <- split(tempTable[["VAL"]], tempTable[["TAG"]])
   tags[["collection"]] = collection
   tags[["species"]] = tax_ids
   tags[["acc"]] = accs
