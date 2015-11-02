@@ -80,6 +80,7 @@ export(
 
   ## util-methods.r
   shannon.entropy,
+  IUPAC2Matrix,
 
   ## TFFMseqLogo.R
 

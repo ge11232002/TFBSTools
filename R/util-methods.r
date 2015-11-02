@@ -46,5 +46,21 @@ shannon.entropy <- function(p)
   -sum(log2(p.norm)*p.norm)
 }
 
-
+### -----------------------------------------------------------------
+### IUPAC_CODE_MAP to the matrix conversion
+### Exported!
+IUPAC2Matrix <- function(x){
+  x <- as.character(x)
+  x <- strsplit(x, "")[[1]]
+  if(!all(x %in% names(IUPAC_CODE_MAP))){
+    stop("All characters must be in IUPAC_CODE_MAP!")
+  }
+  ans <- matrix(0L, nrow=4, ncol=length(x),
+                dimnames=list(c("A", "C", "G", "T")))
+  for(i in 1:length(x)){
+    dnaCharacters <- strsplit(IUPAC_CODE_MAP[x[i]], "")[[1]]
+    ans[dnaCharacters, i] <- 1L
+  }
+  return(ans)
+}
 
