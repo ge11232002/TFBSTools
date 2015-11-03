@@ -64,3 +64,60 @@ IUPAC2Matrix <- function(x){
   return(ans)
 }
 
+
+### -----------------------------------------------------------------
+### Sampling ranges from areas of subject sequence based on input ranges
+### sampleRanges exported!
+sampleRangesOneStrand <- function(inputGRanges, subjectGRanges){
+  if(length(inputGRanges) == 0L){
+    return(GRanges())
+  }
+  if(length(subjectGRanges) == 0L){
+    return(GRanges())
+  }
+  widthsInput <- width(inputGRanges)
+  widthsSubject <- width(subjectGRanges)
+  indexAll <- lapply(widthsInput, 
+                     function(x, widthsSubject){which(x<=widthsSubject)},
+                     widthsSubject)
+  indexSampling <- sapply(indexAll, sample, size=1L)
+  selectedSubjectGRanges <- subjectGRanges[indexSampling]
+  sampledStart <- sapply(end(selectedSubjectGRanges) - 
+                         width(selectedSubjectGRanges) + 1L,
+                         function(x){sample(1L:x, size=1L)})
+  sampledGRanges <- GRanges(seqnames=seqnames(selectedSubjectGRanges),
+                      ranges=IRanges(start=start(selectedSubjectGRanges)+
+                                     sampledStart-1L,
+                                     width=width(inputGRanges)),
+                            strand="*",
+                            seqinfo=seqinfo(selectedSubjectGRanges))
+  stopifnot(length(sampledGRanges) == length(inputGRanges))
+  stopifnot(all(width(sampledGRanges) <= width(selectedSubjectGRanges)))
+  return(sampledGRanges)
+}
+
+sampleRanges <- function(inputGRanges, subjectGRanges, ignore.strand=TRUE){
+  if(ignore.strand){
+    ans <- sampleRangesOneStrand(inputGRanges, subjectGRanges)
+  }else{
+    orderPostive <- which(strand(inputGRanges)=="+")
+    sampledGRangesPostive <- sampleRangesOneStrand(
+                               inputGRanges[orderPostive],
+                               subjectGRanges[strand(subjectGRanges)=="+"])
+    strand(sampledGRangesPostive) <- "+"
+    orderNegative <- which(strand(inputGRanges)=="-")
+    sampledGRangesNegative <- sampleRangesOneStrand(
+                                inputGRanges[orderNegative],
+                                subjectGRanges[strand(subjectGRanges)=="-"])
+    strand(sampledGRangesNegative) <- "-"
+    orderUnknow <- which(strand(inputGRanges)=="*")
+    sampledGRangesUnknown <- sampleRangesOneStrand(
+                               inputGRanges[orderUnknow],
+                               subjectGRanges)
+    ans <- c(sampledGRangesPostive, sampledGRangesNegative, 
+             sampledGRangesUnknown)[order(c(orderPostive, orderNegative, orderUnknow))]
+  }
+  return(ans)
+}
+
+
