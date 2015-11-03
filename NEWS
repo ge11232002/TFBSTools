@@ -1,3 +1,14 @@
+CHANGES IN VERSION 1.9.2
+------------------------
+
+NEW FEATURES
+
+    o Added conversion from IUPAC string to matrix
+
+BUG FIXES
+    o Fixed the seqLogo error when the frequency of each base is same 
+      at certain site. Thanks to Liz.
+
 CHANGES IN VERSION 1.7.2
 ------------------------
 
