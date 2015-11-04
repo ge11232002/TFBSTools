@@ -27,7 +27,7 @@ importMethodsFrom(methods, initialize, show)
 importMethodsFrom(S4Vectors, isConstant, queryHits, subjectHits, 
     elementLengths, Rle, window)
 importMethodsFrom(IRanges, score, subject, ranges, "ranges<-",
-                  Views, start, end, findOverlaps, width)
+                  Views, start, end, findOverlaps, width, which)
 importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
 importMethodsFrom(DirichletMultinomial, fitted)
 importMethodsFrom(GenomeInfoDb, seqinfo)

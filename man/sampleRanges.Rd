@@ -37,18 +37,19 @@
 }
 
 \examples{
-library(GenomicRanges)
-inputGRanges <- GRanges(seqnames=c("chr1", "chr2"), 
-                        range=IRanges(start=c(2L, 10L), end=c(6L, 15L)),
-                        strand=c("+", "-"))
+  library(GenomicRanges)
+  inputGRanges <- GRanges(seqnames=c("chr1", "chr2"), 
+                         range=IRanges(start=c(2L, 10L), end=c(6L, 15L)),
+                          strand=c("+", "-"))
 
-subjectGRanges <- GRanges(
-                    seqnames=c("chr1", "chr1", "chr1", "chr1", "chr2", "chr2"),
-                    ranges=IRanges(start=c(20L, 20L, 30L, 30L, 7L, 25L),
-                                   end=c(50L, 50L, 32L, 32L,9L, 55L)),
-                    strand=c("+","-", "+", "-", "+","-"))
-set.seed(16)
-sampleRanges(inputGRanges, subjectGRanges, ignore.strand=TRUE)
-sampleRanges(inputGRanges, subjectGRanges, ignore.strand=FALSE)
+  subjectGRanges <- GRanges(
+                            seqnames=c("chr1", "chr1", "chr1", "chr1", 
+                                       "chr2", "chr2"),
+                            ranges=IRanges(start=c(20L, 20L, 30L, 30L, 7L, 25L),
+                                           end=c(50L, 50L, 32L, 32L,9L, 55L)),
+                            strand=c("+","-", "+", "-", "+","-"))
+  set.seed(16)
+  sampleRanges(inputGRanges, subjectGRanges, ignore.strand=TRUE)
+  sampleRanges(inputGRanges, subjectGRanges, ignore.strand=FALSE)
 
 }
