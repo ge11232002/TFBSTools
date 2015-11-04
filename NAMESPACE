@@ -30,6 +30,7 @@ importMethodsFrom(IRanges, score, subject, ranges, "ranges<-",
                   Views, start, end, findOverlaps, width)
 importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
 importMethodsFrom(DirichletMultinomial, fitted)
+importMethodsFrom(GenomeInfoDb, seqinfo)
 
 ### -----------------------------------------------------------------
 ### Import ordinary functions, variables in other packages
