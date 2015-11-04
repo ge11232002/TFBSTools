@@ -26,12 +26,10 @@
   }
 }
 
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
 
 \value{
-  A \code{GRanges} object with the same length and widths of \code{inputGRanges}.
+  A \code{GRanges} object with the same length and widths of 
+  \code{inputGRanges}.
 }
 
 \author{
@@ -39,6 +37,7 @@
 }
 
 \examples{
+library(GenomicRanges)
 inputGRanges <- GRanges(seqnames=c("chr1", "chr2"), 
                         range=IRanges(start=c(2L, 10L), end=c(6L, 15L)),
                         strand=c("+", "-"))
