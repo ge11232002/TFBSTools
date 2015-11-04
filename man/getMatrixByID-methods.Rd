@@ -14,7 +14,8 @@
 \title{Basic JASPAR database search functionis \code{getMatrixByID}, 
   \code{getMatrixByName}}
 \description{
-  This method fetches matrix data under the given ID or name from the database and returns a XMatrix object.
+  This method fetches matrix data under the given ID or name from 
+  the database and returns a XMatrix object.
 }
 
 \usage{
@@ -28,7 +29,8 @@
 
 \arguments{
   \item{x}{
-    a character vector of length 1 for the path of JASPAR SQLite file, a \code{SQLiteConnection} object, or a \code{JASPAR2014} object.
+    a character vector of length 1 for the path of JASPAR SQLite file, 
+    a \code{SQLiteConnection} object, or a \code{JASPAR2014} object.
   }
   \item{ID}{
     a character vector of length 1 for the JASPAR stable ID. 
@@ -43,7 +45,8 @@
   For getMatrixByID, 
   ID is a string which refers to the stable JASPAR ID 
   (usually something like "MA0001") with or without version numbers. 
-  "MA0001" will give the latest version on MA0001, while "MA0001.2" will give the second version, if existing. 
+  "MA0001" will give the latest version on MA0001, 
+  while "MA0001.2" will give the second version, if existing. 
 
   For getMatrixByName, according to the current JASPAR data model, 
   name is not necessarily a unique identifier. 
@@ -80,6 +83,3 @@
     pfm3 <- getMatrixByID(JASPAR2014, ID="MA0003")
   }
 }
-
-\keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }

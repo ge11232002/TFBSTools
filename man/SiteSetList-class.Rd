@@ -9,8 +9,8 @@
 
 \title{Class \code{"SiteSetList"}}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the class is. ~~
-  The SiteSetList class is a container for storing a collection of SiteSet objects.
+  The SiteSetList class is a container for storing a collection of 
+  SiteSet objects.
   Basically it is a SimpleList and is designed for manipulating 
   the set of SiteSet objects as a whole.
 }
@@ -56,8 +56,8 @@
 \examples{
     data(MA0003.2)
     data(MA0004.1)
-    pwmList = PWMatrixList(MA0003.2=toPWM(MA0003.2), MA0004.1=toPWM(MA0004.1))
-    sitesetList = searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
+    pwmList <- PWMatrixList(MA0003.2=toPWM(MA0003.2), MA0004.1=toPWM(MA0004.1))
+    sitesetList <- searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
                             min.score="50\%")
     writeGFF3(sitesetList, scoreType="absolute")
     pvalues(sitesetList, type="TFMPvalue")

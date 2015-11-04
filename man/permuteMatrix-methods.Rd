@@ -37,9 +37,6 @@
 }
 
 \examples{
-    #library(JASPAR2014)
-    #pfmSubject = getMatrixByID(JASPAR2014, ID="MA0043")
-    #pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")  
     data("MA0043")
     pfmSubject <- MA0043
     data("MA0048")
@@ -53,4 +50,3 @@
     foo2 = permuteMatrix(pfmList, type="inter")
 }
 
-\keyword{methods}

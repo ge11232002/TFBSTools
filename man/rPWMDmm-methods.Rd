@@ -99,7 +99,8 @@ Kimura, T., Tokuda, T., Nakada, Y., Nokajima, T., Matsumoto, T., & Doucet, A. (2
 }
 
 \note{
-  This code is based on the Matlab code original written by Ole Winther, binf.ku.dk, June 2006.
+  This code is based on the Matlab code original written by Ole Winther, 
+  binf.ku.dk, June 2006.
 }
 
 \seealso{
@@ -119,6 +120,3 @@ Kimura, T., Tokuda, T., Nakada, Y., Nokajima, T., Matsumoto, T., & Doucet, A. (2
     rPWMDmm(MA0003.2, dmmParameters$alpha0, dmmParameters$pmix, N=1, W=6)
   }
 }
-
-\keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }

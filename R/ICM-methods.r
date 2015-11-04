@@ -182,9 +182,11 @@ setMethod("toICM", "matrix",
 setMethod("seqLogo", "ICMatrix",
           function(x, ic.scale = TRUE, xaxis = TRUE, yaxis = TRUE,
                    xfontsize = 15, yfontsize = 15){
-            m = Matrix(x)
-            m = sweep(m, MARGIN=2, colSums(m), "/")
-            m = makePWM(m)
+            m <- Matrix(x)
+            m <- sweep(m, MARGIN=2, colSums(m), "/")
+            ## Deal with the case when information content is 0 for all bases.
+            m[is.nan(m)] <- 0.25
+            m <- makePWM(m)
             seqLogo::seqLogo(m, ic.scale = ic.scale, 
                              xaxis = xaxis, yaxis = yaxis,
                              xfontsize = xfontsize, yfontsize = yfontsize)

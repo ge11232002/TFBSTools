@@ -48,7 +48,6 @@ setValidity("XMatrix",
             function(object){
               ## Check the length of arguments
               if(!isConstant(c(length(object@ID), length(object@name),
-                               length(object@matrixClass), 
                                length(object@strand), 1L))){
                 return("The lengths of ID, name, matrixClass, strand
                        must be length 1")
