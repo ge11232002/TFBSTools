@@ -122,8 +122,6 @@
                     "JASPAR2014.sqlite")
     opts <- list()
     opts[["species"]] <- 9606
-    #opts[["name"]] <- "RUNX1"
-    #opts[["class"]] = "Ig-fold"
     opts[["type"]] <- "SELEX"
     opts[["all_versions"]] <- FALSE
     siteList <- getMatrixSet(db, opts)

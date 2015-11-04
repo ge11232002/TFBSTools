@@ -255,9 +255,12 @@
   #tags = mapply(function(x,y){tags[[x]]=y}, tempTable[["TAG"]], 
   #              tempTable[["VAL"]], SIMPLIFY=FALSE)
   tags <- split(tempTable[["VAL"]], tempTable[["TAG"]])
+  tags <- lapply(tags, unique)
   tags[["collection"]] = collection
   tags[["species"]] = tax_ids
   tags[["acc"]] = accs
+  if(is.null(tags[["class"]]))
+    tags[["class"]] <- ""
   matrixClass = tags[["class"]]
   tags["class"] = NULL
   
