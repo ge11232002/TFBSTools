@@ -20,7 +20,8 @@ Suggests: JASPAR2014(>= 1.4.0), RUnit(>= 0.4.29), BiocStyle(>= 1.7.7),
           knitr(>= 1.11)
 SystemRequirements: meme
 License: GPL-2
-URL: http://jaspar.genereg.net/
+URL: https://bitbucket.org/ge11232002/tfbstools
+BugReports: https://bitbucket.org/ge11232002/tfbstools/issues
 Type: Package
 biocViews: MotifAnnotation, GeneRegulation, MotifDiscovery, Transcription, 
            Alignment
