@@ -93,6 +93,13 @@ setMethod("toPWM", "PFMatrix",
             pwm
           }
           )
+setMethod("toPWM", "PFMatrixList",
+          function(x, type=c("log2probratio", "prob"), pseudocounts=0.8, 
+                   bg=NULL){
+            ans <- lapply(x, toPWM, type=type, pseudocounts=pseudocounts, bg=bg)
+            ans <- do.call(PWMatrixList, ans)
+            return(ans)
+          }
 
 ### Assumes 'x' is a Position *Frequency* Matrix (PFM) and computes the
 ### corresponding Position *Weight* Matrix (PWM).
@@ -100,24 +107,18 @@ setMethod("toPWM", "matrix",
     ## This is validated by the TFBS perl module version.
           function(x, type="log2probratio", pseudocounts=0.8,
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
-            x = normargPfm(x)
-            bg = normargPriorParams(bg)
-            type = match.arg(type, c("log2probratio", "prob"))
-            nseq = colSums(x)
-            priorN = sum(bg)
-            pseudocounts = rep(0, ncol(x)) + pseudocounts
-            #if(length(pseudocounts) == 1)
-            #  p = sweep(x + bg*pseudocounts, MARGIN=2, nseq + pseudocounts, "/")
-              #p = (x + bg_probabilities*pseudocounts) / (nseq + pseudocounts)
-            #else
-              #p = (x + bg_probabilities %*% t(pseudocounts)) / (nseq + pseudocounts)
-              p = sweep(x + bg %*% t(pseudocounts), MARGIN=2, nseq + priorN * pseudocounts, "/")
+            x <- normargPfm(x)
+            bg <- normargPriorParams(bg)
+            type <- match.arg(type, c("log2probratio", "prob"))
+            nseq <- colSums(x)
+            priorN <- sum(bg)
+            pseudocounts <- rep(0, ncol(x)) + pseudocounts
+            p <- sweep(x + bg %*% t(pseudocounts), MARGIN=2, 
+                       nseq + priorN * pseudocounts, "/")
             if(type == "prob")
               return(p)
-            prior.probs = bg / priorN
-            #ans = log2(p / prior.probs)
-            #Here ans's colSums is 1s. Need to be adapted for seq logo maybe later.
-            ans = log2(sweep(p, MARGIN=1, prior.probs, "/"))
+            prior.probs <- bg / priorN
+            ans <- log2(sweep(p, MARGIN=1, prior.probs, "/"))
             return(ans)
           }
           )

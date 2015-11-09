@@ -10,6 +10,7 @@ setMethod("toICM", "character",
                   bg=bg)
           }
           )
+
 setMethod("toICM", "DNAStringSet",
           function(x, pseudocounts=0.8, schneider=FALSE,
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
@@ -20,6 +21,7 @@ setMethod("toICM", "DNAStringSet",
                   bg=bg)
           }
           )
+
 setMethod("toICM", "PFMatrix",
           function(x, pseudocounts=0.8, schneider=FALSE, bg=NULL){
             if(is.null(bg))
@@ -33,6 +35,14 @@ setMethod("toICM", "PFMatrix",
             return(icm)
           }
           )
+
+setMethod("toICM", "PFMatrixList",
+          function(x, pseudocounts=0.8, schneider=FALSE, bg=NULL){
+            ans <- lapply(x, toICM, pseudocounts=pseudocounts,
+                          schneider=schneider, bg=bg)
+            ans <- do.call(ICMatrixList, ans)
+            return(ans)
+          })
                    
 
 ### Assumes 'x' is a Position *Frequency* Matrix (PFM) and computes the
