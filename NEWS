@@ -1,9 +1,10 @@
-CHANGES IN VERSION 1.9.2
+CHANGES IN VERSION 1.9.4
 ------------------------
 
 NEW FEATURES
 
     o Added conversion from IUPAC string to matrix
+    o toPWM, toICM work on PFMatrixList
 
 BUG FIXES
     o Fixed the seqLogo error when the frequency of each base is same 
