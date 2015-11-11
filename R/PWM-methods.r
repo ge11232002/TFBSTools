@@ -99,7 +99,7 @@ setMethod("toPWM", "PFMatrixList",
             ans <- lapply(x, toPWM, type=type, pseudocounts=pseudocounts, bg=bg)
             ans <- do.call(PWMatrixList, ans)
             return(ans)
-          }
+          })
 
 ### Assumes 'x' is a Position *Frequency* Matrix (PFM) and computes the
 ### corresponding Position *Weight* Matrix (PWM).
