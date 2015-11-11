@@ -1,4 +1,4 @@
 
-tfbsEnrichment <-function(query, background, pwmatrixList, cutoff=0.8){
+tfbsEnrichment <- function(pwm, query, background, cutoff=0.8){
   
 }
