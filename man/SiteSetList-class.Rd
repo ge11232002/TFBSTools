@@ -54,19 +54,25 @@
 }
 
 \examples{
-data(MA0003.2)
-data(MA0004.1)
-pwmList <- PWMatrixList(MA0003.2=toPWM(MA0003.2), MA0004.1=toPWM(MA0004.1))
-sitesetList <- searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
-                         min.score="50\%")
-writeGFF3(sitesetList, scoreType="absolute")
-as(sitesetList, "DataFrame")
-as(sitesetList, "data.frame")
-as.data.frame(sitesetList)
-as(sitesetList, "GRanges")
-## Calculate the p-values
-pvalues(sitesetList, type="TFMPvalue")
-pvalues(sitesetList, type="sampling")
+  data(MA0003.2)
+  data(MA0004.1)
+  pwmList <- PWMatrixList(MA0003.2=toPWM(MA0003.2), MA0004.1=toPWM(MA0004.1))
+  sitesetList <- searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
+                           min.score="50\%")
+
+  ## elementLengths of each pwm hits
+  elementLengths(sitesetList)
+
+  ## Output of SiteSetList                         
+  writeGFF3(sitesetList, scoreType="absolute")
+  as(sitesetList, "DataFrame")
+  as(sitesetList, "data.frame")
+  as.data.frame(sitesetList)
+  as(sitesetList, "GRanges")
+
+  ## Calculate the p-values
+  pvalues(sitesetList, type="TFMPvalue")
+  pvalues(sitesetList, type="sampling")
 }
 
 \keyword{classes}
