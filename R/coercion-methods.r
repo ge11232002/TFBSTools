@@ -16,37 +16,38 @@ setAs("XMatrixList", "data.frame", function(from){})
 ### -----------------------------------------------------------------
 ### SiteSet coercion
 setAs("SiteSet", "data.frame", function(from){
-      as.data.frame(as(from, "DataFrame"))
+      if(length(from) == 0L)
+        return(data.frame())
+
+      seqs <- DNAStringSet(views(from))
+      seqs[strand(from) == "-"] <- reverseComplement(seqs[strand(from) == "-"])
+      seqs <- as.character(seqs)
+      absScore <- score(from) 
+      relScore <- relScore(from)
+      ans <- data.frame(seqnames=from@seqname,
+                        source=from@sitesource,
+                        feature=from@sitesource,
+                        start=start(views(from)),
+                        end=end(views(from)),
+                        absScore=absScore,
+                        relScore=relScore,
+                        strand=strand(from),
+                        ID=from@pattern@ID,
+                        TF=from@pattern@name,
+                        class=from@pattern@matrixClass,
+                        siteSeqs=seqs
+                        )
+      return(ans)
+          })
+
+setAs("SiteSet", "DataFrame", function(from){
+      as(as(from, "data.frame"), "DataFrame")
           }
 )
 
 setMethod("as.data.frame", "SiteSet",
           function(x){
             as(x, "data.frame")
-          })
-
-setAs("SiteSet", "DataFrame", function(from){
-      if(length(from) == 0L)
-        return(DataFrame())
-
-      seqs <- DNAStringSet(views(from))
-      seqs[strand(from) == "-"] <- reverseComplement(seqs[strand(from) == "-"])
-      absScore <- score(from) 
-      relScore <- relScore(from)
-      ans <- DataFrame(seqnames=Rle(from@seqname),
-                       source=Rle(from@sitesource),
-                       feature=Rle(from@sitesource),
-                       start=start(views(from)),
-                       end=end(views(from)),
-                       absScore=absScore,
-                       relScore=relScore,
-                       strand=Rle(strand(from)),
-                       ID=Rle(from@pattern@ID),
-                       TF=Rle(from@pattern@name),
-                       class=Rle(from@pattern@matrixClass),
-                       siteSeqs=seqs
-                       )
-      return(ans)
           })
 
 setAs("SiteSet", "GRanges", function(from){
@@ -63,13 +64,13 @@ setAs("SiteSet", "GRanges", function(from){
 
 ### -----------------------------------------------------------------
 ### SiteSetList coercion
-setAs("SiteSetList", "DataFrame", function(from){
-      ans <- do.call(rbind, lapply(from, as, "DataFrame"))
+setAs("SiteSetList", "data.frame", function(from){
+      ans <- do.call(rbind, lapply(from, as, "data.frame"))
       return(ans)
           })
 
-setAs("SiteSetList", "data.frame", function(from){
-      ans <- as.data.frame(as(from, "DataFrame"))
+setAs("SiteSetList", "DataFrame", function(from){
+      ans <- as(as(from, "data.frame"), "DataFrame")
       return(ans)
           })
 
@@ -95,14 +96,14 @@ setAs("SiteSetList", "GRanges", function(from){
 
 ### ----------------------------------------------------------------
 ### SitePairSet coercion
-setAs("SitePairSet", "DataFrame", function(from){
-      ans <- cbind(as(from@siteset1, "DataFrame"),
-                   as(from@siteset2, "DataFrame"))
+setAs("SitePairSet", "data.frame", function(from){
+      ans <- cbind(as(from@siteset1, "data.frame"),
+                   as(from@siteset2, "data.frame"))
       return(ans)
           })
 
-setAs("SitePairSet", "data.frame", function(from){
-      as.data.frame(as(from, "DataFrame"))
+setAs("SitePairSet", "DataFrame", function(from){
+      as(as(from, "data.frame"), "DataFrame")
           })
 
 setMethod("as.data.frame", "SitePairSet",
@@ -110,6 +111,7 @@ setMethod("as.data.frame", "SitePairSet",
             ans <- as(x, "data.frame")
             return(ans)
           })
+
 setAs("SitePairSet", "GRanges", function(from){
       from.DataFrame <- as(from, "DataFrame")
       columns <- ncol(from.DataFrame)
@@ -146,13 +148,13 @@ setAs("SitePairSet", "GRanges", function(from){
 
 ### -----------------------------------------------------------------
 ### SitePairSetList coersion
-setAs("SitePairSetList", "DataFrame", function(from){
-      ans <- do.call(rbind, lapply(from, as, "DataFrame"))
+setAs("SitePairSetList", "data.frame", function(from){
+      ans <- do.call(rbind, lapply(from, as, "data.frame"))
       return(ans)
           })
 
-setAs("SitePairSetList", "data.frame", function(from){
-      as.data.frame(as(from, "DataFrame"))
+setAs("SitePairSetList", "DataFrame", function(from){
+      as(as(from, "data.frame"), "DataFrame")
           })
 
 setMethod("as.data.frame", "SitePairSetList",
