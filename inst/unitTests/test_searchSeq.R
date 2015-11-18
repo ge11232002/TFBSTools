@@ -24,8 +24,9 @@ test_searchSeq <- function(){
   ## Test the searchSeq on DNAStringSet with PWMatrixList
   seqs <- DNAStringSet(c(seq1=seq1, seq2=seq2))
   sitesetList <- searchSeq(pwmList, seqs, min.score="80%")
-  checkIdentical(ranges(as(sitesetList, "GRanges")), 
+  checkIdentical(ranges(unname(as(sitesetList, "GRanges"))), 
                  IRanges(start=c(20L, 22L, 23L, 8L, 10L, 11L, 35L, 35L),
-                         end=c(34L, 36L, 37L, 22L, 24L, 25L, 40L, 40L)))
+                         end=c(34L, 36L, 37L, 22L, 24L, 25L, 40L, 40L))
+                 )
 
 }

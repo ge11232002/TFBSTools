@@ -61,6 +61,7 @@
                            min.score="50\%")
 
   ## elementLengths of each pwm hits
+  library(S4Vectors)
   elementLengths(sitesetList)
 
   ## Output of SiteSetList                         
