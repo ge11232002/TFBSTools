@@ -37,7 +37,7 @@ Depends: R (>= 3.2.2)
 Suggests: BiocStyle(>= 1.7.7),
           JASPAR2014(>= 1.4.0),
           knitr(>= 1.11),
-          RUnit(>= 0.4.29)
+          testthat
 License: GPL-2
 URL: https://bitbucket.org/ge11232002/tfbstools
 BugReports: https://bitbucket.org/ge11232002/tfbstools/issues
