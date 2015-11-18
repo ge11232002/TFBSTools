@@ -1,0 +1,549 @@
+---
+title: "Transcription factor binding site (TFBS) analysis with the \"TFBSTools\" package"
+author: "Ge Tan"
+date: "`r doc_date()`"
+package: "`r pkg_ver('TFBSTools')`"
+abstract: >
+  Analysis and manipulation of transcription factor binding sites.
+vignette: >
+  %\VignetteIndexEntry{Transcription factor binding site (TFBS) analysis with the "TFBSTools" package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output: 
+  BiocStyle::html_document
+bibliography: TFBSTools.bib  
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r code, echo = FALSE}
+code <- function(...) {
+    cat(paste(..., sep = "\n"))
+}
+
+date = "`r doc_date()`"
+pkg = "`r pkg_ver('BiocStyle')`"
+```
+
+```{r global_options, echo=FALSE}
+short=TRUE #if short==TRUE, do not echo code chunks
+debug=FALSE
+knitr::opts_chunk$set(echo=!short, warning=debug, message=debug, error=FALSE,
+               cache.path = "cache/",
+               fig.path = "figures/")
+```
+
+# Introduction
+Eukaryotic regulatory regions are characterized based a set of
+discovered transcription factor binding sites (TFBSs),
+which can be represented as sequence patterns
+with various degree of degeneracy.
+
+This `r Biocpkg("TFBSTools")` package is designed to be a compuational framework
+for TFBSs analysis.
+Based on the famous perl module TFBS [@lenhard_tfbs:_2002],
+we extended the class definitions and enhanced implementations
+in an interactive environment.
+So far this package contains a set of integrated _R_ _S4_ style classes,
+tools, JASPAR database interface functions.
+Most approaches can be described in three sequential phases.
+First, a pattern is generated for a set of target sequences
+known to be bound by a specific transcription factor.
+Second, a set of DNA sequences are analyzed to determine
+the locations of sequences consistent with the described binding pattern.
+Finally, in advanced cases, predictive statistical models of regulatory
+regions are constructed based on  mutiple occurrences of the detected
+patterns.
+
+Since JASPAR2016, the next generation of
+transcription factor binding site, _TFFM_ [@mathelier_next_2013],
+was introduced into JASPAR for the first time.
+Now `r Biocpkg("TFBSTools")` also supports the manipulation of _TFFM_.
+TFFM is based on hidden Markov Model (HMM).
+The biggest advantage of TFFM over basic PWM is that
+it can model position interdependence within TFBSs and variable motif length.
+A novel graphical representation of the TFFM motifs that captures
+the position interdependence is also introduced.
+For more details regarding TFFM,
+please refer to http://cisreg.cmmt.ubc.ca/TFFM/doc/.
+
+`r Biocpkg("TFBSTools")` aims to support all these functionalities
+in the environment _R_, except the external motif finding software,
+such as _MEME_ [@bailey_fitting_1994].
+
+# _S4_ classes in TFBSTools
+The package is built around a number of _S4_ class of
+which the `XMatrix`,
+`SiteSet` classes are the most important.
+The section will briefly explain most of them defined in `r Biocpkg("TFBSTools")`.
+
+## XMatrix and its subclasses
+`XMatrix` is a virtual class,
+which means no concrete objects can be created directly from it.
+The subclass `PFMatrix` is designed to store all the relevant information
+for one raw position frequency matrix (PFM).
+This object is compatible with one record from JASPAR database.
+`PWMatrix` is used to store a position weight matrix (PWM).
+Compared with `PFMatrix`, it has one extra slot _pseudocounts_.
+`ICMatrix` is used to store a information content matrix (ICM).
+Compared with `PWMatrix`, it has one extra slot _schneider_.
+
+The following examples demonstrate the creation of `PFMatrix`,
+the conversions between these matrices and some assocated methods defined for these classes.
+
+```{r PFMatrix, echo=TRUE, eval=TRUE}
+library(TFBSTools)
+## PFMatrix construction; Not all of the slots need to be initialised.
+pfm <- PFMatrix(ID="MA0004.1", name="Arnt", 
+                matrixClass="Zipper-Type", strand="+",
+                bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+                tags=list(family="Helix-Loop-Helix", species="10090",
+                          tax_group="vertebrates",medline="7592839", 
+                          type="SELEX",ACC="P53762", pazar_tf_id="TF0000003",
+                          TFBSshape_ID="11", TFencyclopedia_ID="580"),
+                profileMatrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
+                                       16L, 0L,  20L, 0L,  0L,  0L,
+                                       0L,  1L,  0L,  20L, 0L,  20L,
+                                       0L,  0L,  0L,  0L,  20L, 0L),
+                                     byrow=TRUE, nrow=4,
+                                     dimnames=list(c("A", "C", "G", "T"))
+                                     )
+                )
+
+pfm
+
+## coerced to matrix
+as.matrix(pfm)
+
+## access the slots of pfm
+ID(pfm)
+name(pfm)
+Matrix(pfm)
+ncol(pfm)
+length(pfm)
+
+## convert a FPM to PWM, ICM
+pwm <- toPWM(pfm, type="log2probratio", pseudocounts=0.8,
+             bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
+
+icm <- toICM(pfm, pseudocounts=sqrt(rowSums(pfm)[1]), schneider=FALSE,
+             bg=c(A=0.25, C=0.25, G=0.25, T=0.25))
+
+## get the reverse complment matrix with all the same information except the strand.
+pwmRevComp <- reverseComplement(pwm)
+```
+
+## XMatrixList and its subclasses
+`XMatrixList` is used to store a set of `XMatrix` objects.
+Basically it is a SimpleList for easy manipulation the whole set of
+`XMatrix`.
+The concrete objects can be `PFMatrix`, `PWMatrix` and
+`ICMatrix`.
+
+
+```{r PFMatrixList, echo=TRUE, eval=TRUE}
+pfm2 <- pfm
+pfmList <- PFMatrixList(pfm1=pfm, pfm2=pfm2, use.names=TRUE)
+pfmList
+names(pfmList)
+```
+
+## SiteSet, SiteSetList, SitePairSet and SitePairSetList
+The `SiteSet` class is a container for storing a set of putative
+transcription factor binding sites on a nucleotide sequence
+(start, end, strand, score, pattern as a `PWMatrix`, etc.)
+from scaning a nucleotide sequence with the corresponding `PWMatrix`.
+Similarly, `SiteSetList` stores a set of `SiteSet` objects.
+
+For holding the results returned from a pairwise alignment scaaning,
+`SitePairSet` and `SitePairSetList` are provided.
+
+More detailed examples of using these classes will be given in
+later Section.
+
+## MotifSet
+This `MotifSet` class is used to store the generated motifs from
+_de novo_ motif discovery software, such as
+_MEME_ [@bailey_fitting_1994].
+
+## TFFM and its subclasses
+`TFMM` is a virtual class and two classes
+`TFFMFirst` and `TFFMDetail` are derived from this virtual class.
+Compared with `PFMatrix` class, `TFFM` has two extra slots
+that store the emission distribution parameters and transition probabilities.
+`TFFMFirst` class stands for the first-order TFFMs, while
+`TFFMDetail` stands for the more detailed and descriptive TFFMs.
+
+Although we provide the constructor functions for `TFFM` class,
+the `TFFM` object is usually generated from reading a XML file from
+the Python module _TFFM_.
+
+```{r TFFMRead, echo=TRUE, eval=TRUE}
+  xmlFirst <- file.path(system.file("extdata", package="TFBSTools"),
+                        "tffm_first_order.xml")
+  tffmFirst <- readXMLTFFM(xmlFirst, type="First")
+  tffm <- getPosProb(tffmFirst)
+
+  xmlDetail <- file.path(system.file("extdata", package="TFBSTools"),
+                         "tffm_detailed.xml")
+  tffmDetail <- readXMLTFFM(xmlDetail, type="Detail")
+  getPosProb(tffmDetail)
+```
+
+# Database interfaces for JASPAR2014 database
+This section will demonstrate how to operate on the JASPAR 2014 database.
+JASPAR is a collection of transcription factor DNA-binding preferences,
+modeled as matrices.
+These can be converted into PWMs, used for scanning genomic sequences.
+JASPAR is the only database with this scope where the data can be used
+with no restrictions (open-source).
+A `Bioconducto` experiment data package `r Biocexptpkg("JASPAR2014")`
+is provided with each release of JASPAR.
+
+## Search JASPAR2014 database
+This search function fetches matrix data for all matrices in the database
+matching criteria defined by the named arguments
+and returns a PFMatrixList object.
+For more search criterias,
+please see the help page for `getMatrixSet`.
+
+```{r searchDB, echo=TRUE, eval=TRUE}
+suppressMessages(library(JASPAR2014))
+opts <- list()
+opts[["species"]] <- 9606
+opts[["name"]] <- "RUNX1"
+opts[["type"]] <- "SELEX"
+opts[["all_versions"]] <- TRUE
+PFMatrixList <- getMatrixSet(JASPAR2014, opts)
+PFMatrixList
+
+opts2 <- list()
+opts2[["type"]] <- "SELEX"
+PFMatrixList2 <- getMatrixSet(JASPAR2014, opts2)
+PFMatrixList2
+```
+
+## Store, delete and initialize JASPAR2014 database
+We also provide some functions to initialize an empty JASPAR2014
+style database,
+store new `PFMatrix` or `PFMatrixList` into it,
+or delete some records based on ID.
+The backend of the database is _SQLite_.
+
+
+```{r operateDb, echo=TRUE, eval=TRUE}
+db <- "myMatrixDb.sqlite"
+initializeJASPARDB(db, version="2014")
+data("MA0043")
+storeMatrix(db, MA0043)
+deleteMatrixHavingID(db,"MA0043.1")
+file.remove(db)
+```
+
+# PFM, PWM and ICM methods
+This section will give an introduction of matrix operations,
+including conversion from PFM to PWM and ICM, profile matrices comparison,
+dynamic random profile generation.
+
+## PFM to PWM
+The method `toPWM` can convert PFM to PWM [@Wasserman:2004ec].
+Optional parameters include _type_, _pseudocounts_, _bg_.
+The implementation in this package is a bit different from that in `r Biocpkg("Biostrings")`.
+
+First of all, `toPWM` allows the input matrix to have different column sums,
+which means the count matrix can have an unequal number of sequences contributing
+to each column. This scenario is rare, but exists in JASPAR SELEX data.
+
+Second, we can specify customized _pseudocounts_.
+_pseudocounts_ is necessary for correcting the small number of counts
+or eliminating the zero values before log transformation.
+In TFBS perl module, the square root of the number of sequences contributing to each column.
+However, it has been shown to too harsh [@nishida_pseudocounts_2009].
+Hence, a default value of 0.8 is used.
+Of course, it can be changed to other customized value or even different values for each column.
+
+```{r PWMmatrixMethods, echo=TRUE, eval=TRUE}
+pwm <- toPWM(pfm, pseudocounts=0.8)
+pwm
+```
+
+## PFM to ICM
+The method `toICM` can convert PFM to ICM [@schneider_information_1986].
+Besides the similar _pseudocounts_, _bg_,
+you can also choose to do the _schneider_ correction.
+
+The information content matrix has a column sum between 0 (no base preference)
+and 2 (only 1 base used).
+Usually this information is used to plot sequence log.
+
+How a PFM is converted to ICM: we have the PFM matrix $x$,
+base backrgound frequency $bg$, $pseudocounts$ for correction.
+
+$$Z[j] = \sum_{i=1}^{4} x[i,j]$$
+
+$$p[i,j] = {(x[i,j] + bg[i] \times pseudocounts[j]) \over (Z[j] + \sum_{i}bg[i] \times pseudocounts[j]}$$
+
+$$D[j] = \log_2{4} + \sum_{i=1}^{4} p[i,j]*\log{p[i,j]}$$
+
+$$ICM[i,j] = p[i,j] \times D[j]$$
+
+```{r ICMmatrixMethods, echo=TRUE, eval=TRUE}
+icm <- toICM(pfm, pseudocounts=0.8, schneider=TRUE)
+icm
+```
+
+To plot the sequence logo, we use the package `r Biocpkg("seqlogo")`.
+In sequence logo, each position gives the information content obtained
+for each nucleotide.
+The higher of the letter corresponding to a nucleotide,
+the larger information content and higher probability of getting that nucleotide
+at that position.
+```{r seqLogo1, echo=TRUE, eval=TRUE, fig.width=6, fig.height=4}
+seqLogo(icm)
+```
+
+## Align PFM to a custom matrix or IUPAC string
+In some cases, it is beneficial to assess similarity of existing profile matrices,
+such as JASPAR, to a newly discovered matrix
+(as with using BLAST for sequence data comparison when using Genbank).
+
+`r Biocpkg("TFBSTools")` provides tools for comparing pairs of PFMs,
+or a PFM with IUPAC string, using a modified Needleman-Wunsch algorithm
+[@sandelin_integrated_2003].
+
+```{r PFMSimi, echo=TRUE, eval=TRUE}
+## one to one comparison
+data(MA0003.2)
+data(MA0004.1)
+pfmSubject <- MA0003.2
+pfmQuery <-  MA0004.1
+PFMSimilarity(pfmSubject, pfmQuery)
+
+## one to several comparsion
+PFMSimilarity(pfmList, pfmQuery)
+
+## align IUPAC string
+IUPACString <- "ACGTMRWSYKVHDBN"
+PFMSimilarity(pfmList, IUPACString)
+```
+
+## PWM similarity
+To measure the similarity of two PWM matrix in three measurements:
+_normalised Euclidean distance_, _Pearson correlation_
+and _Kullback Leibler divergence_ [@linhart_transcription_2008].
+Given two PWMs, $P^1$ and $P^2$, where l is the length.
+$P_{i,b}$ is the values in column i with base b.
+The normalised Euclidean distance is computed in
+
+$$ D(a,b) = {1 \over {\sqrt{2}l}} \cdot \sum_{i=1}^{l} \sqrt{\sum_{b \in {\{A,C,G,T\}}} (P_{i,b}^1-P_{i,b}^2)^2}$$
+
+This distance is between 0 (perfect identity) and 1 (complete dis-similarity).
+
+The pearson correlation coefficient is computed in
+
+$$ r(P^1, P^2) = {1 \over l} \cdot \sum_{i=1}^l {\sum_{b \in \{A,C,G,T\}} (P_{i,b}^1 - 0.25)(P_{i,b}^2-0.25) \over \sqrt{\sum_{b \in \{A,C,G,T\}} (P_{i,b}^1 - 0.25)^2 \cdot \sum_{b \in \{A,C,G,T\}} (P_{i,b}^2 - 0.25)^2}}$$
+
+The Kullback-Leibler divergence is computed in
+
+$$KL(P^1, P^2) = {1 \over {2l}} \cdot \sum_{i=1}^l \sum_{b \in \{A,C,G,T\}} (P_{i,b}^1\log{ P_{i,b}^1 \over P_{i,b}^2}+ P_{i,b}^2\log{P_{i,b}^2 \over {P_{i,b}^1}})$$
+
+
+```{r PWMSimilarity, echo=TRUE, eval=TRUE}
+data(MA0003.2)
+data(MA0004.1)
+pwm1 <- toPWM(MA0003.2, type="prob")
+pwm2 <- toPWM(MA0004.1, type="prob")
+PWMSimilarity(pwm1, pwm2, method="Euclidean")
+PWMSimilarity(pwm1, pwm2, method="Pearson")
+PWMSimilarity(pwm1, pwm2, method="KL")
+```
+
+## Dynamic random profile generation
+In this section, we will demonstrate the capability of random profile matrices generation with matrix permutation and probabilitis sampling.
+In many computational/simulation studies,
+it is particularly desired to have a set of random matrices.
+Some cases includes the estimation of distance between putative TFBS
+and transcription start site, the evaluation of comparison between matrices [@bryne_jaspar_2008].
+These random matrices are expected to have same statistical properties with
+the selcted profiles, such as nucleotide content or information content.
+
+The permutation method is relatively easy.
+It simply shuffles the columns either constrainted in each matrix, or columns almong all selected matrices.
+The probabilistic sampling is more complicated and can be done in two steps:
+
+1. A Dirichlet multinomial mixture model is trained on all available matrices in JASPAR.
+2. Random columns are sampled from the posterior distribution of the trained Dirichlet model based on selected profiles.
+
+
+```{r permuteMatrix, echo=TRUE, eval=TRUE}
+## Matrice permutation
+permuteMatrix(pfmQuery)
+permuteMatrix(pfmList, type="intra")
+permuteMatrix(pfmList, type="inter")
+```
+
+```{r samplingMatrix, echo=TRUE, eval=FALSE}
+## Dirichlet model training
+data(MA0003.2)
+data(MA0004.1)
+pfmList <- PFMatrixList(pfm1=MA0003.2, pfm2=MA0004.1, use.names=TRUE)
+dmmParameters <- dmmEM(pfmList, K=6, alg="C")
+## Matrice sampling from trained Dirichlet model
+pwmSampled <- rPWMDmm(MA0003.2, dmmParameters$alpha0, dmmParameters$pmix,
+                      N=1, W=6)
+```
+
+# TFFM methods
+## The graphical representation of TFFM
+Basic PWMs can be graphically represented by the sequence logos shown above.
+A novel graphical representation of TFFM is requied for
+taking the dinucleotide dependence into account.
+
+For the upper part of the sequence logo,
+we represent the nucleotide probabilities
+at position $p$ for each possible nucleotide at position $p-1$.
+Hence, each column represents a position within a TFBS and
+each row the nucleotide probabilities found at that position.
+Each row assumes a specific nucleotide has been emitted
+by the previous hidden state.
+The intersection between a column corresponding to position $p$ and
+row corresponding to nucleotide $n$ gives the probabilities of
+getting each nucleotide at position $p$ if $n$ has been seen at position $p-1$.
+The opacity to represent the sequence logo is proportional to
+the probablity of possible row to be used by the TFFM.
+
+```{r TFFMFirstseqLogo, echo=TRUE, eval=TRUE, fig.width=6, fig.height=10}
+  ## sequence logo for First-order TFFM
+  seqLogo(tffmFirst)
+```
+
+```{r TFFMDetailseqLogo, echo=TRUE, eval=TRUE, fig.width=6, fig.height=10}
+  ## sequence logo for detailed TFFM
+  seqLogo(tffmDetail)
+```
+
+# Scan sequence and alignments with PWM pattern
+## searchSeq
+`searchSeq` scans a nucleotide sequence with the pattern represented in the PWM.
+The strand argument controls which strand of the sequence will be searched.
+When it is _*_, both strands will be scanned.
+
+A `SiteSet` object will be returned which can be exported into
+GFF3 or GFF2 format.
+Empirical p-values for the match scores can be calculated by an exact method
+from `r CRANpkg("TFMPvalue")` or the distribution of sampled scores.
+
+```{r searchSeq, echo=TRUE, eval=TRUE}
+library(Biostrings)
+data(MA0003.2)
+data(MA0004.1)
+pwmList <- PWMatrixList(MA0003.2=toPWM(MA0003.2), MA0004.1=toPWM(MA0004.1),
+                        use.names=TRUE)
+subject <- DNAString("GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG")
+siteset <- searchSeq(pwm, subject, seqname="seq1", min.score="60%", strand="*")
+
+sitesetList <- searchSeq(pwmList, subject, seqname="seq1",
+                         min.score="60%", strand="*")
+
+
+## generate gff2 or gff3 style output
+head(writeGFF3(siteset))
+head(writeGFF3(sitesetList))
+head(writeGFF2(siteset))
+
+## get the relative scores
+relScore(siteset)
+relScore(sitesetList)
+
+## calculate the empirical p-values of the scores
+pvalues(siteset, type="TFMPvalue")
+pvalues(siteset, type="sampling")
+```
+
+## searchAln
+`searchAln` scans a pairwise alignment with the pattern
+represented by the PWM.
+It reports only those hits that are present in equivalent positions of both sequences
+and exceed a specified threshold score in both,
+AND are found in regions of the alignment above the specified.
+
+```{r searchAln, echo=TRUE, eval=TRUE}
+library(Biostrings)
+data(MA0003.2)
+pwm <- toPWM(MA0003.2)
+aln1 <- DNAString("ACTTCACCAGCTCCCTGGCGGTAAGTTGATC---AAAGG---AAACGCAAAGTTTTCAAG")
+aln2 <- DNAString("GTTTCACTACTTCCTTTCGGGTAAGTAAATATATAAATATATAAAAATATAATTTTCATC")
+sitePairSet <- searchAln(pwm, aln1, aln2, seqname1="seq1", seqname2="seq2",
+                         min.score="50%", cutoff=0.5,
+                         strand="*", type="any")
+## generate gff style output
+head(writeGFF3(sitePairSet))
+head(writeGFF2(sitePairSet))
+
+## search the Axt alignment
+library(CNEr)
+axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="CNEr"),
+                                 "hg19.danRer7.net.axt")
+axtHg19DanRer7 <- readAxt(axtFilesHg19DanRer7)
+sitePairSet <-  searchAln(pwm, axtHg19DanRer7, min.score="80%",
+                          windowSize=51L, cutoff=0.7, strand="*",
+                          type="any", conservation=NULL, mc.cores=2)
+GRangesTFBS <- toGRangesList(sitePairSet, axtHg19DanRer7)
+GRangesTFBS$targetTFBS
+GRangesTFBS$queryTFBS
+```
+
+## searchPairBSgenome
+`searchPairBSgenome` is designed to do the genome-wise phylogenetic footprinting.
+Given two `BSgenome`, a chain file for liftover from one genome to another,
+`searchPairBSgenome` identifies the putative transcription factor binding sites
+which are conserved in both genomes.
+
+```{r searchBSgenome, echo=TRUE, eval=FALSE}
+library(rtracklayer)
+library(JASPAR2014)
+library(BSgenome.Hsapiens.UCSC.hg19)
+library(BSgenome.Mmusculus.UCSC.mm10)
+pfm <- getMatrixByID(JASPAR2014, ID="MA0004.1")
+pwm <- toPWM(pfm)
+chain <- import.chain("Downloads/hg19ToMm10.over.chain")
+sitePairSet <- searchPairBSgenome(pwm, BSgenome.Hsapiens.UCSC.hg19,
+                                 BSgenome.Mmusculus.UCSC.mm10,
+                                 chr1="chr1", chr2="chr1",
+                                 min.score="90%", strand="+", chain=chain)
+```
+
+# Use _de novo_ motif discovery software
+In this section, we will introduce wrapper functions for external motif discovery programs.
+So far, _MEME_ is supported.
+## _MEME_
+`runMEME` takes a `DNAStringSet` or a set of `characters` as input,
+and returns a `MotifSet` object.
+
+```{r MEME-wrapper, echo=TRUE, eval=FALSE}
+motifSet <- runMEME(file.path(system.file("extdata",
+                                          package="TFBSTools"), "crp0.s"),
+                    binary="meme",
+                    arguments=list("-nmotifs"=3)
+                   )
+## Get the sites sequences and surrounding sequences
+sitesSeq(motifSet, type="all")
+## Get the sites sequences only
+sitesSeq(motifSet, type="none")
+consensusMatrix(motifSet)
+```
+
+# Session info
+Here is the output of `sessionInfo()` on the system on which this
+document was compiled:
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```
+
+# References
+
+[R]: http://r-project.org
+[RStudio]: http://www.rstudio.com/

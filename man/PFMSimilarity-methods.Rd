@@ -40,8 +40,10 @@
 }
 
 \value{
-  For each \code{pfmSubject}, an absolute score and a relative percentage score is returned. 
-  The maximum absolute score is 2*the width of the smaller matrix in the comparison pair.
+  For each \code{pfmSubject}, an absolute score and 
+  a relative percentage score is returned. 
+  The maximum absolute score is 2*the width of the smaller matrix 
+  in the comparison pair.
 }
 
 \references{
@@ -54,22 +56,17 @@
 }
 
 \examples{
-    library(JASPAR2014)
-    ## one to one comparison
-    data("MA0043")
-    pfmSubject <- MA0043
-    data("MA0048")
-    pfmQuery <- MA0048
-    #pfmSubject = getMatrixByID(JASPAR2014, ID="MA0043")
-    #pfmQuery = getMatrixByID(JASPAR2014, ID="MA0048")
-    score <- PFMSimilarity(pfmSubject, pfmQuery)
-    ## one to several comparsion
-    #opts = list()
-    #opts[["class"]] = "Ig-fold"
-    #pfmList = getMatrixSet(JASPAR2014, opts)
-    pfmList <- PFMatrixList(pfmSubject, pfmQuery)
-    scores <- PFMSimilarity(pfmList, pfmQuery)
+  ## one to one comparison
+  data("MA0043")
+  pfmSubject <- MA0043
+  data("MA0048")
+  pfmQuery <- MA0048
+  score <- PFMSimilarity(pfmSubject, pfmQuery)
+    
+  ## one to several comparsion
+  pfmList <- PFMatrixList(pfmSubject, pfmQuery)
+  scores <- PFMSimilarity(pfmList, pfmQuery)
 }
 
 \keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }
+

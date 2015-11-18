@@ -114,7 +114,7 @@ Ge Tan
   data(MA0003.2)
   data(MA0004.1)
   pfmList <- PFMatrixList(pfm1=MA0003.2, pfm2=MA0004.1, use.names=TRUE)
-  icmList <- toPWM(pfmList, pseudocounts=0.8, schneider=TRUE)
+  pwmList <- toPWM(pfmList, pseudocounts=0.8)
 }
 
 \keyword{methods}

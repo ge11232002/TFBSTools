@@ -19,7 +19,8 @@ setMethod("PFMSimilarity", signature(pfmSubject="matrix", pfmQuery="matrix"),
          }
          )
 
-setMethod("PFMSimilarity", signature(pfmSubject="PFMatrix", pfmQuery="PFMatrix"),
+setMethod("PFMSimilarity", signature(pfmSubject="PFMatrix", 
+                                     pfmQuery="PFMatrix"),
           function(pfmSubject, pfmQuery, openPenalty=3, extPenalty=0.01){
             ans = PFMSimilarity(Matrix(pfmSubject), Matrix(pfmQuery), 
                                openPenalty=openPenalty, extPenalty=extPenalty)
@@ -43,7 +44,8 @@ setMethod("PFMSimilarity", signature(pfmSubject="matrix", pfmQuery="PFMatrix"),
           }
           )
 
-setMethod("PFMSimilarity", signature(pfmSubject="PFMatrixList", pfmQuery="matrix"),
+setMethod("PFMSimilarity", signature(pfmSubject="PFMatrixList", 
+                                     pfmQuery="matrix"),
           function(pfmSubject, pfmQuery, openPenalty=3, extPenalty=0.01){
             ans = lapply(pfmSubject, PFMSimilarity, pfmQuery,
                             openPenalty=openPenalty, extPenalty=extPenalty)
@@ -51,7 +53,8 @@ setMethod("PFMSimilarity", signature(pfmSubject="PFMatrixList", pfmQuery="matrix
           }
           )
 
-setMethod("PFMSimilarity", signature(pfmSubject="PFMatrixList", pfmQuery="PFMatrix"),
+setMethod("PFMSimilarity", signature(pfmSubject="PFMatrixList", 
+                                     pfmQuery="PFMatrix"),
           function(pfmSubject, pfmQuery, openPenalty=3, extPenalty=0.01){
             ans = lapply(pfmSubject, PFMSimilarity, pfmQuery,
                          openPenalty=openPenalty, extPenalty=extPenalty)
@@ -67,14 +70,16 @@ setMethod("PFMSimilarity", signature(pfmSubject="matrix", pfmQuery="character"),
           }
           )
 
-setMethod("PFMSimilarity", signature(pfmSubject="PFMatrix", pfmQuery="character"),
+setMethod("PFMSimilarity", signature(pfmSubject="PFMatrix", 
+                                     pfmQuery="character"),
           function(pfmSubject, pfmQuery, openPenalty=3, extPenalty=0.01){
             PFMSimilarity(Matrix(pfmSubject), pfmQuery,
                          openPenalty=openPenalty, extPenalty=extPenalty)
           }
           )
                                     
-setMethod("PFMSimilarity", signature(pfmSubject="PFMatrixList", pfmQuery="character"),
+setMethod("PFMSimilarity", signature(pfmSubject="PFMatrixList", 
+                                     pfmQuery="character"),
           function(pfmSubject, pfmQuery, openPenalty=3, extPenalty=0.01){
             ans = lapply(pfmSubject, PFMSimilarity, pfmQuery,
                          openPenalty=openPenalty, extPenalty=extPenalty)
