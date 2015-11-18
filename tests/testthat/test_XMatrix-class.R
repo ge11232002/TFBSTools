@@ -24,7 +24,6 @@ test_that("test_XMatrixConstructor", {
         G = 0.25)))
     expect_error(PFMatrix(ID = c("12", "34")))
     expect_error(PFMatrix(name = c("12", "34")))
-    expect_error(PFMatrix(matrixClass = c("12", "34")))
     expect_error(PFMatrix(strand = c("+", "-")))
     expect_error(PFMatrix(strand = c("a")))
     expect_error(PFMatrix(profileMatrix = matrix(1, ncol = 2, 
