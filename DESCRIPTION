@@ -39,8 +39,8 @@ Suggests: BiocStyle(>= 1.7.7),
           knitr(>= 1.11),
           testthat
 License: GPL-2
-URL: https://bitbucket.org/ge11232002/tfbstools
-BugReports: https://bitbucket.org/ge11232002/tfbstools/issues
+URL: https://github.com/ge11232002/TFBSTools
+BugReports: https://github.com/ge11232002/TFBSTools/issues
 Type: Package
 biocViews: MotifAnnotation, GeneRegulation, MotifDiscovery, Transcription, 
            Alignment
