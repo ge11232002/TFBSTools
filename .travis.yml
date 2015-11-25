@@ -4,3 +4,6 @@ language: r
 warnings_are_errors: true
 sudo: required
 bioc_required: true
+apt_packages: 
+  - gsl-bin
+  - libgsl0-dev
