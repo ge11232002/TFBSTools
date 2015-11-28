@@ -4,3 +4,9 @@ sudo: required
 bioc_required: true
 apt_packages:
   - libgsl0-dev
+r_binary_packages:
+  - futile.logger
+  - caTools
+  - gtools
+  - RSQLite
+  - XML
