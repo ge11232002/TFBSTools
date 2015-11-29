@@ -1,5 +1,3 @@
-[![Travis-CI Build Status](https://travis-ci.org/ge11232002/TFBSTools.svg?branch=master)](https://travis-ci.org/ge11232002/TFBSTools)
-
 # TFBSTools
 Software Package for Transcription Factor Binding Site (TFBS) Analysis
 
