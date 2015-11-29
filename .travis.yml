@@ -10,3 +10,5 @@ r_binary_packages:
   - gtools
   - RSQLite
   - XML
+r_github_packages:
+  - rstudio/rmarkdown
