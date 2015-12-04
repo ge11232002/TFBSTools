@@ -49,7 +49,8 @@ LazyData: no
 Collate: AllGenerics.r AllClasses.r show-methods.r util-methods.r
          XMatrix-methods.r XMatrixList-methods.r
          SiteSet-methods.r
-         coercion-methods.r DB-methods.r 
+         coercion-methods.r DB-methods.r
+         JASPAR.R
          PairwiseAlignment-methods.r
          ICM-methods.r PWM-methods.r 
          Motif-methods.r PFM-methods.r
