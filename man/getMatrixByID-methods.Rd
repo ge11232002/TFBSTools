@@ -29,15 +29,16 @@
 
 \arguments{
   \item{x}{
-    a character vector of length 1 for the path of JASPAR SQLite file, 
-    a \code{SQLiteConnection} object, or a \code{JASPAR2014} object.
+    \code{character}(1) for the path of JASPAR SQLite file, 
+    a \code{SQLiteConnection} object, a \code{JASPAR2014}, 
+    or a \code{JASPAR2016}object.
   }
   \item{ID}{
-    a character vector of length 1 for the JASPAR stable ID. 
+    \code{character}() of JASPAR stable ID(s).
     See more details below.
   } 
   \item{name}{
-    a character vector of length 1 for the JASPAR profile name.
+    \code{character}() of JASPAR stable name(s).
   }
 }
 
@@ -60,9 +61,8 @@
 }
 
 \value{
-  A XMatrix object is returned. 
-  The exact type of the object depending on the \code{type} argument.
-  NA is returned if matrix with the given ID/name is not found.
+  A PFMMatrix object is returned when input ID or name is length 1.
+  Otherwise, \code{PFMMatrixList} is returned.
 }
 
 \author{
@@ -82,7 +82,7 @@
     pfm <- getMatrixByID(db, ID="MA0003")
     
     ## character and IDs
-    pfmLsit <- getMatrixByID(db, ID=c("MA0003", "MA0004"))
+    pfmList <- getMatrixByID(db, ID=c("MA0003", "MA0004"))
     
     ## character and name
     pfm <- getMatrixByName(db, name="TFAP2A")

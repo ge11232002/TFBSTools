@@ -303,7 +303,7 @@ setMethod("getMatrixByID", "SQLiteConnection",
               if(is.na(version))
                 version <- as.character(.get_latest_version(x, baseID))
               if(length(version) == 0) # no match
-                return(NA)
+                stop(id, " not found!")
               # get internal ID - also a check for validity
               int_id <- as.character(.get_internal_id(x, baseID, version))
               # get matrix using internal ID
@@ -363,14 +363,14 @@ setMethod("getMatrixByName", "SQLiteConnection",
             ans <- list()
             for(eachName in name){
               sqlCMD = paste0("SELECT distinct BASE_ID 
-                            FROM MATRIX WHERE NAME='", name, "'")
+                            FROM MATRIX WHERE NAME='", eachName, "'")
               tempTable = dbGetQuery(x, sqlCMD)
               baseID = tempTable[["BASE_ID"]]
               if(length(baseID) == 0)
-                return(NA)
+                stop(eachName, " not found!")
               if(length(baseID) > 1)
                 warning("There are ", length(baseID), 
-                        " distinct stable IDs with name ", name, 
+                        " distinct stable IDs with name ", eachName, 
                         ": ", paste(baseID, collapse=", "))
               ans[[eachName]] <- getMatrixByID(x, baseID[1])
             }
