@@ -295,17 +295,25 @@
     # if existing. Warnings will be given for non-existing matrices.
 setMethod("getMatrixByID", "SQLiteConnection",
           function(x, ID){
-            # separate stable ID and version number
-            baseID = strsplit(ID, "\\.")[[1]][1]
-            version = strsplit(ID, "\\.")[[1]][2]
-            if(is.na(version))
-              version = as.character(.get_latest_version(x, baseID))
-            if(length(version) == 0) # no match
-              return(NA)
-            # get internal ID - also a check for validity
-            int_id = as.character(.get_internal_id(x, baseID, version))
-            # get matrix using internal ID
-            ans = .get_Matrix_by_int_id(x, int_id, type="PFM")
+            ans <- list()
+            for(id in ID){
+              # separate stable ID and version number
+              baseID <- strsplit(id, "\\.")[[1]][1]
+              version <- strsplit(id, "\\.")[[1]][2]
+              if(is.na(version))
+                version <- as.character(.get_latest_version(x, baseID))
+              if(length(version) == 0) # no match
+                stop(id, " not found!")
+              # get internal ID - also a check for validity
+              int_id <- as.character(.get_internal_id(x, baseID, version))
+              # get matrix using internal ID
+              ans[[id]] <- .get_Matrix_by_int_id(x, int_id, type="PFM")
+            }
+            if(length(ans) == 1L){
+              ans <- ans[[1]]
+            }else{
+              ans <- do.call(PFMatrixList, ans)
+            }
             return(ans)
           }
           )
@@ -352,17 +360,25 @@ setMethod("getMatrixByName", "SQLiteConnection",
             #type = match.arg(type, c("PWM", "PFM", "ICM"))
             if(missing(name))
               stop("name needs to be specified!")
-            sqlCMD = paste0("SELECT distinct BASE_ID 
-                            FROM MATRIX WHERE NAME='", name, "'")
-            tempTable = dbGetQuery(x, sqlCMD)
-            baseID = tempTable[["BASE_ID"]]
-            if(length(baseID) == 0)
-              return(NA)
-            if(length(baseID) > 1)
-              warning("There are ", length(baseID), 
-                      " distinct stable IDs with name ", name, 
-                      ": ", paste(baseID, collapse=", "))
-            getMatrixByID(x, baseID[1])
+            ans <- list()
+            for(eachName in name){
+              sqlCMD = paste0("SELECT distinct BASE_ID 
+                            FROM MATRIX WHERE NAME='", eachName, "'")
+              tempTable = dbGetQuery(x, sqlCMD)
+              baseID = tempTable[["BASE_ID"]]
+              if(length(baseID) == 0)
+                stop(eachName, " not found!")
+              if(length(baseID) > 1)
+                warning("There are ", length(baseID), 
+                        " distinct stable IDs with name ", eachName, 
+                        ": ", paste(baseID, collapse=", "))
+              ans[[eachName]] <- getMatrixByID(x, baseID[1])
+            }
+            if(length(ans) == 1L){
+              ans <- ans[[1]]
+            }else{
+              ans <- do.call(PFMatrixList, ans)
+            }
           }
           )
 

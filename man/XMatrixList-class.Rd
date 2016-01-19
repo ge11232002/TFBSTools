@@ -34,7 +34,10 @@ ICMatrixList(..., use.names=TRUE)
 ## Accessor-like methods:
 \S4method{ID}{XMatrixList}(x)
 \S4method{name}{XMatrixList}(x)
-
+\S4method{bg}{XMatrixList}(x)
+\S4method{tags}{XMatrixList}(x)
+\S4method{name}{XMatrixList}(x)
+\S4method{strand}{XMatrixList}(x)
 }
 
 \arguments{
@@ -54,7 +57,7 @@ ICMatrixList(..., use.names=TRUE)
 }
 
 \author{
-Ge Tan
+  Ge Tan
 }
 
 
@@ -65,7 +68,12 @@ Ge Tan
 \examples{
     data(MA0003.2)
     data(MA0004.1)
+    
+    ## Construction of PFMatrixList
     pfmList <- PFMatrixList(pfm1=MA0003.2, pfm2=MA0004.1, use.names=TRUE)
+    
+    ## Construction of PFM<atrixList from list of PFMatrix
+    pfmList <- do.call(PFMatrixList, list(pfm1=MA0003.2, pfm2=MA0004.1))
 }
 \keyword{classes}
 
