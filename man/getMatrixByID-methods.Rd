@@ -74,12 +74,23 @@
 }
 
 \examples{
-  \donttest{  
     library(JASPAR2014)
     db <- file.path(system.file("extdata", package="JASPAR2014"), 
                     "JASPAR2014.sqlite")
+                    
+    ## character and ID
     pfm <- getMatrixByID(db, ID="MA0003")
-    pfm2 <- getMatrixByName(db, name="TFAP2A")
-    pfm3 <- getMatrixByID(JASPAR2014, ID="MA0003")
-  }
+    
+    ## character and IDs
+    pfmLsit <- getMatrixByID(db, ID=c("MA0003", "MA0004"))
+    
+    ## character and name
+    pfm <- getMatrixByName(db, name="TFAP2A")
+    
+    ##
+    ## character and name
+    pfmList <- getMatrixByName(db, name=c("TFAP2A", "Arnt"))
+    
+    ## JASPAR2014 and ID
+    pfm <- getMatrixByID(JASPAR2014, ID="MA0003")
 }
