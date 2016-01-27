@@ -1,3 +1,10 @@
+CHANGES IN Bioc 3.3
+-------------------
+
+BUG FIXES
+    o Adapt the runMEME to work with meme 4.10.x version.
+
+
 CHANGES IN VERSION 1.9.4
 ------------------------
 

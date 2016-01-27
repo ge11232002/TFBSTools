@@ -5,7 +5,8 @@
 \alias{runMEME,DNAStringSet-method}
 \title{Wrapper function for MEME} 
 \description{
-  This function builds position frequency matrices using an external program MEME written by Bailey and Elkan.
+  This function builds position frequency matrices using 
+  an external program \strong{MEME} written by \emph{Bailey} and \emph{Elkan}.
 }
 
 \usage{
@@ -17,10 +18,12 @@
 
 \arguments{
   \item{x}{
-    A chracter vector of the path of fasta file or a \code{XStringSet}.
+    A \code{character}(1) vector of the path of fasta file 
+    or a \code{XStringSet}.
   }
   \item{binary}{
-    The path of MEME binary. By default, we assume the meme is in the PATH.
+    \code{character}(1): the path of MEME binary. 
+    By default, we assume the meme is in the \emph{PATH}.
   }
   \item{seqtype}{
     The sequence type. "AA" and "DNA" are allowed.
@@ -33,32 +36,44 @@
 
   }
   \item{tmpdir}{
-    A character vector to change the defult tmp directory.
+    A \code{character}(1) vector to change the defult R's temp directory.
   }
 }
 
 \value{
-  A MotifSet object is returned.
+  A \code{MotifSet} object is returned.
 }
 
 
 \references{
   Bailey, T. L., Boden, M., Buske, F. A., Frith, M., Grant, C. E., Clementi, L., et al. (2009). MEME SUITE: tools for motif discovery and searching. Nucleic acids research, 37(Web Server issue), W202-8. doi:10.1093/nar/gkp335
+  
+  \url{http://meme-suite.org/}
 }
 
 \author{
   Ge Tan
 }
 
+\note{
+  This wrapper works on meme 4.10.1.
+}
 \seealso{
   \code{\linkS4class{MotifSet}}
 }
 
 \examples{
   \dontrun{
-    motifSet = runMEME("/Users/gtan/src/meme_4.9.1/tests/crp0.s", 
-                    binary="/usr/local/Cellar/meme/4.9.0-p4/bin/meme", 
-                    arguments="-nmotifs 3")
+    motifSet <- runMEME(file.path(system.file("extdata", package="TFBSTools"), 
+                        "crp0.s"), 
+                    binary="/usr/local/Cellar/meme/4.10.1/bin/meme", 
+                    arguments=list("-nmotifs"=3))
+    ## Get the site sequences                
+    sitesSeq(motifSet, type="all")
+    sitesSeq(motifSet, type="none")
+    
+    ## Get the consensu matrix, then it can be used as a PFMatrix
+    consensusMatrix(motifSet)
   }
 }
 
