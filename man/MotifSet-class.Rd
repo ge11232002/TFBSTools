@@ -74,8 +74,8 @@
   \dontrun{
     motifSet <- runMEME(file.path(system.file("extdata", package="TFBSTools"), 
                         "crp0.s"),
-                        binary="/usr/local/Cellar/meme/4.9.0-p4/bin/meme",
-                        arguments="-nmotifs 3")
+                        binary="/usr/local/Cellar/meme/4.10.1/bin/meme",
+                        arguments=list("-nmotifs"=3))
     sitesSeq(motifSet, type="all")
     sitesSeq(motifSet, type="none")
     consensusMatrix(motifSet)
