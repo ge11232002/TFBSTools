@@ -25,7 +25,7 @@ importMethodsFrom(rtracklayer, import.chain, liftOver)
 importMethodsFrom(BSgenome, getSeq)
 importMethodsFrom(methods, initialize, show)
 importMethodsFrom(S4Vectors, isConstant, queryHits, subjectHits, 
-    elementLengths, Rle, window)
+    elementNROWS, Rle, window)
 importMethodsFrom(IRanges, score, subject, ranges, "ranges<-",
                   Views, start, end, findOverlaps, width, which)
 importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
