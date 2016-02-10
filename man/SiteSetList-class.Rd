@@ -60,9 +60,9 @@
   sitesetList <- searchSeq(pwmList, "GAATTCTCTCTTGTTGTAGTCTCTTGACAAAATG", 
                            min.score="50\%")
 
-  ## elementLengths of each pwm hits
+  ## elementNROWS of each pwm hits
   library(S4Vectors)
-  elementLengths(sitesetList)
+  elementNROWS(sitesetList)
 
   ## Output of SiteSetList                         
   writeGFF3(sitesetList, scoreType="absolute")

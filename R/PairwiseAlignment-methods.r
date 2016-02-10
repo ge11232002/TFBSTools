@@ -257,7 +257,7 @@ do_PairBSgenomeSearchPositive = function(pwm, BSgenome1, BSgenome2,
   site2GRanges = liftOver(site1GRanges, chain)
   # reduce the ranges. can apply on a GRangesList!! Cool!
   site2GRanges = reduce(site2GRanges)
-  lengths <- elementLengths(site2GRanges)
+  lengths <- elementNROWS(site2GRanges)
   site2GRanges = site2GRanges[lengths == 1L] 
   # so far, we drop the region with more ranges. 
   # Discuss with Boris for more details.
@@ -398,7 +398,7 @@ do_PairBSgenomeSearchNew <- function(pwm, BSgenome1, BSgenome2,
   site2GRangesLift <- liftOver(site1GRanges, chain)
   # reduce the ranges. can apply on a GRangesList!! Cool!
   site2GRangesLift <- reduce(site2GRangesLift)
-  lengths <- elementLengths(site2GRangesLift)
+  lengths <- elementNROWS(site2GRangesLift)
   site2GRangesLift <- site2GRangesLift[lengths == 1L]
   # so far, we drop the region with more ranges. 
   # Discuss with Boris for more details.

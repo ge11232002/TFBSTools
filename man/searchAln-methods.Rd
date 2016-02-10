@@ -177,7 +177,7 @@
                            min.score="70\%", cutoff=0.5, 
                            strand="*", type="any")
   ## elementLenths of each pwm hits
-   elementLengths(sitePairSetList)
+   elementNROWS(sitePairSetList)
                            
   ## output
   writeGFF2(sitePairSetList)
