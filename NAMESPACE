@@ -24,8 +24,7 @@ importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-", findOverlaps,
 importMethodsFrom(rtracklayer, import.chain, liftOver)
 importMethodsFrom(BSgenome, getSeq)
 importMethodsFrom(methods, initialize, show)
-importMethodsFrom(S4Vectors, isConstant, queryHits, subjectHits, 
-    elementNROWS, Rle, window)
+importMethodsFrom(S4Vectors, isConstant, elementNROWS, Rle, window)
 importMethodsFrom(IRanges, score, subject, ranges, "ranges<-",
                   Views, start, end, findOverlaps, width, which)
 importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
@@ -48,7 +47,7 @@ importFrom(gtools, rdirichlet)
 importFrom(BiocParallel, MulticoreParam, bpmapply)
 importFrom(DirichletMultinomial, dmn, laplace, mixturewt)
 importFrom(TFMPvalue, TFMsc2pv)
-importFrom(S4Vectors, DataFrame)
+importFrom(S4Vectors, DataFrame, queryHits, subjectHits)
 importFrom(XML, xmlParse, xmlToList)
 importFrom(grid, grid.newpage, plotViewport, dataViewport, 
            grid.xaxis, grid.polygon, pushViewport, grid.text, popViewport,
