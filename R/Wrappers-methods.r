@@ -15,7 +15,8 @@ run_MEME <- function(inputFastaFn, binary="meme", seqtype="DNA",
   booleanArguments <- c("-nomatrim", "-noendgaps", "-revcomp", "-pal",
                        "-x_branch", "-w_branch")
   arguments1 <- arguments[names(arguments) %in% valueArguments]
-  arguments1 <- paste(names(arguments), arguments, collapse=" ")
+  arguments1 <- paste(names(arguments1), format(arguments1, scientific=FALSE),
+                      collapse=" ")
   arguments2 <- arguments[names(arguments) %in% booleanArguments]
   arguments2 <- paste(names(arguments2), collapse=" ")
   arguments <- paste(arguments1, arguments2)
