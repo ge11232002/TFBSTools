@@ -1,19 +1,5 @@
 
 ### -----------------------------------------------------------------
-### a better system call
-### Not Exported!
-my.system = function(cmd, echo=TRUE, intern=FALSE, ...){
-  if (echo){
-    message(cmd)
-  }
-  res = system(cmd, intern=intern, ...)
-  if (!intern){
-    stopifnot(res == 0)
-  }
-  return(res)
-}
-
-### -----------------------------------------------------------------
 ### findOverlapsBases
 ### Not exported!
 findLargestOverlaps = function(query, subject){

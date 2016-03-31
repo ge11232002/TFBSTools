@@ -1,5 +1,3 @@
-
-
 ### ---------------------------------------------------------------
 ### The real wrapper function for MEME
 ###
@@ -15,17 +13,26 @@ run_MEME <- function(inputFastaFn, binary="meme", seqtype="DNA",
   booleanArguments <- c("-nomatrim", "-noendgaps", "-revcomp", "-pal",
                        "-x_branch", "-w_branch")
   arguments1 <- arguments[names(arguments) %in% valueArguments]
-  arguments1 <- paste(names(arguments), arguments, collapse=" ")
+  arguments1 <- paste(names(arguments1), format(arguments1, scientific=FALSE),
+                      collapse=" ")
   arguments2 <- arguments[names(arguments) %in% booleanArguments]
   arguments2 <- paste(names(arguments2), collapse=" ")
   arguments <- paste(arguments1, arguments2)
-  cmd <- paste(binary, inputFastaFn, "-text", 
-              ifelse(seqtype=="DNA", "-dna", "-protein"), 
-              arguments, "2>/dev/null")
-  memeOutput <- my.system(cmd, intern=TRUE)
-  #conMemeOutput = pipe(cmd, open="rt")
-  #on.exit(close(conMemeOutput))
-  
+  options <- c(inputFastaFn, "-text", 
+               ifelse(seqtype=="DNA", "-dna", "-protein"), 
+               arguments)
+  message(paste(binary, paste(options, collapse=" ")))
+  memeOutput <- system2(command=binary, args=options, stderr=FALSE, stdout=TRUE)
+  if(!is.null(attributes(memeOutput))){
+    if(attributes(memeOutput)$status == 1L){
+      testFn <- paste0("MEME-", basename(inputFastaFn))
+      file.copy(inputFastaFn, testFn)
+      stop("MEME run with error! Please test MEME with input file ", testFn)
+    }else if(attributes(memeOutput)$status == 127L){
+      stop("Can't run MEME!")
+    }
+  }
+
   # get the version of meme used.
   oneLine <- memeOutput[grep("^MEME version", memeOutput)]
   version = strsplit(oneLine, " ")[[1]][3]

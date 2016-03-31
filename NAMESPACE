@@ -53,7 +53,9 @@ importFrom(grid, grid.newpage, plotViewport, dataViewport,
            grid.xaxis, grid.polygon, pushViewport, grid.text, popViewport,
            unit, gpar)
 importFrom(Biobase, rowMax, rowMin)
-
+importFrom("graphics", "par")
+importFrom("stats", "runif", "setNames")
+importFrom("utils", "write.table")
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools
@@ -120,6 +122,9 @@ export(
   deleteMatrixHavingID,
   initializeJASPARDB,
 
+  ## JASPAR.R
+  makeFlatFileDir,
+  
   ## AllGenerics.r
   ID, 
   name, 
