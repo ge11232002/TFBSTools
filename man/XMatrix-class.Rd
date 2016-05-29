@@ -219,7 +219,7 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
                  
   ## Construction from a set of binding sites sequences
   sitesSeqs <- c("Human Gli1"= "GACCACCCA", "hIGFBP-6"= "GACCCCCCA",
-                 "HNF-3β"="GAACACCCA", "hPlakoglobin"= "GACCACCAA",
+                 "HNF-3beta"="GAACACCCA", "hPlakoglobin"= "GACCACCAA",
                  "rIGFBP-6"= "GTCCACCCA", "Sox-9"= "GGCCACCCA")
   countMatrix <- consensusMatrix(sitesSeqs)
   pfm <- PFMatrix(ID="Gli-1", name="Gli-1", profileMatrix=countMatrix)
