@@ -107,6 +107,10 @@ exportMethods(
   ## coercion-methods.r
   as.matrix, as.data.frame,
 
+  # XMatrix-methods.r
+  colSums,
+  rowSums,
+
   ## Motif-methods.r
   consensusMatrix
 )
@@ -138,8 +142,8 @@ export(
   #alignments,
 
   # XMatrix-methods.r
-  colSums,
-  rowSums,
+#colSums,
+#  rowSums,
 
   ## PWM-methods.r
   toPWM,

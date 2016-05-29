@@ -66,6 +66,8 @@
   ## one to several comparsion
   pfmList <- PFMatrixList(pfmSubject, pfmQuery)
   scores <- PFMSimilarity(pfmList, pfmQuery)
+  
+  
 }
 
 \keyword{methods}

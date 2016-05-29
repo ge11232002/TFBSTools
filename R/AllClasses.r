@@ -95,6 +95,7 @@ setValidity("XMatrix",
 PFMatrix = function(ID="Unknown", name="Unknown", matrixClass="Unknown",
                     strand="+", bg=c(A=0.25, C=0.25, G=0.25, T=0.25), 
                     tags=list(), profileMatrix=matrix()){
+  mode(profileMatrix) <- "integer"
   new("PFMatrix", ID=ID, name=name, matrixClass=matrixClass, 
       strand=strand, bg=bg,
       tags=tags,
