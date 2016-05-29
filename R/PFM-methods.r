@@ -6,7 +6,7 @@ compareMatrix = function(pfmSubject, pfmQuery, openPenalty, extPenalty){
   # The true aligning engine. Taking two ordinary matrixs.
   pfmSubject = normargPfm(pfmSubject)
   pfmQuery = normargPfm(pfmQuery)
-  ans = .Call("matrixAligner", pfmSubject, pfmQuery, openPenalty, extPenalty)
+  ans = .Call("matrixAligner", pfmQuery, pfmSubject, openPenalty, extPenalty)
   return(ans)
 }
 
@@ -14,7 +14,7 @@ setMethod("PFMSimilarity", signature(pfmSubject="matrix", pfmQuery="matrix"),
          function(pfmSubject, pfmQuery, openPenalty=3, extPenalty=0.01){
            score = compareMatrix(pfmSubject, pfmQuery, openPenalty=openPenalty,
                                  extPenalty=extPenalty)
-           relScore = 100 * score / max(ncol(pfmSubject), ncol(pfmQuery)) / 2
+           relScore = 100 * score / min(ncol(pfmSubject), ncol(pfmQuery)) / 2
            return(c(score=score, relScore=relScore))
          }
          )

@@ -48,7 +48,6 @@
 
 \references{
   Sandelin, A., H glund, A., Lenhard, B., & Wasserman, W. W. (2003). Integrated analysis of yeast regulatory sequences for biologically linked clusters of genes. Functional & Integrative Genomics, 3(3), 125-134. doi:10.1007/s10142-003-0086-6
-
 }
 
 \author{
@@ -56,17 +55,21 @@
 }
 
 \examples{
-  ## one to one comparison
-  data("MA0043")
-  pfmSubject <- MA0043
-  data("MA0048")
-  pfmQuery <- MA0048
-  score <- PFMSimilarity(pfmSubject, pfmQuery)
-    
-  ## one to several comparsion
-  pfmList <- PFMatrixList(pfmSubject, pfmQuery)
-  scores <- PFMSimilarity(pfmList, pfmQuery)
+  library(Biostrings)
+  library(JASPAR2016)
+  ## Example matrix from JASPAR database
+  profileMatrix <- matrix(as.integer(
+    c(13, 13,  3,  1, 54,  1,  1,  1,  0,  3,  2,  5,
+      13, 39,  5, 53,  0,  1, 50,  1,  0, 37,  0, 17,
+      17,  2, 37,  0,  0, 52,  3,  0, 53,  8, 37, 12,
+      11,  0,  9,  0,  0,  0,  0, 52,  1,  6, 15, 20)),
+    nrow=4, byrow=TRUE, dimnames=list(DNA_BASES))
+  pfmQuery <- PFMatrix(profileMatrix=profileMatrix)
+  pfmSubjects <- getMatrixSet(JASPAR2016,
+                              opts=list(ID=c("MA0500", "MA0499", "MA0521",
+                                             "MA0697", "MA0048", "MA0751",
+                                             "MA0832")))
+  PFMSimilarity(pfmSubjects, pfmQuery)
 }
 
 \keyword{methods}
-

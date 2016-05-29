@@ -1,6 +1,6 @@
 Package: TFBSTools
-Version: 1.11.2
-Date: 2016-03-31
+Version: 1.11.4
+Date: 2016-05-29
 Title: Software Package for Transcription Factor Binding Site (TFBS) Analysis
 Description: TFBSTools is a package for the analysis and manipulation of 
              transcription factor binding sites. It includes matrices conversion
@@ -37,7 +37,8 @@ Depends: R (>= 3.2.2)
 Suggests: BiocStyle(>= 1.7.7),
           JASPAR2014(>= 1.4.0),
           knitr(>= 1.11),
-          testthat
+          testthat,
+          JASPAR2016(>= 1.0.0)
 License: GPL-2
 URL: https://github.com/ge11232002/TFBSTools
 BugReports: https://github.com/ge11232002/TFBSTools/issues
