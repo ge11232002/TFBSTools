@@ -40,7 +40,7 @@ importFrom(Biostrings, unitScale, PWMscoreStartingAt,
                        DNAString)
 importFrom(caTools, runmean)
 importFrom(GenomicRanges, GRanges, GRangesList)
-importFrom(methods, is, new)
+importFrom(methods, is, new, as, slot)
 importFrom(RSQLite, SQLite)
 importFrom(IRanges, IRanges)
 importFrom(gtools, rdirichlet)

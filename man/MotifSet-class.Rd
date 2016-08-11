@@ -6,6 +6,7 @@
 \alias{[,MotifSet-method}
 \alias{consensusMatrix,MotifSet-method}
 \alias{[,MotifSet,ANY,ANY-method}
+\alias{[,MotifSet,ANY,ANY,ANY-method}
 \alias{length,MotifSet-method}
 \alias{sitesSeq}
 \alias{sitesSeq,MotifSet-method}

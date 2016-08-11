@@ -346,12 +346,12 @@ setMethod("toGRangesList",
                       ranges=IRanges(start=
                         unlist(lapply(x, 
                           function(x){start(x@siteset1@views)})) + 
-                                     rep(start(axt@targetRanges), 
+                                     rep(start(targetRanges(axt)), 
                                          eachLengths) - 1,
                                      end=
                         unlist(lapply(x,
                           function(x){end(x@siteset1@views)})) +
-                                     rep(start(axt@targetRanges),
+                                     rep(start(targetRanges(axt)),
                                          eachLengths) - 1
                                      ),
                       strand="+",
@@ -374,12 +374,12 @@ setMethod("toGRangesList",
                       ranges=IRanges(start=
                         unlist(lapply(x,
                           function(x){start(x@siteset2@views)})) +
-                                     rep(start(axt@queryRanges),
+                                     rep(start(queryRanges(axt)),
                                          eachLengths) - 1,
                                      end=
                         unlist(lapply(x,
                           function(x){end(x@siteset2@views)})) +
-                                     rep(start(axt@queryRanges),
+                                     rep(start(queryRanges(axt)),
                                          eachLengths) - 1
                                      ),
                       strand=rep(strand(queryRanges(axt)), eachLengths),

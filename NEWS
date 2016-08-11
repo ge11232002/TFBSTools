@@ -1,3 +1,9 @@
+CHANGES IN Bioc 3.4
+-------------------
+
+BUG FIXES
+    o Fix a bug in PFMSimilarity.
+
 CHANGES IN Bioc 3.3
 -------------------
 
