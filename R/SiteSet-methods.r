@@ -75,30 +75,28 @@ setMethod("writeGFF2", "SitePairSetList",
 ### Exported!
 setMethod("siteset1", "SitePairSetList",
           function(x){
-            #ans = SiteSetList(lapply(x, siteset1))
-            ans = do.call(SiteSetList, lapply(x, siteset1))
+            ans <- do.call(SiteSetList, lapply(x, siteset1))
             return(ans)
           }
           )
 
 setMethod("siteset2", "SitePairSetList",
           function(x){
-            #ans = SiteSetList(lapply(x, siteset2))
-            ans = do.call(SiteSetList, lapply(x, siteset2))
+            ans <- do.call(SiteSetList, lapply(x, siteset2))
             return(ans)
           }
           )
 
 setMethod("seqname1", "SitePairSetList",
           function(x){
-            ans = sapply(x, function(x){x@siteset1@seqname})
+            ans <- sapply(x, function(x){x@siteset1@seqname})
             return(ans)
           }
           )
 
 setMethod("seqname2", "SitePairSetList",
           function(x){
-            ans = sapply(x, function(x){x@siteset2@seqname})
+            ans <- sapply(x, function(x){x@siteset2@seqname})
             return(ans)
           }
           )
@@ -183,7 +181,8 @@ setMethod("writeGFF3", "SiteSet",
               return(data.frame())
             scoreType = match.arg(scoreType, c("absolute", "relative"))
             seqs = DNAStringSet(views(x))
-            seqs[strand(x) == "-"] = reverseComplement(seqs[strand(x) == "-"])
+            seqs[strand(x) == "-"] <- 
+              reverseComplement(seqs[strand(x) == "-"])
             if(scoreType =="absolute"){
               score = score(x)
             }else{
@@ -215,7 +214,8 @@ setMethod("writeGFF2", "SiteSet",
               return(data.frame())
             scoreType = match.arg(scoreType, c("absolute", "relative"))
             seqs = DNAStringSet(views(x))
-            seqs[strand(x) == "-"] = reverseComplement(seqs[strand(x) == "-"])
+            seqs[strand(x) == "-"] <- 
+              reverseComplement(seqs[strand(x) == "-"])
             if(scoreType == "absolute"){
               score = score(x)
             }else{
@@ -338,7 +338,7 @@ setMethod("toGRangesList",
             indexNoneZero <- which(sapply(x, length) != 0L)
             x <- x[indexNoneZero]
             axt <- axt[indexNoneZero]
-            eachLengths <- sapply(x, length)
+            eachLengths <- lengths(x)
             targetTFBS <- 
               GRanges(seqnames=rep(sapply(x, 
                                      function(x){x@siteset1@seqname}),
@@ -398,5 +398,3 @@ setMethod("toGRangesList",
             return(GRangesList(targetTFBS=targetTFBS, queryTFBS=queryTFBS))
           }
           )
-
-
