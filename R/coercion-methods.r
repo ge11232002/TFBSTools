@@ -20,7 +20,8 @@ setAs("SiteSet", "data.frame", function(from){
         return(data.frame())
 
       seqs <- DNAStringSet(views(from))
-      seqs[strand(from) == "-"] <- reverseComplement(seqs[strand(from) == "-"])
+      seqs[strand(from) == "-"] <- 
+        reverseComplement(seqs[strand(from) == "-"])
       seqs <- as.character(seqs)
       absScore <- score(from) 
       relScore <- relScore(from)
@@ -34,7 +35,7 @@ setAs("SiteSet", "data.frame", function(from){
                         strand=strand(from),
                         ID=from@pattern@ID,
                         TF=from@pattern@name,
-                        class=from@pattern@matrixClass,
+                        class=paste(from@pattern@matrixClass, collapse="; "),
                         siteSeqs=seqs
                         )
       return(ans)
