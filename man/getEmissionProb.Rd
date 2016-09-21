@@ -45,6 +45,3 @@
   tffmDetail <- readXMLTFFM(xmlDetail, type="Detail")
   getEmissionProb(tffmDetail)
 }
-
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

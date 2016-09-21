@@ -209,10 +209,10 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
                   tax_group="vertebrates", medline="7592839", type="SELEX", 
                   ACC="P53762", pazar_tf_id="TF0000003",
                   TFBSshape_ID="11", TFencyclopedia_ID="580"),
-                  profileMatrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
-                                         16L, 0L,  20L, 0L,  0L,  0L,
-                                         0L,  1L,  0L,  20L, 0L,  20L,
-                                         0L,  0L,  0L,  0L,  20L, 0L), 
+                  profileMatrix=matrix(c(4,  19, 0,  0,  0,  0,
+                                         16, 0,  20, 0,  0,  0,
+                                         0,  1,  0,  20, 0,  20,
+                                         0,  0,  0,  0,  20, 0), 
                                          byrow=TRUE, nrow=4, 
                                          dimnames=list(c("A", "C", "G", "T")))
                  )
@@ -229,7 +229,7 @@ ICMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
   as(pfm, "matrix")
 
   ## Methods
-  pwm = toPWM(pfm)
+  pwm <- toPWM(pfm)
   reverseComplement(pwm)
   length(pfm)
 }
