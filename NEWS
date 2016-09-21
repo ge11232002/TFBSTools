@@ -5,6 +5,9 @@ BUG FIXES
     o Fix a bug in PFMSimilarity.
     o Fix an error when there are multiple classes for motif matrx.
 
+NEW FEATURES
+    o readJASPARMatrix function to add the JASPAR format file.
+
 CHANGES IN Bioc 3.3
 -------------------
 

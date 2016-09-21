@@ -127,7 +127,7 @@ export(
   initializeJASPARDB,
 
   ## JASPAR.R
-  makeFlatFileDir,
+  makeFlatFileDir, readJASPARMatrix,
   
   ## AllGenerics.r
   ID, 
