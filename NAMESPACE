@@ -5,7 +5,6 @@ useDynLib(TFBSTools, .registration = TRUE)
 ### Import S4 classes defined in other packages
 ###
 importClassesFrom(S4Vectors, Annotated, Vector, SimpleList, List, DataFrame)
-#importClassesFrom(JASPAR2014, JASPAR2014)
 importClassesFrom(Biostrings, DNAStringSet, PairwiseAlignments, XStringViews)
 importClassesFrom(GenomicRanges, GRanges, GRangesList)
 importClassesFrom(methods, ANY, character, integer, missing)
@@ -16,11 +15,12 @@ import(BiocGenerics)
 ### -----------------------------------------------------------------
 ### Import S4 methods defined in other packages
 ###
-importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, consensusMatrix, PairwiseAlignments, pattern, consensusMatrix)
+importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, 
+                  consensusMatrix, PairwiseAlignments, pattern, consensusMatrix)
 importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
 importMethodsFrom(XVector, subseq)
-importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-", findOverlaps,
-    reduce)
+importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-", 
+                  findOverlaps, reduce)
 importMethodsFrom(rtracklayer, import.chain, liftOver)
 importMethodsFrom(BSgenome, getSeq)
 importMethodsFrom(methods, initialize, show)
@@ -182,5 +182,3 @@ export(
   ## TFFM.R
   getEmissionProb, getPosProb
 )
-
-
