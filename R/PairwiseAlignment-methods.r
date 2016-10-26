@@ -1,18 +1,3 @@
-### ---------------------------------------------------------------
-### The PairwiseAlignmentTFBS accessor-like methods
-###
-#setMethod("alignments", "PairwiseAlignmentTFBS",
-#          function(x) x@alignments)
-#setMethod("seqname", "PairwiseAlignmentTFBS",
-#          function(x) c(x@seqname1, x@seqname2))
-#setMethod("conservation1", "PairwiseAlignmentTFBS",
-#          function(x) x@conservation1)
-#setMethod("seqlength", "PairwiseAlignmentTFBS",
-#          function(x) c(x@seq1length, x@seq2length))
-#setMethod("alnlength", "PairwiseAlignmentTFBS",
-#          function(x) nchar(alignments(x)))
-
-
 calculate_conservation = function(aln1, aln2, windowSize, which="1"){
   ## This function is used to calculate the conservation profiles for a pairwise alignment.
   # x: a DNAStringSet with length 2 holds the alignment
@@ -226,17 +211,6 @@ setMethod("doSiteSearch",
                              cutoff=cutoff, conservation=conservation)
           }
           )
-#setMethod("doSiteSearch", 
-#          signature(aln1="PairwiseAlignmentTFBS", aln2="missing"),
-#          function(pwm, aln1, aln2, min.score="80%", 
-#                   windowSize=51L, cutoff=0.7,
-#                   conservation=NULL){
-#            do_sitesearch(pwm, as.character(pattern(alignments(aln1))),
-#                          as.character(subject(alignments(aln1))),
-#                          min.score=min.score, windowSize=windowSize(aln1),
-#                          cutoff=cutoff, conservation=conservation1(aln1))
-#          }
-#          )
 
 do_PairBSgenomeSearchPositive = function(pwm, BSgenome1, BSgenome2, 
                                          chr1, chr2, 
@@ -399,23 +373,26 @@ do_PairBSgenomeSearchNew <- function(pwm, BSgenome1, BSgenome2,
   # reduce the ranges. can apply on a GRangesList!! Cool!
   site2GRangesLift <- reduce(site2GRangesLift)
   lengths <- elementNROWS(site2GRangesLift)
-  site2GRangesLift <- site2GRangesLift[lengths == 1L]
+  
+  indexLength1 <- which(lengths == 1L)
+  site2GRangesLift <- site2GRangesLift[indexLength1]
   # so far, we drop the region with more ranges. 
   # Discuss with Boris for more details.
   # only keep the ranges on chr2
-  site2GRangesLift <- 
-    site2GRangesLift[as.character(seqnames(site2GRangesLift)) == chr2]
-  # site1 <- site1[as.integer(names(site2GRanges))]
-  indexToKeepSite1 <- as.integer(names(site2GRangesLift))
+  site2GRangesLift <- unlist(site2GRangesLift)
+  indexForChr <- which(seqnames(site2GRangesLift) == chr2)
+  site2GRangesLift <- site2GRangesLift[indexForChr]
+  indexToKeepSite1 <- indexLength1[indexForChr]
+  
   # extend the ranges a bit. Let's use ncol of matrix
   site2GRangesLiftMerged <- 
-    GRanges(seqnames=as.character(seqnames(site2GRangesLift)), 
-            ranges=IRanges(as.integer(start(site2GRangesLift)) - 
+    GRanges(seqnames=seqnames(site2GRangesLift),
+            ranges=IRanges(start(site2GRangesLift) - 
                            ncol(pwm@profileMatrix), 
-                           as.integer(end(site2GRangesLift)) + 
+                           end(site2GRangesLift) + 
                            ncol(pwm@profileMatrix)
                            ),
-            strand=as.character(strand(site2GRangesLift))
+            strand=strand(site2GRangesLift)
             )
   # Let's see how site2GRangesLiftMerged overlaps with site2GRanges
   hits <- findOverlaps(site2GRangesLiftMerged, site2GRanges, ignore.strand=TRUE)
@@ -423,7 +400,6 @@ do_PairBSgenomeSearchNew <- function(pwm, BSgenome1, BSgenome2,
   indexToKeepSite2 <- subjectHits(hits)
   return(list(site1=site1[indexToKeepSite1], site2=site2[indexToKeepSite2]))
 }
-
 
 do_PairBSgenomeSearch = function(pwm, BSgenome1, BSgenome2, chr1, chr2,
                                           strand, min.score, chain){
@@ -445,6 +421,4 @@ do_PairBSgenomeSearch = function(pwm, BSgenome1, BSgenome2, chr1, chr2,
   ans_siteset1 = do.call(c, list(sitesetPos$site1, sitesetNeg$site1))
   ans_siteset2 = do.call(c, list(sitesetPos$site2, sitesetNeg$site2))
   return(SitePairSet(siteset1=ans_siteset1, siteset2=ans_siteset2))
-
 }
-
