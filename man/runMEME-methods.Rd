@@ -56,7 +56,7 @@
 }
 
 \note{
-  This wrapper works on meme 4.10.1.
+  This wrapper is tested on \dQuote{MEME} 4.10.1.
 }
 \seealso{
   \code{\linkS4class{MotifSet}}
