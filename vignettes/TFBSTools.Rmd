@@ -333,11 +333,11 @@ PFMSimilarity(pfmList, IUPACString)
 To measure the similarity of two PWM matrix in three measurements:
 _normalised Euclidean distance_, _Pearson correlation_
 and _Kullback Leibler divergence_ [@linhart_transcription_2008].
-Given two PWMs, $P^1$ and $P^2$, where l is the length.
-$P_{i,b}$ is the values in column i with base b.
+Given two PWMs, $P^1$ and $P^2$, where $l$ is the length.
+$P_{i,b}$ is the values in column $i$ with base $b$.
 The normalised Euclidean distance is computed in
 
-$$ D(a,b) = {1 \over {\sqrt{2}l}} \cdot \sum_{i=1}^{l} \sqrt{\sum_{b \in {\{A,C,G,T\}}} (P_{i,b}^1-P_{i,b}^2)^2}$$
+$$ D(P^1, P^2) = {1 \over {\sqrt{2}l}} \cdot \sum_{i=1}^{l} \sqrt{\sum_{b \in {\{A,C,G,T\}}} (P_{i,b}^1-P_{i,b}^2)^2}$$
 
 This distance is between 0 (perfect identity) and 1 (complete dis-similarity).
 

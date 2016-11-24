@@ -86,6 +86,9 @@ export(
   sampleRanges,
 
   ## TFFMseqLogo.R
+  
+  ## Wrappers-methods.R
+  parseMEMEOutput,
 
   ## IO.R
   readXMLTFFM

@@ -32,65 +32,13 @@ run_MEME <- function(inputFastaFn, binary="meme", seqtype="DNA",
       stop("Can't run MEME!")
     }
   }
-
-  # get the version of meme used.
-  oneLine <- memeOutput[grep("^MEME version", memeOutput)]
-  version = strsplit(oneLine, " ")[[1]][3]
-
-  # get the command
-  oneLine = memeOutput[grep("^command:", memeOutput)]
-  command = gsub("^command: ", "", oneLine)
-
-  
-  # get the motifs information
-  revcomp = grepl("revcomp", command)
-  oneLines = memeOutput[grep("^MOTIF  \\d+", memeOutput)]
-  splittedLines = strsplit(oneLines, "[[:blank:]]+")
-  motifWidths = as.integer(sapply(splittedLines, "[", 6))
-  motifOccurrences = as.integer(sapply(splittedLines, "[", 9))
-  motifEvalues = as.numeric(sapply(splittedLines, "[", 15))
-  
-  # get the motifs names
-  indexNames = grep("sorted by position p-value", memeOutput)
-  oneLines = memeOutput[indexNames]
-  motifNames = lapply(strsplit(oneLines, "[[:blank:]]+"), "[", c(2,3))
-  motifNames = sapply(motifNames, paste0, collapse=" ")
-
-  # get the motifs ranges
-  motifList = list()
-  for(i in seq_len(length(indexNames))){
-    oneLines = memeOutput[seq(from=indexNames[i]+4, 
-                              to=indexNames[i]+4+motifOccurrences[i]-1)]
-    splittedLines = strsplit(oneLines, "[[:blank:]]+")
-    strands <- NULL
-    starts <- NULL
-    if(revcomp){
-      strands <- sapply(splittedLines, "[", 2)
-      starts <- as.integer(sapply(splittedLines, "[", 3))
-    }else{
-      strands <- Rle("+", length(splittedLines))
-      starts <- as.integer(sapply(splittedLines, "[", 2))
-    }
-    oneRange <- GRanges(seqnames=sapply(splittedLines, "[", 1), 
-                       ranges=IRanges(start=starts,
-                                      width=motifWidths[i]),
-                       strand=strands,
-                       score=as.numeric(sapply(splittedLines, 
-                                               "[", ifelse(revcomp, 4, 3)))
-                       )
-    motifList = c(motifList, oneRange)
-  }
-  motifList = GRangesList(motifList)
-  names(motifList) = motifNames
-  ans = list(motifList=motifList, motifEvalues=motifEvalues) 
+  ans <- parseMEMEOutput(memeOutput)
   return(ans)
 }
 
-
-
 ### -------------------------------------------------------------
 ### The MEME method
-###
+### Exported!
 setMethod("runMEME", "character",
           function(x, binary="meme", seqtype="DNA", arguments=list(), 
                    tmpdir=tempdir()){
@@ -125,6 +73,66 @@ setMethod("runMEME", "DNAStringSet",
           }
           )
 
-
-
-
+### -----------------------------------------------------------------
+### Parse the output from MEME
+### Exported!
+parseMEMEOutput <- function(x){
+  if(length(x) == 1L){
+    ## The path of file
+    memeOutput <- readLines(x)
+  }else{
+    memeOutput <- x
+  }
+  
+  # get the version of meme used.
+  oneLine <- memeOutput[grep("^MEME version", memeOutput)]
+  version = strsplit(oneLine, " ")[[1]][3]
+  
+  # get the command
+  oneLine = memeOutput[grep("^command:", memeOutput)]
+  command = gsub("^command: ", "", oneLine)
+  
+  
+  # get the motifs information
+  revcomp = grepl("revcomp", command)
+  oneLines = memeOutput[grep("^MOTIF  \\d+", memeOutput)]
+  splittedLines = strsplit(oneLines, "[[:blank:]]+")
+  motifWidths = as.integer(sapply(splittedLines, "[", 6))
+  motifOccurrences = as.integer(sapply(splittedLines, "[", 9))
+  motifEvalues = as.numeric(sapply(splittedLines, "[", 15))
+  
+  # get the motifs names
+  indexNames = grep("sorted by position p-value", memeOutput)
+  oneLines = memeOutput[indexNames]
+  motifNames = lapply(strsplit(oneLines, "[[:blank:]]+"), "[", c(2,3))
+  motifNames = sapply(motifNames, paste0, collapse=" ")
+  
+  # get the motifs ranges
+  motifList = list()
+  for(i in seq_len(length(indexNames))){
+    oneLines = memeOutput[seq(from=indexNames[i]+4, 
+                              to=indexNames[i]+4+motifOccurrences[i]-1)]
+    splittedLines = strsplit(oneLines, "[[:blank:]]+")
+    strands <- NULL
+    starts <- NULL
+    if(revcomp){
+      strands <- sapply(splittedLines, "[", 2)
+      starts <- as.integer(sapply(splittedLines, "[", 3))
+    }else{
+      strands <- Rle("+", length(splittedLines))
+      starts <- as.integer(sapply(splittedLines, "[", 2))
+    }
+    oneRange <- GRanges(seqnames=sapply(splittedLines, "[", 1), 
+                        ranges=IRanges(start=starts,
+                                       width=motifWidths[i]),
+                        strand=strands,
+                        score=as.numeric(sapply(splittedLines, 
+                                                "[", ifelse(revcomp, 4, 3)))
+    )
+    motifList = c(motifList, oneRange)
+  }
+  motifList = GRangesList(motifList)
+  names(motifList) = motifNames
+  ans = list(motifList=motifList, motifEvalues=motifEvalues)
+  return(ans)
+}

@@ -1,3 +1,9 @@
+CHANGES IN Bioc 3.5
+-------------------
+
+NEW FEATURES
+    o Add function to parse MEME output.
+
 CHANGES IN Bioc 3.4
 -------------------
 
