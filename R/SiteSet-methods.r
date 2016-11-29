@@ -309,13 +309,6 @@ setMethod("pvalues", "SiteSetList",
           }
           )
 
-#setMethod("pvalues", "SitePairSet",
-#          function(x){
-#            list(pvalues(siteset1(x)), pvalues(siteset2(x)))
-#          }
-#          )
-
-
 ### -----------------------------------------------------------------
 ### get the genomic coordinates in the view of SitePairSet 
 ### from searchAln for Axt.
