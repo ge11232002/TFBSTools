@@ -11,12 +11,13 @@
 }
 
 \usage{
-  searchSeq(x, subject, seqname="Unknown", strand="*", min.score="80\%")
+  searchSeq(x, subject, seqname="Unknown", strand="*", min.score="80\%",
+            mc.cores=1L)
 }
 
 \arguments{
   \item{x}{
-    x can be a \link{PWMatrix} object or a \link{PWMatrixList} object.
+    \code{\link{PWMatrix}} or \code{\link{PWMatrixList}} object.
   }
   \item{subject}{
     A \code{DNAStringSet}, \code{DNAString}, \code{XStringViews} or 
@@ -38,6 +39,10 @@
     in the format of "80\%" or as a single absolute value between 0 and 1.
     When it is percentage value, it represents the quantile 
     between the minimal and the maximal possible value from the PWM.
+  }
+  \item{mc.cores}{
+    \code{integer}(1): The number of cores to use.
+    It is only used when \sQuote{x} is a \code{\link{PWMatrixList}} object.
   }
 }
 
@@ -87,6 +92,9 @@ Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identifi
   # PWMatrixList, character
   sitesetList <- searchSeq(pwmList, seq1, seqname="seq1", strand="*", 
                            min.score="80\%")
+  sitesetList <- searchSeq(pwmList, seq1, seqname="seq1", strand="*", 
+                           min.score="80\%", mc.cores=2L)
+  
   ## Convert the SiteSteList object into other R objects
   as(sitesetList, "data.frame")
   as(sitesetList, "DataFrame")

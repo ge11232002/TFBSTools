@@ -108,7 +108,8 @@ setGeneric("totalIC", signature="x",
            function(x) standardGeneric("totalIC"))
 
 setGeneric("searchSeq", #signature="x",
-           function(x, subject, seqname="Unknown", strand="*", min.score="80%")
+           function(x, subject, seqname="Unknown", strand="*", min.score="80%",
+                    mc.cores=1L)
              standardGeneric("searchSeq"))
 
 setGeneric("searchAln",
