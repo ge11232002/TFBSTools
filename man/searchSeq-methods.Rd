@@ -47,13 +47,15 @@
 }
 
 \value{
-  A Site object is returned when x is a \code{PWMatrix} object.
-  A SiteList object is returned when x is a \code{PWMatrixList} or
-  subject is a \code{DNAStringSet}.
+  A \code{\link{SiteSet}} object is returned when x is a \code{PWMatrix} object.
+  A \code{\link{SiteSetList}} object is returned 
+  when x is a \code{PWMatrixList} or subject is a \code{DNAStringSet}.
 }
 
 \references{
-Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identification of regulatory elements. Nature Publishing Group, 5(4), 276-287. doi:10.1038/nrg1315
+Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the 
+identification of regulatory elements. Nature Publishing Group, 5(4), 276-287. 
+doi:10.1038/nrg1315
 }
 
 \author{
