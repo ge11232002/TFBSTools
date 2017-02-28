@@ -9,7 +9,7 @@ Description: TFBSTools is a package for the analysis and manipulation of
              It can also scan putative TFBS from sequence/alignment, 
              query JASPAR database and provides a wrapper of 
              de novo motif discovery software.
-Authors@R: person("Ge", "Tan", email="ge.tan09@imperial.ac.uk",
+Authors@R: person("Ge", "Tan", email="ge_tan@live.com",
                   role = c("aut", "cre"))
 VignetteBuilder: knitr
 Imports: Biobase(>= 2.28),
