@@ -11,12 +11,13 @@
 }
 
 \usage{
-  searchSeq(x, subject, seqname="Unknown", strand="*", min.score="80\%")
+  searchSeq(x, subject, seqname="Unknown", strand="*", min.score="80\%",
+            mc.cores=1L)
 }
 
 \arguments{
   \item{x}{
-    x can be a \link{PWMatrix} object or a \link{PWMatrixList} object.
+    \code{\link{PWMatrix}} or \code{\link{PWMatrixList}} object.
   }
   \item{subject}{
     A \code{DNAStringSet}, \code{DNAString}, \code{XStringViews} or 
@@ -39,16 +40,22 @@
     When it is percentage value, it represents the quantile 
     between the minimal and the maximal possible value from the PWM.
   }
+  \item{mc.cores}{
+    \code{integer}(1): The number of cores to use.
+    It is only used when \sQuote{x} is a \code{\link{PWMatrixList}} object.
+  }
 }
 
 \value{
-  A Site object is returned when x is a \code{PWMatrix} object.
-  A SiteList object is returned when x is a \code{PWMatrixList} or
-  subject is a \code{DNAStringSet}.
+  A \code{\link{SiteSet}} object is returned when x is a \code{PWMatrix} object.
+  A \code{\link{SiteSetList}} object is returned 
+  when x is a \code{PWMatrixList} or subject is a \code{DNAStringSet}.
 }
 
 \references{
-Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identification of regulatory elements. Nature Publishing Group, 5(4), 276-287. doi:10.1038/nrg1315
+Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the 
+identification of regulatory elements. Nature Publishing Group, 5(4), 276-287. 
+doi:10.1038/nrg1315
 }
 
 \author{
@@ -87,6 +94,9 @@ Wasserman, W. W., & Sandelin, A. (2004). Applied bioinformatics for the identifi
   # PWMatrixList, character
   sitesetList <- searchSeq(pwmList, seq1, seqname="seq1", strand="*", 
                            min.score="80\%")
+  sitesetList <- searchSeq(pwmList, seq1, seqname="seq1", strand="*", 
+                           min.score="80\%", mc.cores=2L)
+  
   ## Convert the SiteSteList object into other R objects
   as(sitesetList, "data.frame")
   as(sitesetList, "DataFrame")

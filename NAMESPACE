@@ -56,6 +56,7 @@ importFrom(Biobase, rowMax, rowMin)
 importFrom("graphics", "par")
 importFrom("stats", "runif", "setNames")
 importFrom("utils", "write.table")
+importFrom(parallel, mclapply)
 
 ### -----------------------------------------------------------------
 ### Export S4 classes defined in TFBSTools

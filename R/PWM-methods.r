@@ -1,5 +1,7 @@
-## Our own normargPfm. The only difference from Biostrings version is we do not require the column sums are identical.
-normargPfm = function(x){
+## Our own normargPfm. 
+## The only difference from Biostrings version is we do not require 
+## the column sums are identical.
+normargPfm <- function(x){
     if (!is.matrix(x) || !is.integer(x))
         stop("invalid PFM 'x': not an integer matrix")
     if (is.null(rownames(x)))
@@ -59,7 +61,7 @@ normargPwm <- function(pwm, argname="pwm")
 setMethod("toPWM", "character",
           function(x, type="log2probratio", pseudocounts=0.8, 
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
-            dnaset = DNAStringSet(x)
+            dnaset <- DNAStringSet(x)
             toPWM(dnaset, type=type,
                   pseudocounts=pseudocounts,
                   bg=bg)
@@ -71,7 +73,7 @@ setMethod("toPWM", "DNAStringSet",
                    bg=c(A=0.25, C=0.25, G=0.25, T=0.25)){
             if(!isConstant(width(x)))
               stop("'x' must be rectangular (i.e. have a constant width)")
-            pfm = consensusMatrix(x)
+            pfm <- consensusMatrix(x)
             toPWM(pfm, type=type,
                   pseudocounts=pseudocounts,
                   bg=bg)
@@ -81,22 +83,23 @@ setMethod("toPWM", "DNAStringSet",
 setMethod("toPWM", "PFMatrix",
           function(x, type="log2probratio", pseudocounts=0.8, bg=NULL){
             if(is.null(bg))
-              bg = bg(x)
-            pwmMatrix = toPWM(Matrix(x), type=type,
-                              pseudocounts=pseudocounts,
-                              bg=bg)
-            pwm = PWMatrix(ID=ID(x), name=name(x), 
-                           matrixClass=matrixClass(x),
-                           strand=strand(x), bg=bg, 
-                           tags=tags(x), profileMatrix=pwmMatrix,
-                           pseudocounts=pseudocounts)
+              bg <- bg(x)
+            pwmMatrix <- toPWM(Matrix(x), type=type,
+                               pseudocounts=pseudocounts,
+                               bg=bg)
+            pwm <- PWMatrix(ID=ID(x), name=name(x), 
+                            matrixClass=matrixClass(x),
+                            strand=strand(x), bg=bg, 
+                            tags=tags(x), profileMatrix=pwmMatrix,
+                            pseudocounts=pseudocounts)
             pwm
           }
           )
 setMethod("toPWM", "PFMatrixList",
           function(x, type=c("log2probratio", "prob"), pseudocounts=0.8, 
                    bg=NULL){
-            ans <- lapply(x, toPWM, type=type, pseudocounts=pseudocounts, bg=bg)
+            ans <- lapply(x, toPWM, type=type, pseudocounts=pseudocounts,
+                          bg=bg)
             ans <- do.call(PWMatrixList, ans)
             return(ans)
           })
@@ -129,7 +132,7 @@ setMethod("toPWM", "matrix",
 setMethod("searchSeq", "PWMatrix",
 # scans a nucleotide sequence with the pattern represented by the PWM.
           function(x, subject, seqname="Unknown",
-                   strand="*", min.score="80%"){
+                   strand="*", min.score="80%", mc.cores=1L){
             if(is(subject, "DNAStringSet")){
               ## We return SiteSetList if input is DNAStringSet
               if(is.null(names(subject))){
@@ -155,10 +158,11 @@ setMethod("searchSeq", "PWMatrixList",
 # scans a nucleotide sequence with 
 # all patterns represented stored in $matrixset;
           function(x, subject, seqname="Unknown", 
-                   strand="*", min.score="80%"){
-            ans_list <- lapply(x, searchSeq, 
-                               subject=subject, seqname=seqname, 
-                               strand=strand, min.score=min.score)
+                   strand="*", min.score="80%", mc.cores=1L){
+            ans_list <- mclapply(x, searchSeq, 
+                                 subject=subject, seqname=seqname, 
+                                 strand=strand, min.score=min.score,
+                                 mc.cores=mc.cores)
             if(is(subject, "DNAStringSet")){
               ans <- do.call(SiteSetList, unlist(lapply(ans_list, as, "list")))
             }else{
@@ -232,8 +236,6 @@ my.searchSeq <- function(x, subject, seqname="Unknown",
                       pattern=xPos
                      )
 }
- 
-
 
 ### ----------------------------------------------------------------------
 ### searchAln: Scans a pairwise alignment of nucleotide sequences 
@@ -242,7 +244,6 @@ my.searchSeq <- function(x, subject, seqname="Unknown",
 ### of both sequences and exceed a specified threshold score in both, 
 ### AND are found in regions of the alignment above the specified
 ### Should have a better way for this duplicated code..
-
 setMethod("searchAln", 
           signature(pwm="PWMatrixList", aln1="character", aln2="character"),
           function(pwm, aln1, aln2, 
@@ -308,7 +309,8 @@ setMethod("searchAln",
           function(pwm, aln1, aln2, seqname1="Unknown1", seqname2="Unknown2",
                    min.score="80%", windowSize=51L, cutoff=0.7,
                    strand="*", type="any", conservation=NULL){
-            #ans = lapply(x, doSiteSearch, subject, min.score=min.score, windowSize=windowSize, cutoff=cutoff, conservation=conservation)
+            #ans = lapply(x, doSiteSearch, subject, min.score=min.score, 
+            #windowSize=windowSize, cutoff=cutoff, conservation=conservation)
             ans_list = lapply(pwm, searchAln, aln1, aln2, 
                               seqname1=seqname1, seqname2=seqname2,
                               min.score=min.score, 
@@ -638,7 +640,3 @@ PWMscore <- function(pwm, subject, starting.at=1L){
                               minScore(Matrix(pwm))
   return(score)                            
 }
-
-
-
-
