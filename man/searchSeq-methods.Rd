@@ -42,7 +42,8 @@
   }
   \item{mc.cores}{
     \code{integer}(1): The number of cores to use.
-    It is only used when \sQuote{x} is a \code{\link{PWMatrixList}} object.
+    It is only used when \sQuote{x} is a \code{\link{PWMatrixList}} object
+    and not available on windows platform.
   }
 }
 
@@ -95,7 +96,7 @@ doi:10.1038/nrg1315
   sitesetList <- searchSeq(pwmList, seq1, seqname="seq1", strand="*", 
                            min.score="80\%")
   sitesetList <- searchSeq(pwmList, seq1, seqname="seq1", strand="*", 
-                           min.score="80\%", mc.cores=2L)
+                           min.score="80\%", mc.cores=1L)
   
   ## Convert the SiteSteList object into other R objects
   as(sitesetList, "data.frame")
