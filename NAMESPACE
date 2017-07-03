@@ -17,7 +17,8 @@ import(BiocGenerics)
 ###
 importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, 
                   consensusMatrix, PairwiseAlignments, pattern, consensusMatrix)
-importMethodsFrom(RSQLite, dbGetQuery, dbConnect, dbDisconnect)
+importMethodsFrom(DBI, dbGetQuery)
+importMethodsFrom(RSQLite, dbConnect, dbDisconnect)
 importMethodsFrom(XVector, subseq)
 importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-", 
                   findOverlaps, reduce)
