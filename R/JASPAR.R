@@ -77,6 +77,7 @@ readJASPARMatrix <- function(fn, type=c("individual", "all")){
     }
     text2 <- split(text, rep(1:(length(text)/6), rep(6, length(text)/6)))
     ans <- lapply(text2, .processJASPARText)
+    names(ans) <- lapply(ans, name)
     ans <- do.call(PFMatrixList, ans)
   }
   return(ans)
