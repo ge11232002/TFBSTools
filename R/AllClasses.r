@@ -18,6 +18,12 @@ setClass("JASPAR2016",
                  )
          )
 
+setClass("JASPAR2018",
+         slots=c(
+           db="character"
+         )
+)
+
 ### -----------------------------------------------------------------
 ### The position frequency matrix (PWM) class
 ###
