@@ -75,7 +75,7 @@ setGeneric("storeMatrix",
            function(x, pfmList) standardGeneric("storeMatrix")
            )
 setGeneric("initializeJASPARDB", signature="x",
-           function(x, version=c("2014", "2016"))
+           function(x, version=c("2014", "2016", "2018"))
              standardGeneric("initializeJASPARDB"))
 setGeneric("deleteMatrixHavingID", signature="x",
            function(x, IDs) standardGeneric("deleteMatrixHavingID"))

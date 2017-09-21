@@ -338,6 +338,11 @@ setMethod("getMatrixByID", "JASPAR2016",
             getMatrixByID(x@db, ID)
           }
           )
+setMethod("getMatrixByID", "JASPAR2018",
+          function(x, ID){
+            getMatrixByID(x@db, ID)
+          }
+)
 
 ### get_Matrix_by_name fetches matrix data under 
 ### the given name from the database and returns a XMatrix object.
@@ -401,6 +406,11 @@ setMethod("getMatrixByName", "JASPAR2016",
             getMatrixByName(x@db, name)
           }
           )
+setMethod("getMatrixByName", "JASPAR2018",
+          function(x, name){
+            getMatrixByName(x@db, name)
+          }
+)
 
 ### get_MatrixSet fetches matrix data under for all matrices in the database matching criteria defined by the named arguments and returns a XMatrixList object
 # Returns : a XMatrixList object
@@ -486,6 +496,12 @@ setMethod("getMatrixSet", "JASPAR2016",
           }
           )
 
+setMethod("getMatrixSet", "JASPAR2018",
+          function(x, opts){
+            getMatrixSet(x@db, opts)
+          }
+)
+
 setMethod("deleteMatrixHavingID", "SQLiteConnection",
 # Deletes the matrix having the given ID from the database
 # Args    : (ID)
@@ -530,6 +546,13 @@ setMethod("deleteMatrixHavingID", "JASPAR2016",
             deleteMatrixHavingID(x@db, IDs)
           }
           )
+
+setMethod("deleteMatrixHavingID", "JASPAR2018",
+          function(x, IDs){
+            deleteMatrixHavingID(x@db, IDs)
+          }
+)
+
 
 ### ------------------------------------------------------------
 ### utilities functions for store_Matrix
@@ -689,6 +712,11 @@ setMethod("storeMatrix", signature(x="JASPAR2016", pfmList="PFMatrix"),
             storeMatrix(x@db, pfmList)
           }
           )
+setMethod("storeMatrix", signature(x="JASPAR2018", pfmList="PFMatrix"),
+          function(x, pfmList){
+            storeMatrix(x@db, pfmList)
+          }
+)
 setMethod("storeMatrix", signature(x="JASPAR2014", 
                                    pfmList="PFMatrixList"),
           function(x, pfmList){
@@ -701,6 +729,12 @@ setMethod("storeMatrix", signature(x="JASPAR2016",
             storeMatrix(x@db, pfmList)
           }
           )
+setMethod("storeMatrix", signature(x="JASPAR2018",
+                                   pfmList="PFMatrixList"),
+          function(x, pfmList){
+            storeMatrix(x@db, pfmList)
+          }
+)
 
 ### -----------------------------------------------------------------
 ### initialize the jaspar 2014, 2016 stype db. create empty tables.
@@ -761,9 +795,10 @@ setMethod("storeMatrix", signature(x="JASPAR2016",
 ### -----------------------------------------------------------------
 ### initializeJASPARDB interface
 ### Exported!
-### Until now, the table definitions for JASPAR2014 and JASPAR2016 are same.
+### Until now, the table definitions for JASPAR2014, JASPAR2016 and 
+###   JASPARE2018 are same.
 setMethod("initializeJASPARDB", "SQLiteConnection",
-          function(x, version=c("2014", "2016")){
+          function(x, version=c("2014", "2016", "2018")){
             version <- match.arg(version)
             .create_tables(x)
             return("Success")
@@ -771,7 +806,7 @@ setMethod("initializeJASPARDB", "SQLiteConnection",
           )
 
 setMethod("initializeJASPARDB", "character",
-          function(x, version=c("2014", "2016")){
+          function(x, version=c("2014", "2016", "2018")){
             con = dbConnect(SQLite(), x)
             on.exit(dbDisconnect(con))
             initializeJASPARDB(con, version=version)
@@ -779,14 +814,19 @@ setMethod("initializeJASPARDB", "character",
           )
 
 setMethod("initializeJASPARDB", "JASPAR2014",
-          function(x, version=c("2014", "2016")){
+          function(x, version=c("2014", "2016", "2018")){
             initializeJASPARDB(x@db, version="2014")
           }
           )
 
 setMethod("initializeJASPARDB", "JASPAR2016",
-          function(x, version=c("2014", "2016")){
+          function(x, version=c("2014", "2016", "2018")){
             initializeJASPARDB(x@db, version="2016")
           }
           )
+setMethod("initializeJASPARDB", "JASPAR2018",
+          function(x, version=c("2014", "2016", "2018")){
+            initializeJASPARDB(x@db, version="2018")
+          }
+)
 
