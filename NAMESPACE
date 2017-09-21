@@ -65,7 +65,8 @@ importFrom(parallel, mclapply)
 exportClasses(PFMatrix, PWMatrix, ICMatrix,
   PFMatrixList, PWMatrixList, ICMatrixList,
   SiteSet, SiteSetList, SitePairSet, SitePairSetList,
-  MotifSet
+  MotifSet,
+  JASPAR2018
   #PairwiseAlignmentTFBS
   )
 
