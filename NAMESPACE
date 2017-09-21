@@ -187,4 +187,8 @@ export(
  
   ## TFFM.R
   getEmissionProb, getPosProb
+<<<<<<< HEAD
 )
+=======
+)
+>>>>>>> upstream/master
