@@ -87,8 +87,7 @@ Ge Tan
 
 \seealso{
 \code{\link{toICM}},
-\code{\linkS4class{XMatrix}},
-\link[Biostrings]{PWM}
+\code{\linkS4class{XMatrix}}
 }
 
 \examples{
