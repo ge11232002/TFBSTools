@@ -17,6 +17,7 @@
 \alias{name,XMatrixList-method}
 \alias{strand,XMatrixList-method}
 \alias{tags,XMatrixList-method}
+\alias{showAsCell,XMatrixList-method}
 
 \title{Class \code{"XMatrixList"}}
 \description{

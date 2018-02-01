@@ -1,15 +1,19 @@
 #include "TFBSTools.h"
+#include <R.h>
+#include <Rinternals.h>
+#include <stdlib.h> // for NULL
+#include <R_ext/Rdynload.h>
 
-#define CALLMETHOD_DEF(fun, numArgs) {#fun, (DL_FUNC) &fun, numArgs}
+/* .Call calls */
+extern SEXP matrixAligner(SEXP, SEXP, SEXP, SEXP);
 
-static const R_CallMethodDef callMethods[] = {
-  /* matrixAlignerDynamic.c */
-  CALLMETHOD_DEF(matrixAligner, 4),
+static const R_CallMethodDef CallEntries[] = {
+  {"matrixAligner", (DL_FUNC) &matrixAligner, 4},
   {NULL, NULL, 0}
 };
 
-void R_init_TFBSTools(DllInfo *info)
+void R_init_TFBSTools(DllInfo *dll)
 {
-  R_registerRoutines(info, NULL, callMethods, NULL, NULL);
-  return;
+  R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+  R_useDynamicSymbols(dll, FALSE);
 }

@@ -25,7 +25,7 @@ importMethodsFrom(GenomicRanges, seqnames, strand, "strand<-",
 importMethodsFrom(rtracklayer, import.chain, liftOver)
 importMethodsFrom(BSgenome, getSeq)
 importMethodsFrom(methods, initialize, show)
-importMethodsFrom(S4Vectors, isConstant, elementNROWS, Rle, window)
+importMethodsFrom(S4Vectors, isConstant, elementNROWS, Rle, window, showAsCell)
 importMethodsFrom(IRanges, score, subject, ranges, "ranges<-",
                   Views, start, end, findOverlaps, width, which)
 importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
@@ -105,6 +105,9 @@ exportMethods(
   ncol,
   dim,
   reverseComplement,
+  
+  ## XMatrixList-methods.r
+  showAsCell,
   
   ## SiteSet-methods.r
   start, end,

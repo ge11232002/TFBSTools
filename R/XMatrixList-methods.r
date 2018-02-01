@@ -12,3 +12,10 @@ setMethod("pseudocounts", "PWMatrixList", function(x) sapply(x, pseudocounts))
 setMethod("schneider", "ICMatrixList", function(x) sapply(x, schneider))
 setMethod("tags", "XMatrixList", function(x) lapply(x, tags))
 
+### -----------------------------------------------------------------
+### showAsCell
+### 
+setMethod("showAsCell", "XMatrixList", function(object){
+  ans <- paste(ID(object), name(object), matrixClass(object), sep="; ")
+  return(ans)
+})
