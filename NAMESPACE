@@ -27,7 +27,7 @@ importMethodsFrom(BSgenome, getSeq)
 importMethodsFrom(methods, initialize, show)
 importMethodsFrom(S4Vectors, isConstant, elementNROWS, Rle, window, showAsCell)
 importMethodsFrom(IRanges, score, subject, ranges, "ranges<-",
-                  Views, start, end, findOverlaps, width, which)
+                  Views, start, end, findOverlaps, width, which, pintersect)
 importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
 importMethodsFrom(DirichletMultinomial, fitted)
 importMethodsFrom(GenomeInfoDb, seqinfo)

@@ -10,8 +10,7 @@ findLargestOverlaps = function(query, subject){
   }
   hitsQuery = query[queryHits(hits)]
   hitsSubject = subject[subjectHits(hits)]
-  overlapLength = sapply(mapply(intersect, hitsQuery, hitsSubject, 
-                                SIMPLIFY=FALSE), length)
+  overlapLength <- width(pintersect(hitsQuery, hitsSubject))
   splittedLength = split(overlapLength, queryHits(hits))
   groupMax = sapply(splittedLength, max)
   stopifnot(length(groupMax) == length(splittedLength))
