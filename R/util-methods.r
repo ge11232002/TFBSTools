@@ -11,13 +11,10 @@ findLargestOverlaps = function(query, subject){
   hitsQuery = query[queryHits(hits)]
   hitsSubject = subject[subjectHits(hits)]
   overlapLength <- width(pintersect(hitsQuery, hitsSubject))
-  splittedLength = split(overlapLength, queryHits(hits))
-  groupMax = sapply(splittedLength, max)
-  stopifnot(length(groupMax) == length(splittedLength))
-  for(i in 1:length(splittedLength)){
-    splittedLength[[i]] = splittedLength[[i]] == groupMax[i]
-  }
-  return(hits[unname(unlist(splittedLength))])
+  splittedLength <- split(overlapLength, queryHits(hits))
+  groupMax <- sapply(splittedLength, max)
+  maxHits <- groupMax[as.character(queryHits(hits))] == overlapLength
+  return(hits[maxHits])
 }
 
 ### -----------------------------------------------------------------
