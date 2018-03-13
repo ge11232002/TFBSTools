@@ -21,7 +21,7 @@
 
 \arguments{
   \item{pwmSubject}{
-    A \code{matrix} or \code{PWMatrix} or \code{PWMatrixList} object.
+    A \code{matrix} or \code{PWMatrix} or \code{PWMatrixList} object in \dQuote{prob} type.
   }
   \item{pwmQuery}{
     A \code{matrix} or \code{PWMatrix} object.
