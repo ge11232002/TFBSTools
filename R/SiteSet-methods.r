@@ -294,7 +294,7 @@ setMethod("pvalues", "SiteSet",
                                     sum(apply(pwm, 2, sample, 
                                               size=1, prob=bg)))
               pvalues = sapply(x@score, function(x){
-                             sum(x < allScores)/length(allScores)
+                             sum(x < allScores)/1e4
                                     }
             )
             return(pvalues)
@@ -304,8 +304,29 @@ setMethod("pvalues", "SiteSet",
 
 setMethod("pvalues", "SiteSetList",
           function(x, type=c("TFMPvalue", "sampling")){
-            ans = lapply(x, pvalues, type)
-            return(ans)
+            if(type == "TFMPvalue"){
+              if(length(x) > 1000){
+                warning("You have large number of SiteSetList. TFMPvalue will be slow.")
+              }
+              ans = lapply(x, pvalues, type)
+              return(ans)
+            }else if(type == "sampling"){
+              names_pwms <- sapply(x, function(x){x@pattern@ID})
+              ssl_uniquePWMs <- x[!duplicated(names_pwms)]
+              names_uniquePWMs <- sapply(ssl_uniquePWMs, 
+                                         function(x){x@pattern@ID})
+              allScores_uniuqe <- lapply(ssl_uniquePWMs, function(x){
+                replicate(1e4,
+                                      sum(apply(x@pattern@profileMatrix, 2, sample, 
+                                                size=1, prob=x@pattern@bg)))
+              })
+              names(allScores_uniuqe) <- names_uniquePWMs
+              
+              pvalues <- lapply(x, function(y){
+                sapply(y@score, 
+                       function(z){sum(z<allScores_uniuqe[[y@pattern@ID]]) / 1e4})})
+              return(pvalues)
+            }
           }
           )
 
