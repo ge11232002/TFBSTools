@@ -306,7 +306,7 @@ setMethod("pvalues", "SiteSetList",
           function(x, type=c("TFMPvalue", "sampling")){
             if(type == "TFMPvalue"){
               if(length(x) > 1000){
-                warning("You have large number of SiteSetList. TFMPvalue will be slow.")
+                stop("You have large number of SiteSetList. TFMPvalue will be slow. Use sampling instead")
               }
               ans = lapply(x, pvalues, type)
               return(ans)
