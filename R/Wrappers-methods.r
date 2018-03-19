@@ -98,7 +98,7 @@ parseMEMEOutput <- function(x){
   
   # get the motifs information
   revcomp = grepl("revcomp", command)
-  oneLines = memeOutput[grep("^MOTIF  \\d+", memeOutput)]
+  oneLines = memeOutput[grep("^MOTIF +\\d+", memeOutput)]
   splittedLines = strsplit(oneLines, "[[:blank:]]+")
   motifWidths = as.integer(sapply(splittedLines, "[", 6))
   motifOccurrences = as.integer(sapply(splittedLines, "[", 9))
