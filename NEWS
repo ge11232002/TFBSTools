@@ -1,11 +1,11 @@
-CHANGES IN Bioc 3.5
+CHANGES IN VERSION 1.14.0
 -------------------
 
 NEW FEATURES
     o Add function to parse MEME output.
     o Add parallel computing of searchSeq.
 
-CHANGES IN Bioc 3.4
+CHANGES IN VERSION 1.12.0
 -------------------
 
 BUG FIXES
@@ -15,7 +15,7 @@ BUG FIXES
 NEW FEATURES
     o readJASPARMatrix function to add the JASPAR format file.
 
-CHANGES IN Bioc 3.3
+CHANGES IN VERSION 1.10.0
 -------------------
 
 BUG FIXES
