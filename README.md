@@ -4,8 +4,9 @@ Software Package for Transcription Factor Binding Site (TFBS) Analysis
 ## Installation of the stable version of `TFBSTools` from Bioconductor
 
 ```R
-source("https://bioconductor.org/biocLite.R")
-biocLite("TFBSTools")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("TFBSTools")
 ```
 
 ## Installation of the development version of `TFBSTools` from github
