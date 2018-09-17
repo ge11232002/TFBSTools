@@ -66,6 +66,8 @@ setMethod("runMEME", "DNAStringSet",
                    tmpdir=tempdir()){
             tmpFile = tempfile(pattern="MEME_", tmpdir=tmpdir, 
                                fileext = ".fasta")
+            if(is.null(names(x)))
+              names(x) <- seq_along(x)
             writeXStringSet(x, filepath=tmpFile, format="fasta")
             on.exit(unlink(tmpFile))
             ans = run_MEME(tmpFile, binary=binary, 
