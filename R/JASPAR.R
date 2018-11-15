@@ -65,17 +65,19 @@ makeFlatFileDir <- function(JASPAR){
 readJASPARMatrix <- function(fn, type=c("individual", "all")){
   type <- match.arg(type)
   text <- readLines(fn)
+  text <- text[text != ""]
+  
   if(type == "individual"){
     if(length(text) != 5L){
       stop("The `individual` format is supposed to have 5 lines!")
     }
     ans <- .processJASPARText(text)
   }else{
-    if(length(text) %% 6 != 0L){
+    if(length(text) %% 5 != 0L && length(text) %% 5 != 0L){
       stop("The `all` format is supposed to have a number of lines",
-           "mutipled by 6!")
+           "mutipled by 5!")
     }
-    text2 <- split(text, rep(1:(length(text)/6), rep(6, length(text)/6)))
+    text2 <- split(text, rep(1:(length(text)/5), rep(5, length(text)/5)))
     ans <- lapply(text2, .processJASPARText)
     names(ans) <- lapply(ans, name)
     ans <- do.call(PFMatrixList, ans)
