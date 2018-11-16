@@ -9,14 +9,15 @@
   \sQuote{all} matrices in one file.
 }
 \usage{
-  readJASPARMatrix(fn, type = c("individual", "all"))
+  readJASPARMatrix(fn, matrixClass=c("PFM", "PWM", "PWMProb"))
 }
 \arguments{
   \item{fn}{
     \code{character}(1): The filename of JASPAR format matrix file.
   }
-  \item{type}{
-    \code{character}(1): It can be \sQuote{individual} or \sQuote{all}.
+  \item{matrixClass}{
+    \code{character}(1): the matrices in the files are \sQuote{PFM}, \sQuote{PWM} or
+    \sQuote{PFM} in probability.
   }
 }
 \details{
@@ -27,8 +28,8 @@
   \url{http://jaspar.genereg.net/html/DOWNLOAD/JASPAR_CORE/pfm/nonredundant/pfm_all.txt}
 }
 \value{
-  When \sQuote{individual}, a \code{PFMatrix} object is returned.
-  When \sQuote{all}, a \code{PFMatrixList} object is returned.
+  A \code{PFMatrixList} or \code{PWMatrixList} object is returned, depending on the
+  matrix class.
 }
 \author{
   Ge Tan
@@ -39,8 +40,8 @@
 \examples{
   fn <- file.path(system.file("extdata", package="TFBSTools"),
                   "MA0001.1.pfm")
-  readJASPARMatrix(fn, type="individual")
+  readJASPARMatrix(fn, matrixClass="PFM")
   fn <- file.path(system.file("extdata", package="TFBSTools"),
                   "pfm_all_example.txt")
-  readJASPARMatrix(fn, type="all")
+  readJASPARMatrix(fn, matrixClass="PFM")
 }

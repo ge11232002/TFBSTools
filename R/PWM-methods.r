@@ -89,7 +89,7 @@ setMethod("toPWM", "PFMatrix",
                                bg=bg)
             pwm <- PWMatrix(ID=ID(x), name=name(x), 
                             matrixClass=matrixClass(x),
-                            strand=strand(x), bg=bg, 
+                            strand=strand(x), bg=bg,
                             tags=tags(x), profileMatrix=pwmMatrix,
                             pseudocounts=pseudocounts)
             pwm
