@@ -5,6 +5,7 @@
 \alias{deleteMatrixHavingID,JASPAR2014-method}
 \alias{deleteMatrixHavingID,JASPAR2016-method}
 \alias{deleteMatrixHavingID,JASPAR2018-method}
+\alias{deleteMatrixHavingID,JASPAR2020-method}
 \alias{deleteMatrixHavingID,SQLiteConnection-method}
 \alias{storeMatrix}
 \alias{storeMatrix-methods}
@@ -13,9 +14,11 @@
 \alias{storeMatrix,JASPAR2014,PFMatrix-method}
 \alias{storeMatrix,JASPAR2016,PFMatrix-method}
 \alias{storeMatrix,JASPAR2018,PFMatrix-method}
+\alias{storeMatrix,JASPAR2020,PFMatrix-method}
 \alias{storeMatrix,JASPAR2014,PFMatrixList-method}
 \alias{storeMatrix,JASPAR2016,PFMatrixList-method}
 \alias{storeMatrix,JASPAR2018,PFMatrixList-method}
+\alias{storeMatrix,JASPAR2020,PFMatrixList-method}
 \alias{storeMatrix,SQLiteConnection,PFMatrix-method}
 \alias{storeMatrix,SQLiteConnection,PFMatrixList-method}
 \alias{initializeJASPARDB}
@@ -23,6 +26,7 @@
 \alias{initializeJASPARDB,JASPAR2014-method}
 \alias{initializeJASPARDB,JASPAR2016-method}
 \alias{initializeJASPARDB,JASPAR2018-method}
+\alias{initializeJASPARDB,JASPAR2020-method}
 \alias{initializeJASPARDB,SQLiteConnection-method}
 
 \title{JASPAR database operations}
@@ -40,11 +44,13 @@
   \S4method{storeMatrix}{character,PFMatrix}(x, pfmList)
   \S4method{storeMatrix}{SQLiteConnection,PFMatrix}(x, pfmList)
   \S4method{storeMatrix}{JASPAR2014,PFMatrix}(x, pfmList)
-  \S4method{initializeJASPARDB}{SQLiteConnection}(x, version=c("2014", "2016", "2018"))
-  \S4method{initializeJASPARDB}{character}(x, version=c("2014", "2016", "2018"))
+  \S4method{initializeJASPARDB}{SQLiteConnection}(x, version=c("2014", "2016", "2018", "2020"))
+  \S4method{initializeJASPARDB}{character}(x, version=c("2014", "2016", "2018", "2020"))
   \S4method{initializeJASPARDB}{JASPAR2014}(x, version)
   \S4method{initializeJASPARDB}{JASPAR2016}(x, version)
   \S4method{initializeJASPARDB}{JASPAR2018}(x, version)
+  \S4method{initializeJASPARDB}{JASPAR2020}(x, version)
+
 }
 
 \arguments{

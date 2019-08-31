@@ -5,6 +5,7 @@
 \alias{getMatrixSet,JASPAR2014-method}
 \alias{getMatrixSet,JASPAR2016-method}
 \alias{getMatrixSet,JASPAR2018-method}
+\alias{getMatrixSet,JASPAR2020-method}
 \alias{getMatrixSet,SQLiteConnection-method}
 
 \title{Advanced JASPAR database search functions \code{get_MatrixSet}}
