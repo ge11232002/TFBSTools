@@ -42,7 +42,7 @@ Suggests: BiocStyle(>= 1.7.7),
           testthat,
           JASPAR2016(>= 1.0.0),
           JASPAR2018(>= 1.0.0),
-          JASPAR
+          JASPAR2020
 License: GPL-2
 URL: https://github.com/ge11232002/TFBSTools
 BugReports: https://github.com/ge11232002/TFBSTools/issues
