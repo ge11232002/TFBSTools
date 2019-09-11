@@ -52,7 +52,7 @@
     based on the relevant literature.
   
   \code{collection=c("CORE", "CNE", "PHYLOFACTS", "SPLICE", 
-    "POLII", "FAM", "PBM", "PBM_HOMEO", "PBM_HLH"}
+    "POLII", "FAM", "PBM", "PBM_HOMEO", "PBM_HLH", "UNVALIDATED"}
   
   \code{all_versions=c(FALSE,TRUE)}: We constantly update the profiles in
     JASPAR. Some profiles may have multiple versions. 
