@@ -18,7 +18,8 @@
     opts[["collection"]] = match.arg(opts[["collection"]], 
                                      c("CORE", "CNE", "PHYLOFACTS", 
                                        "SPLICE", "POLII", "FAM", 
-                                       "PBM", "PBM_HOMEO", "PBM_HLH"))
+                                       "PBM", "PBM_HOMEO", "PBM_HLH",
+                                       "UNVALIDATED"))
 
   if(!"all_versions" %in% names(opts))
     opts[["all_versions"]] = FALSE
