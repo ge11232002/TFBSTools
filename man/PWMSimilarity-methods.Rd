@@ -63,31 +63,24 @@
 \describe{
 
 \item{\code{signature(pwmSubject = "matrix", pwmQuery = "matrix")}}{
-%%  ~~describe this method here~~
 }
 
 \item{\code{signature(pwmSubject = "matrix", pwmQuery = "PWMatrix")}}{
-%%  ~~describe this method here~~
 }
 
 \item{\code{signature(pwmSubject = "PWMatrix", pwmQuery = "matrix")}}{
-%%  ~~describe this method here~~
 }
 
 \item{\code{signature(pwmSubject = "PWMatrix", pwmQuery = "PWMatrix")}}{
-%%  ~~describe this method here~~
 }
 
 \item{\code{signature(pwmSubject = "PWMatrixList", pwmQuery = "matrix")}}{
-%%  ~~describe this method here~~
 }
 
 \item{\code{signature(pwmSubject = "PWMatrixList", pwmQuery = "PWMatrix")}}{
-%%  ~~describe this method here~~
 }
 
 \item{\code{signature(pwmSubject = "PWMatrixList", pwmQuery = "PWMatrixList")}}{
-%%  ~~describe this method here~~
 }
 }}
 
@@ -102,7 +95,3 @@
   pwm2 = toPWM(MA0004.1, type="prob")
   PWMSimilarity(pwm1, pwm2, method="Euclidean")
 }
-
-
-\keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }

@@ -107,6 +107,3 @@
   tffmFirst <- readXMLTFFM(xmlFirst, type="First")
   seqLogo(tffmFirst)
 }
-
-\keyword{methods}
-\keyword{ ~~ other possible keyword(s) ~~ }
