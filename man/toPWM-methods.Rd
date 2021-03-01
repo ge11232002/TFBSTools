@@ -60,8 +60,8 @@
   Pseudocounts is necessary for correcting the small number of counts 
   or eliminating the zero values before log transformation.
 
-  \deqn{postProbs = \frac{PFM + bg * pseudocounts}{ncol(PFM) + sum(bg) * pseudocounts}}{%
-  postProbs = (PFM + bg * pseudocounts) / (ncol(PFM) + sum(bg) * pseudocounts)}
+  \deqn{postProbs = \frac{PFM + bg * pseudocounts}{colSums(PFM) + sum(bg) * pseudocounts}}{%
+  postProbs = (PFM + bg * pseudocounts) / (colSums(PFM) + sum(bg) * pseudocounts)}
   \deqn{priorProbs = bg / sum(bg)}{%
   priorProbs = bg / sum(bg)}
   \deqn{PWM_{log2probratio} = \log_2{postProbs \over priorProbs}}{%
