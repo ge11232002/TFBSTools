@@ -34,6 +34,7 @@
   \donttest{
     library(JASPAR2014)
     makeFlatFileDir(JASPAR2014)
+    unlink("FlatFileDir", recursive = TRUE)
   }
 }
 

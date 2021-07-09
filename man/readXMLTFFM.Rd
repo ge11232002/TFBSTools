@@ -38,6 +38,3 @@
                         "tffm_first_order.xml")
   tffmFirst <- readXMLTFFM(xmlFirst, type="First")
 }
-
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
