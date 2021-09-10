@@ -6,6 +6,7 @@
 \alias{getMatrixByID,JASPAR2016-method}
 \alias{getMatrixByID,JASPAR2018-method}
 \alias{getMatrixByID,JASPAR2020-method}
+\alias{getMatrixByID,JASPAR2022-method}
 \alias{getMatrixByID,SQLiteConnection-method}
 \alias{getMatrixByName}
 \alias{getMatrixByName,character-method}
@@ -13,6 +14,7 @@
 \alias{getMatrixByName,JASPAR2016-method}
 \alias{getMatrixByName,JASPAR2018-method}
 \alias{getMatrixByName,JASPAR2020-method}
+\alias{getMatrixByName,JASPAR2022-method}
 \alias{getMatrixByName,SQLiteConnection-method}
 
 \title{Basic JASPAR database search functionis \code{getMatrixByID}, 

@@ -202,7 +202,3 @@ setGeneric("getEmissionProb", signature="tffm",
 setGeneric("getTransition", signature="tffm",
            function(tffm, i, j)
              standardGeneric("getTransition"))
-
-
-
-
