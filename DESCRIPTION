@@ -1,6 +1,6 @@
 Package: TFBSTools
-Version: 1.41.0
-Date: 2021-09-10
+Version: 1.41.1
+Date: 2024-04-23
 Title: Software Package for Transcription Factor Binding Site (TFBS) Analysis
 Description: TFBSTools is a package for the analysis and manipulation of 
              transcription factor binding sites. It includes matrices conversion
@@ -14,6 +14,7 @@ Authors@R: person("Ge", "Tan", email="ge_tan@live.com",
 VignetteBuilder: knitr
 Imports: Biobase(>= 2.28),
          Biostrings(>= 2.36.4),
+         pwalign,
          BiocGenerics(>= 0.14.0),
          BiocParallel(>= 1.2.21),
          BSgenome(>= 1.36.3),
