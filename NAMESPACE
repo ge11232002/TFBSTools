@@ -17,7 +17,7 @@ import(BiocGenerics)
 ### Import S4 methods defined in other packages
 ###
 importMethodsFrom(Biostrings, reverseComplement, matchPWM, maxScore, minScore, 
-                  consensusMatrix, pattern)
+                  consensusMatrix)
 importMethodsFrom(pwalign, PairwiseAlignments)
 importMethodsFrom(DBI, dbGetQuery)
 importMethodsFrom(RSQLite, dbConnect, dbDisconnect)

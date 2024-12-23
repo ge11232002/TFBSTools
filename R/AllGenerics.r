@@ -153,6 +153,8 @@ setGeneric("pvalues", signature="x",
            standardGeneric("pvalues"))
 setGeneric("clone", signature="x", function(x, ...) 
            standardGeneric("clone"))
+setGeneric("pattern", signature="x", function(x)
+  standardGeneric("pattern"))
 
 ## PWM methods
 setGeneric("PWMSimilarity", 
