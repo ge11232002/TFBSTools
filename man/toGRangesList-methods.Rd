@@ -31,12 +31,12 @@
 \examples{
   data(MA0003.2)
   pwm <- toPWM(MA0003.2)
-  library(CNEr)
-  axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="TFBSTools"),
-                                   "hg19.danRer7.net.axt")
-  axtHg19DanRer7 <- readAxt(axtFilesHg19DanRer7)
-  sitePairSet <-  searchAln(pwm, axtHg19DanRer7, min.score="80\%",
-                            windowSize=51L, cutoff=0.7, strand="*",
-                            type="any", conservation=NULL, mc.cores=1)
-  toGRangesList(sitePairSet, axtHg19DanRer7)
+  #library(CNEr)
+  #axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="TFBSTools"),
+  #                                 "hg19.danRer7.net.axt")
+  #axtHg19DanRer7 <- readAxt(axtFilesHg19DanRer7)
+  #sitePairSet <-  searchAln(pwm, axtHg19DanRer7, min.score="80\%",
+  #                          windowSize=51L, cutoff=0.7, strand="*",
+  #                          type="any", conservation=NULL, mc.cores=1)
+  # toGRangesList(sitePairSet, axtHg19DanRer7)
 }

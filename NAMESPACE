@@ -9,7 +9,7 @@ importClassesFrom(Biostrings, DNAStringSet, XStringViews)
 importClassesFrom(pwalign, PairwiseAlignments)
 importClassesFrom(GenomicRanges, GRanges, GRangesList)
 importClassesFrom(methods, ANY, character, integer, missing)
-importClassesFrom(CNEr, Axt)
+### importClassesFrom(CNEr, Axt)
 import(BiocGenerics)
 
 
@@ -30,7 +30,7 @@ importMethodsFrom(methods, initialize, show)
 importMethodsFrom(S4Vectors, isConstant, elementNROWS, Rle, window, showAsCell)
 importMethodsFrom(IRanges, subject, ranges, "ranges<-",
                   Views, start, end, findOverlaps, width, which, pintersect)
-importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
+# importMethodsFrom(CNEr, querySeqs, targetSeqs, targetRanges, queryRanges)
 importMethodsFrom(DirichletMultinomial, fitted)
 importMethodsFrom(GenomeInfoDb, seqinfo)
 
@@ -172,7 +172,7 @@ export(
   relScore,
   views,
   pvalues,
-  toGRangesList,
+  # toGRangesList,
 
   ## PairwiseAlignment-methods.r
   calConservation,

@@ -188,15 +188,15 @@
   as(sitePairSetList, "GRanges")
   
   # PWMatrix, Axt, missing
-  library(CNEr)
-  axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="TFBSTools"), 
-                                   "hg19.danRer7.net.axt")
-  axtHg19DanRer7 <- readAxt(axtFilesHg19DanRer7)
-  sitePairSetList <-  searchAln(pwm1, axtHg19DanRer7, min.score="80\%", 
-                            windowSize=51L, cutoff=0.7, strand="*", 
-                            type="any", conservation=NULL, mc.cores=1)
+  #library(CNEr)
+  #axtFilesHg19DanRer7 <- file.path(system.file("extdata", package="TFBSTools"), 
+  #                                 "hg19.danRer7.net.axt")
+  #axtHg19DanRer7 <- readAxt(axtFilesHg19DanRer7)
+  #sitePairSetList <-  searchAln(pwm1, axtHg19DanRer7, min.score="80\%", 
+  #                          windowSize=51L, cutoff=0.7, strand="*", 
+  #                          type="any", conservation=NULL, mc.cores=1)
   ## We may want to coordinates of motif in the genome
-  GRangesTFBS <- toGRangesList(sitePairSetList, axtHg19DanRer7)
+  # GRangesTFBS <- toGRangesList(sitePairSetList, axtHg19DanRer7)
 }
 
 \keyword{methods}

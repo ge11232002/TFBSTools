@@ -1,6 +1,5 @@
 library(TFBSTools)
 library(JASPAR2014)
-library(CNEr)
 
 pfm <- getMatrixByID(JASPAR2014, ID="MA0139")
 pwm <- toPWM(pfm)

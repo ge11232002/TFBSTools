@@ -118,8 +118,8 @@ setGeneric("searchAln",
                     strand="*", type="any", conservation=NULL, mc.cores=1L)
              standardGeneric("searchAln")
            )
-setGeneric("toGRangesList", function(x, axt)
-           standardGeneric("toGRangesList"))
+# setGeneric("toGRangesList", function(x, axt)
+#            standardGeneric("toGRangesList"))
 
 setGeneric("doSiteSearch",
            function(pwm, aln1, aln2, min.score="80%", windowSize=51L, 
